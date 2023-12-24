@@ -4,19 +4,20 @@ import { db } from "~/server/db";
 
 export default async function Home() {
   const session = await getServerAuthSession();
-  const user = await db.user.findUnique({
-    where: {
-      id: session.user.id,
-    },
-  });
-  const role = user?.role;
-  console.log(role);
+  // No Session!
   if (!session){
     return <main>
       <h1>Hello, Stranger!</h1>
       <p>This is the Public Landing Page</p>
     </main>
   }
+  // Session!
+  const user = await db.user.findUnique({
+    where: {
+      id: session.user.id,
+    },
+  })
+  const role = user?.role;
   return (
     <main>
       <h1>Hello, {session.user.name}</h1>
