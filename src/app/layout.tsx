@@ -1,9 +1,10 @@
 import "~/styles/globals.css";
-
+import { getServerSession } from 'next-auth'
 import { Inter } from "next/font/google";
 import { cookies } from "next/headers";
-
+import Provider from "./context/Provider";
 import { TRPCReactProvider } from "~/trpc/react";
+import NavBar from "./_components/NavBar";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -16,17 +17,21 @@ export const metadata = {
   icons: [{ rel: "icon", url: "/favicon.ico" }],
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const session = await getServerSession();
   return (
     <html lang="en">
       <body className={`font-sans ${inter.variable}`}>
+        <Provider session = {session}>
         <TRPCReactProvider cookies={cookies().toString()}>
+          <NavBar />
           {children}
         </TRPCReactProvider>
+        </Provider>
       </body>
     </html>
   );
