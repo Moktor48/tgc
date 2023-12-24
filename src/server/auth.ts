@@ -5,9 +5,10 @@ import {
   type NextAuthOptions,
 } from "next-auth";
 import DiscordProvider from "next-auth/providers/discord";
-
+import Rolex from "./Rolex";
 import { env } from "~/env";
 import { db } from "~/server/db";
+
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -19,8 +20,8 @@ declare module "next-auth" {
   interface Session extends DefaultSession {
     user: {
       id: string;
-      // ...other properties
-      // role: UserRole;
+      role?: string | null
+      //role: UserRole;
     } & DefaultSession["user"];
   }
 
@@ -36,12 +37,14 @@ declare module "next-auth" {
  * @see https://next-auth.js.org/configuration/options
  */
 export const authOptions: NextAuthOptions = {
+
   callbacks: {
     session: ({ session, user }) => ({
       ...session,
       user: {
         ...session.user,
         id: user.id,
+        role: session.user.role,
       },
     }),
   },

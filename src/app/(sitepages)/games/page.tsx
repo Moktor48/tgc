@@ -2,6 +2,9 @@ import React from 'react'
 
 export default function page() {
   return (
-    <div>Public Games Page</div>
+    <div>
+      <p>Game listing</p>
+      <p>Apply to guild for games</p>
+    </div>
   )
 }
