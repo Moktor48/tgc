@@ -24,3 +24,6 @@ export default function NavBar() {
     </div>
   )
 }
+
+
+//Link all pages here
