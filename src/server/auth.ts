@@ -5,7 +5,6 @@ import {
   type NextAuthOptions,
 } from "next-auth";
 import DiscordProvider from "next-auth/providers/discord";
-import Rolex from "./Rolex";
 import { env } from "~/env";
 import { db } from "~/server/db";
 
