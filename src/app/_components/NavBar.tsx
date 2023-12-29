@@ -1,12 +1,13 @@
 import Link from 'next/link';
-import { authOptions, getServerAuthSession } from '~/server/auth';
 import Image from 'next/image';
 
-
 export default async function NavBar() {
-  const session = await getServerAuthSession()
     return (
 <div className="navbar" id="navbar">
+
+  <div className="dropdown">
+    <button className="dropbtn"><Link href="/"><h2>Home<span className="home-button"></span></h2></Link></button>
+  </div>
 
   <div className="dropdown">
     <button className="dropbtn"><h2>Builds<span className="triangle-down"></span></h2></button>
@@ -27,7 +28,7 @@ export default async function NavBar() {
   </div>
 
   <div className="dropdown">
-    <button className="dropbtn"><h2>Test<span className="triangle-down"></span></h2></button>
+    <button className="dropbtn"><h2>Articles<span className="triangle-down"></span></h2></button>
     <div className="nav-dropdown-content">
         <Link href="#">Option 7</Link>
         <Link href="#">Option 8</Link>
@@ -36,13 +37,8 @@ export default async function NavBar() {
   </div>
 
   <a href="https://discord.gg/TGC" className="dropbtn" target="_blank">
-    <Image src="_components/img/discord-logo-white.svg" width={24} height={24} alt="Discord" />
+    <Image src="/img/discord-logo-white.svg" width={150} height={120} alt="Discord" />
   </a>
-
 </div>
     )
 }
-
-
-//Link all pages here
-

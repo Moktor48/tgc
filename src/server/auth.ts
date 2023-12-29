@@ -19,16 +19,14 @@ declare module "next-auth" {
   interface Session extends DefaultSession {
     user: {
       id: string;
-      role?: string | null
-      //role: UserRole;
+      role: string;
     } & DefaultSession["user"];
   }
 
-  // interface User {
-  //   // ...other properties
-  //   // role: UserRole;
-  // }
-}
+  interface User {
+    role: string;
+  }
+  }
 
 /**
  * Options for NextAuth.js used to configure adapters, providers, callbacks, etc.
@@ -36,23 +34,33 @@ declare module "next-auth" {
  * @see https://next-auth.js.org/configuration/options
  */
 export const authOptions: NextAuthOptions = {
-
   callbacks: {
-    session: ({ session, user }) => ({
-      ...session,
-      user: {
-        ...session.user,
-        id: user.id,
-        role: session.user.role,
-      },
-    }),
+    session: ({ session, user }) => {
+      return {
+        ...session,
+        user: {
+          ...session.user,
+          id: user.id,
+          // Fix unsafe member access
+          role: user.role,
+        },
+      };
+    },
   },
+
   adapter: PrismaAdapter(db),
+
   providers: [
     DiscordProvider({
+      profile(profile) {
+        const role: string = profile.role as string;
+        return { role, id: profile.id as string};
+      },
+
       clientId: env.DISCORD_CLIENT_ID,
       clientSecret: env.DISCORD_CLIENT_SECRET,
     }),
+
     /**
      * ...add more providers here.
      *

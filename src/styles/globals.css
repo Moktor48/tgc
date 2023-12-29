@@ -182,9 +182,10 @@ header {
 /* nav bar ************************************/
 .navbar{
     background-color: rgb(0, 0, 0);
+    width: 100%;
     display: grid;
     justify-items: center;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(5, 1fr);
     grid-gap: 10px;   
     position: absolute;
     bottom: 0px;
@@ -214,7 +215,7 @@ Add these to navbar using javascript to make navbar stick to top of page when us
     
 }/* end of sticky navbar */
 
-.dropbtn {
+.dropbtn, .home-button {
     background-color: transparent;
     color: rgb(255, 255, 255);
     border: none;
@@ -229,7 +230,12 @@ Add these to navbar using javascript to make navbar stick to top of page when us
     font-weight:bold;
     font-size: 2vw;
 }
-  
+
+.home-button a{
+    color: #c5c5c5;
+    text-decoration: none;
+}
+
 .triangle-down {
     display: inline-block;
     width: 0;
@@ -277,7 +283,7 @@ Add these to navbar using javascript to make navbar stick to top of page when us
 
 .navbar img {
 
-    height: 35%;
+    height: 70%;
     object-fit: contain;
 }
 /* end of nav bar ***************************************/
