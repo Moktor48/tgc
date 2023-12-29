@@ -2,7 +2,7 @@ import React from 'react'
 import { getServerAuthSession } from '~/server/auth'
 
 
-export default async function Page( { params }: {params: { id: string } }) {
+export default async function AdminPage( { params }: {params: { id: string } }) {
   const session = await getServerAuthSession()
 
   

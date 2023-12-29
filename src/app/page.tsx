@@ -1,5 +1,4 @@
 import { getServerAuthSession } from "~/server/auth";
-import SecretMessage from "./_components/SecretMessage";
 import { db } from "~/server/db";
 
 export default async function Home() {
