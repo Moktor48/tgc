@@ -46,7 +46,7 @@ export default async function RootLayout({
           width: '100%',
           height: '100%',
           position:'relative',
-          minHeight: '50vh',
+          minHeight: '40vh',
         }}>
           <StatBar />
           <SideBar />

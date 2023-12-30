@@ -1,5 +1,5 @@
 import { getServerAuthSession } from "~/server/auth";
-import { db } from "~/server/db";
+import FrontContent from "./_components/FrontContent";
 
 export default async function Home() {
   const session = await getServerAuthSession()
@@ -13,16 +13,93 @@ export default async function Home() {
     )
   }
   // Session!
-  const user = await db.user.findUnique({
-    where: {
-      id: session.user.id,
-    },
-  })
-  const role = user?.role;
+
   return (
+    <>
     <main>
-      <h1>Hello, {session.user.name}</h1>
-      <p>This is the Public Landing Page, and your role is: {role}</p>
+      <FrontContent />
     </main>
+    <p>1</p><br />
+    <p>1</p><br />
+    <p>1</p><br />
+    <p>1</p><br />
+    <p>1</p><br />
+    <p>1</p><br />
+    <p>1</p><br />
+    <p>1</p><br />
+    <p>1</p><br />
+    <p>1</p><br />
+    <p>1</p><br />
+    <p>1</p><br />
+    <p>1</p><br />
+    <p>1</p><br />
+    <p>1</p><br />
+    <p>1</p><br />
+    <p>1</p><br />
+    <p>1</p><br />
+    <p>1</p><br />
+    <p>1</p><br />
+    <p>1</p><br />
+    <p>1</p><br />
+    <p>1</p><br />
+    <p>1</p><br />
+    <p>1</p><br />
+    <p>1</p><br />
+    <p>1</p><br />
+    <p>1</p><br />
+    <p>1</p><br />
+    <p>1</p><br />
+    <p>1</p><br />
+    <p>1</p><br />
+    <p>1</p><br />
+    <p>1</p><br />
+    <p>1</p><br />
+    <p>1</p><br />
+    <p>1</p><br />
+    <p>1</p><br />
+    <p>1</p><br />
+    <p>1</p><br />
+    <p>1</p><br />
+    <p>1</p><br />
+    <p>1</p><br />
+    <p>1</p><br />
+    <p>1</p><br />
+    <p>1</p><br />
+    <p>1</p><br />
+    <p>1</p><br />
+    <p>1</p><br />
+    <p>1</p><br />
+    <p>1</p><br />
+    <p>1</p><br />
+    <p>1</p><br />
+    <p>1</p><br />
+    <p>1</p><br />
+    <p>1</p><br />
+    <p>1</p><br />
+    <p>1</p><br />
+    <p>1</p><br />
+    <p>1</p><br />
+    <p>1</p><br />
+    <p>1</p><br />
+    <p>1</p><br />
+    <p>1</p><br />
+    <p>1</p><br />
+    <p>1</p><br />
+    <p>1</p><br />
+    <p>1</p><br />
+    <p>1</p><br />
+    <p>1</p><br />
+    <p>1</p><br />
+    <p>1</p><br />
+    <p>1</p><br />
+    <p>1</p><br />
+    <p>1</p><br />
+    <p>1</p><br />
+    <p>1</p><br />
+    <p>1</p><br />
+    <p>1</p><br />
+    <p>1</p><br />
+    <p>1</p><br />
+    </>
   )
 }
