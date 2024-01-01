@@ -1,6 +1,5 @@
 import { getServerAuthSession } from '~/server/auth';
 import Image from 'next/image';
-import type { Session } from 'node_modules/next-auth/core/types';
 export default async function StatBar() {
     const session = await getServerAuthSession()
     const esoCount = 823 // await db.player.count({}); // display eso members logged into game.
