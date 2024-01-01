@@ -10,7 +10,7 @@ export default async function StatBar() {
   // Session is not valid
   if(!session || session.user.role === 'guest') {
     return (
-        <div className="stats-bar">
+        <div className="statbar">
         <div className="stats-item">Online Members</div>
         <div className="stats-item">ESO: {esoCount}</div>
         <div className="stats-item">FFXIV: {ffxivCount}</div>

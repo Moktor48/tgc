@@ -30,30 +30,23 @@ export default async function RootLayout({
 }) {
   const session = await getServerAuthSession();
   return (
-    <html lang="en"style={{
+    <html lang="en" style={{
       backgroundImage: `url(${bg.src})`,
       width: '100%',
       height: '100%',
     }}>
       <body className={`font-sans ${inter.variable}`}>
         <Provider session = {session}>
-        <TRPCReactProvider cookies={cookies().toString()}>
-        <header className="header" style={{
-          backgroundImage: `url(${tg.src})`,
-          backgroundSize: 'cover',
-          backgroundRepeat: 'no-repeat',
-          backgroundPosition: 'center',
-          width: '100%',
-          height: '100%',
-          position:'relative',
-          minHeight: '40vh',
-        }}>
-          <StatBar />
-          <SideBar />
-          <NavBar />
-        </header>
-          {children}
-        </TRPCReactProvider>
+          <TRPCReactProvider cookies={cookies().toString()}>
+            <header>
+              <StatBar />
+              <SideBar />
+            </header>
+            <main>
+              <NavBar />
+              {children}
+            </main>
+          </TRPCReactProvider>
         </Provider>
       </body>
     </html>

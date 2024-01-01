@@ -1,7 +1,10 @@
 import Link from 'next/link';
 import Image from 'next/image';
 
+
+
 export default async function NavBar() {
+
     return (
 <div className="navbar" id="navbar">
 
@@ -42,3 +45,26 @@ export default async function NavBar() {
 </div>
     )
 }
+
+
+/*
+    // When the user scrolls, execute stickNavBar()
+    window.onscroll = function() { stickNavbar()};
+
+    // Get the navbar
+    const navbar = document.getElementById("navbar");
+
+    // Get the offset position of the navbar
+    const sticky = navbar.offsetTop;
+    console.log(window.pageYOffset)
+
+    // Add the sticky class to the navbar when you reach its scroll position. Remove "sticky" when you leave the scroll position
+    function stickNavbar() {
+        if (window.scrollY >= sticky) {
+            navbar.classList.add("sticky");
+            
+        } else {
+            navbar.classList.remove("sticky");
+        }
+    }
+*/

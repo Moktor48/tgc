@@ -43,20 +43,15 @@ body {
 }
 
 header {
-    max-height: 20vw;
+    min-height: 40vh;
+    max-height: 50vh;
     display: block;
     background-size: cover;
-    background-position-y: 30%;
-    justify-content: center;
-    align-items: center;
+    background-position-y: 15%;
     color: #c5c5c5;
+    background-image: url("/img/tgc.png");
 }
 
-.header-img {
-    height: 25vw;
-    text-align: center;
-    background-repeat: no-repeat;
-}
 
 .home-grid-container {
     display: grid;
@@ -76,7 +71,7 @@ header {
     right: 0;
     background-color: #1f1f1f;
     height: 100%;
-    overflow-x: hidden;
+    overflow-x: visible;
     transition: 0.5s;
     padding-top: 60px;
     display: flex;
@@ -112,66 +107,46 @@ header {
     transition: all 0.3s linear;
     color: yellow;
 }
-
-
-
-.sidebar.show {
-    right: 0;
+.header-container {
+    display: grid;
+    background-color: rgba(43, 4, 4, 0.753);
+    padding-top: 2%;
+    padding-left: 10%;
+    padding-right: 10%;
+    padding-bottom: 2%;
+    grid-template-columns: 1fr 20%;
+    text-align: center;
 }
 
-.sidebar-header {
-    padding: 15px;
+.header {
+    border-bottom: solid #f9f9f9 .2vw;
+    border-left: hidden;
+    border-top: hidden;
+    border-right: hidden;
+}
+
+.newsletter {
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
     align-items: center;
+    margin: 0%;
+    padding: 0%;
+    background-color: rgba(44, 4, 4, 0.75);
+    min-height: 35vh;
 }
 
-.sidebar-links {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.sidebar-buttons {
-    width: 90%; /* Adjust the width as needed */
-    background-color: #1f1f1f; /* Match the sidebar color */
-    margin: 10px auto; /* Center the button and add spacing */
-    border-radius: 15px; /* Rounded border */
-    padding: 12px;
-    color: #fff; /* Text color */
-    text-align: left;
-    display: block;
-    text-decoration: none;
-    box-shadow: none; /* Remove box shadow */
-    border: none; /* Remove the border */
-    transition: background-color 0.3s, color 0.3s; /* Smooth color transition */
-}
-
-.sidebar-buttons:hover {
-    background-color: #333; /* Slightly darker color on hover */
-}
-
-.sidebar-buttons a {
-    display: block;
-    color: #fff;
-    text-decoration: none;
-}
-
-.bottom-username {
-    position: absolute;
-    bottom: 0;
-    right: 20px; /* Adjust as needed */
-    color: #fff;
+#newsletter form {
     display: flex;
-    align-items: center;
+    flex-direction: column;
+    max-width: 300px;
+    margin-top: 0px;
     
 }
 
-.bottom-username {
-    position: absolute;
-    bottom: 20px; /* Adjust this value as needed */
-    left: 20px; /* Adjust this value as needed */
-    color: #fff; /* Color for the username */
+#newsletter label,
+#newsletter input {
+    margin-bottom: 10px;
+    
 }
 
 /* Stats-bar ****************************************/
@@ -185,7 +160,7 @@ header {
     top: 0;
     align-items: center;
     width: 100%;
-    height: 2vh;
+    height: 50px;
     padding-top: .5%;
     padding-bottom: .5%;
     z-index: 0;
@@ -219,7 +194,7 @@ header {
     grid-template-columns: repeat(5, 1fr);
     grid-gap: 10px;   
     position: sticky;
-    top: 2vh;
+    top: 50px;
     padding-top: 0%;
     padding-bottom: 0%;
     z-index: 0;
@@ -229,23 +204,6 @@ header {
     justify-content: center;
     align-content: center;
 }
-
-/* Sticky navbar
-
-Add these to navbar using javascript to make navbar stick to top of page when user scrolls */
-.sticky {
-    position: sticky;
-
-    bottom: 0;
-    width: 100%;
-    margin-top: .9%;
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
-
-}
-  
-.sticky + .content {
-    
-}/* end of sticky navbar */
 
 .dropbtn, .home-button {
     background-color: transparent;
@@ -417,4 +375,50 @@ article h3 {
 article:hover {
     transform: scale(1.05); /* subtle zoom effect on hover */
     box-shadow: 0 0px 20px 10px rgb(0, 0, 0); /* deeper shadow on hover */
+}
+main {
+    padding-left: 0px;
+    padding-right: 0px;
+}
+
+footer {
+    color: #c5c5c5;
+    text-align: center;
+    padding-top: 10px;
+    margin: 0%;
+    min-height: 5vh;
+    background-color: #1f1f1f;
+    max-height: 25vh;
+}
+
+h1 {
+    color: #c5c5c5;
+    font-size: 1.75vw;
+}
+
+h2 {
+    padding: 0%;
+    color: #c5c5c5;
+    font-size: 1.5vw;
+}
+
+h3{
+    font-size: 1.25vw;
+    color: #c5c5c5;
+    text-size-adjust: 50%;
+}
+
+p, h4 {
+    font-size: 1vw;
+    color: #c5c5c5;
+    text-size-adjust: 50%;
+}
+
+#login-button{
+    cursor: pointer;
+    font-size: 20px;
+}
+
+a {
+    text-decoration: none;
 }
