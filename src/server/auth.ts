@@ -4,7 +4,8 @@ import {
   type DefaultSession,
   type NextAuthOptions,
 } from "next-auth";
-import DiscordProvider, { DiscordProfile } from "next-auth/providers/discord";
+import DiscordProvider from "next-auth/providers/discord";
+import type { DiscordProfile } from "next-auth/providers/discord";
 import { env } from "~/env";
 import { db } from "~/server/db";
 
@@ -24,15 +25,23 @@ declare module "next-auth" {
   }
 
   interface User {
-    role: string;
-  }
-  }
-
-  interface Profile extends DiscordProfile {
     id: string;
-    role: string;
+    role?: string;
   }
 
+  interface AdapterUser {
+    role: string
+  }
+}
+declare module "next-auth/providers/discord" {
+  interface DiscordProfile {
+    id: string;
+    name: string;
+    email: string;
+    image: string;
+    role: string;
+  }
+}
 /**
  * Options for NextAuth.js used to configure adapters, providers, callbacks, etc.
  *
@@ -46,7 +55,7 @@ export const authOptions: NextAuthOptions = {
         user: {
           ...session.user,
           id: user.id,
-          // Fix unsafe member access
+          image: user.image,
           role: user.role,
         },
       };
@@ -57,11 +66,6 @@ export const authOptions: NextAuthOptions = {
 
   providers: [
     DiscordProvider({
-      profile(profile: Profile) {
-        const role: string = profile.role;
-        return { role, id: profile.id};
-      },
-
       clientId: env.DISCORD_CLIENT_ID,
       clientSecret: env.DISCORD_CLIENT_SECRET,
     }),

@@ -7,16 +7,14 @@ export default async function StatBar() {
     const swtorCount = 12 // await db.player.count({ where: { game:'swtor' } }); // display swtor members logged into game.
 
   // Session is not valid
-  if(!session || session.user.role === 'guest') {
+  if(!session) {
     return (
-        <div className="statbar">
+        <div className="stats-bar">
         <div className="stats-item">Online Members</div>
         <div className="stats-item">ESO: {esoCount}</div>
         <div className="stats-item">FFXIV: {ffxivCount}</div>
         <div className="stats-item">SWTOR: {swtorCount}</div>
-        <button id="avatar" className="stats-item-menu">
-            <i className="sidebar-togglefa fa-bars" id="sidebar-toggle"></i>
-        </button>
+
 
     </div>
     )
@@ -29,7 +27,7 @@ export default async function StatBar() {
     <div className="stats-item">ESO: {esoCount}</div>
     <div className="stats-item">FFXIV: {ffxivCount}</div>
     <div className="stats-item">SWTOR: {swtorCount}</div>
-    <div className="stats-item-menu flex"><span className="inline-flex"><Image src={session.user.image} width={30} height={30} style={{maxWidth: '100%', height: 'auto',}}alt="avatar" /></span><span>{session.user.name}</span></div>
+    <div className="stats-item-menu flex"><span className="inline-flex">{ session.user.image != null && <Image src={session.user.image} width={30} height={30} style={{maxWidth: '100%', height: 'auto',}}alt="avatar" />}</span><span>{session.user.name}</span></div>
   </div>
   )
 }

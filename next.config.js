@@ -13,7 +13,7 @@ const config = {
         protocol: 'https',
         hostname: 'cdn.discordapp.com',
         port: '',
-        pathname: '/avatars/267399228433760256/e411824740b4b71ac534fdeaaf7728a1.png',
+        pathname: '/avatars/**',
       },
     ],
 },};

@@ -1,4 +1,3 @@
-
 import FrontContent from "./_components/FrontContent";
 
 export default async function Home() {

@@ -7,7 +7,6 @@ import { TRPCReactProvider } from "~/trpc/react";
 import NavBar from "./_components/NavBar";
 import StatBar from "./_components/StatBar";
 import bg from "./_components/img/body-background-img-rock.png"
-import tg from "./_components/img/tgc.png"
 import SideBar from "./_components/SideBar";
 
 
