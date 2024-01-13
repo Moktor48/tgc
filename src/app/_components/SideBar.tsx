@@ -69,7 +69,7 @@ export default function SideBar() {
             { role != "guest" && <li><Link className="links" href={`/account/${id}`}><span className="material-symbols-outlined">Person</span> Account</Link></li>}
             { role === "admin" && <li><Link className="links" href={`/staff/${id}`}><span className="material-symbols-outlined">Supervisor_Account</span> Staff</Link></li>}
             { role === "staff" && <li><Link className="links" href={`/staff/${id}`}><span className="material-symbols-outlined">Supervisor_Account</span> Staff</Link></li>}
-            { role === "admin" && <li><Link className="links" href={`/admin/${id}`}><span className="material-symbols-outlined">Admin_Panel_Settings</span> Admin</Link></li>}
+            { role === "admin" && <li><Link className="links" href={`/admin`}><span className="material-symbols-outlined">Admin_Panel_Settings</span> Admin</Link></li>}
             <li><Link className="links" href="/about"><span className="material-symbols-outlined">Question_Mark</span> About</Link></li>
             <li><Link className="links" href="/api/auth/signout"><span className="material-symbols-outlined">Logout</span> Sign-out</Link></li>
         </ul>

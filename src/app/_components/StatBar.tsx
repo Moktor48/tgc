@@ -27,7 +27,7 @@ export default async function StatBar() {
     <div className="stats-item">ESO: {esoCount}</div>
     <div className="stats-item">FFXIV: {ffxivCount}</div>
     <div className="stats-item">SWTOR: {swtorCount}</div>
-    <div className="stats-item-menu flex"><span className="inline-flex">{ session.user.image != null && <Image src={session.user.image} width={30} height={30} style={{maxWidth: '100%', height: 'auto',}}alt="avatar" />}</span><span>{session.user.name}</span></div>
+    <div className="stats-item-menu flex"><span className="inline-flex">{ session.user.image != null && <Image src={session.user.image} width={30} height={30} alt="avatar" />}</span><span>{session.user.name}</span></div>
   </div>
   )
 }

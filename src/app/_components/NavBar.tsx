@@ -15,16 +15,16 @@ export default async function NavBar() {
   <div className="dropdown">
     <button className="dropbtn"><h2>Builds<span className="triangle-down"></span></h2></button>
     <div className="nav-dropdown-content">
-        <Link href="#">Option 1</Link>
-        <Link href="#">Option 2</Link>
-        <Link href="#">Option 3</Link>
+        <Link href="#">ESO</Link>
+        <Link href="#">SWTOR</Link>
+        <Link href="#">FFXIV</Link>
     </div>
   </div>
 
   <div className="dropdown">
     <button className="dropbtn"><h2>Guides<span className="triangle-down"></span></h2></button>
     <div className="nav-dropdown-content">
-        <Link href="#">Baldur's Gate 3</Link>
+        <Link href="#">ESO</Link>
         <Link href="#">SWTOR</Link>
         <Link href="#">FFXIV</Link>
     </div>
@@ -33,9 +33,9 @@ export default async function NavBar() {
   <div className="dropdown">
     <button className="dropbtn"><h2>Articles<span className="triangle-down"></span></h2></button>
     <div className="nav-dropdown-content">
-        <Link href="#">Option 7</Link>
-        <Link href="#">Option 8</Link>
-        <Link href="#">Option 9</Link>
+        <Link href="/article/eso">ESO</Link>
+        <Link href="/article/swtor">SWTOR</Link>
+        <Link href="/article/ffxiv">FFXIV</Link>
     </div>
   </div>
 
@@ -45,26 +45,3 @@ export default async function NavBar() {
 </div>
     )
 }
-
-
-/*
-    // When the user scrolls, execute stickNavBar()
-    window.onscroll = function() { stickNavbar()};
-
-    // Get the navbar
-    const navbar = document.getElementById("navbar");
-
-    // Get the offset position of the navbar
-    const sticky = navbar.offsetTop;
-    console.log(window.pageYOffset)
-
-    // Add the sticky class to the navbar when you reach its scroll position. Remove "sticky" when you leave the scroll position
-    function stickNavbar() {
-        if (window.scrollY >= sticky) {
-            navbar.classList.add("sticky");
-            
-        } else {
-            navbar.classList.remove("sticky");
-        }
-    }
-*/
