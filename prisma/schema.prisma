@@ -14,16 +14,15 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
-model Post {
-    id        Int      @id @default(autoincrement())
-    name      String
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-
-    createdBy   User   @relation(fields: [createdById], references: [id])
+model post {
+    id          String            @id @default(cuid())
+    post        String            @db.Text
+    createdAt   DateTime          @default(now())
+    updatedAt   DateTime          @updatedAt
+    name        String
+    createdBy   User              @relation(fields: [createdById], references: [id])
     createdById String
-
-    @@index([name])
+    permissions post_permission[]
 }
 
 // Necessary for Next auth
@@ -33,12 +32,12 @@ model Account {
     type              String
     provider          String
     providerAccountId String
-    refresh_token     String?  @db.Text
-    access_token      String?  @db.Text
+    refresh_token     String? @db.Text
+    access_token      String? @db.Text
     expires_at        Int?
     token_type        String?
     scope             String?
-    id_token          String?  @db.Text
+    id_token          String? @db.Text
     session_state     String?
     user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -51,19 +50,23 @@ model Session {
     userId       String   @unique
     expires      DateTime
     user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-
 }
 
 model User {
-    id            String    @id @default(cuid())
-    name          String?
-    email         String?   @unique
+    id            String            @id @default(cuid())
+    name          String
+    email         String            @unique
     emailVerified DateTime?
-    image         String?
-    role          String?    @default("guest")
+    image         String
+    role          String            @default("guest") //guest, member, staff, admin, gm
     accounts      Account[]
     sessions      Session[]
-    posts         Post[]
+    posts         post[]
+    eso           eso[]
+    ffxiv         ffxiv[]
+    swtor         swtor[]
+    staff         staff[]
+    permissions   user_permission[]
 }
 
 model VerificationToken {
@@ -74,5 +77,63 @@ model VerificationToken {
     @@unique([identifier, token])
 }
 
+// Guild role tables
 
+model eso {
+    id       String   @id @default(cuid())
+    userId   String   @unique //FK from user
+    rank     String   @default("Member") //member, respected, officer, deputy
+    raid     Boolean? @default(false)
+    raidlead Boolean? @default(false)
+    mentor   Boolean? @default(false)
+    user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
 
+model ffxiv {
+    id       String   @id @default(cuid())
+    userId   String   @unique
+    rank     String   @default("Member")
+    raid     Boolean? @default(false)
+    raidlead Boolean? @default(false)
+    mentor   Boolean? @default(false)
+    user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model swtor {
+    id       String   @id @default(cuid())
+    userId   String   @unique
+    rank     String   @default("Member")
+    raid     Boolean? @default(false)
+    raidlead Boolean? @default(false)
+    mentor   Boolean? @default(false)
+    user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model staff {
+    id             String   @id @default(cuid())
+    userId         String   @unique
+    specialist     String? //List roles, separate by semicolon?
+    representative String? //List roles, separate by semicolon?
+    highcouncil    Boolean? @default(false)
+    guildmaster    Boolean? @default(false)
+    user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model post_permission {
+    id      String  @id @default(cuid())
+    postId  String
+    general Boolean @default(false)
+    eso     Boolean @default(false)
+    ffxiv   Boolean @default(false)
+    swtor   Boolean @default(false)
+    post    post    @relation(fields: [postId], references: [id], onDelete: Cascade)
+}
+
+model user_permission {
+    id      String  @id @default(cuid())
+    userId  String
+    staff   Boolean @default(false)
+    member  Boolean @default(false)
+    council Boolean @default(false)
+    user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
