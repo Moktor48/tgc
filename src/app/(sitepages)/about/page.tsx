@@ -5,3 +5,8 @@ export default function AboutPage() {
     <div>Public About Page</div>
   )
 }
+
+/*
+FUTURE NOTES
+Chance needs to come up with something witty
+*/

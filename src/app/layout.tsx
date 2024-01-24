@@ -8,6 +8,7 @@ import NavBar from "./_components/NavBar";
 import StatBar from "./_components/StatBar";
 import bg from "./_components/img/body-background-img-rock.png"
 import SideBar from "./_components/SideBar";
+import BottomComp from "./_components/BottomComp";
 
 
 const inter = Inter({
@@ -42,6 +43,7 @@ export default async function RootLayout({
             <main>
               <NavBar />
               {children}
+              <BottomComp />
             </main>
           </TRPCReactProvider>
         </Provider>
@@ -49,3 +51,7 @@ export default async function RootLayout({
     </html>
   );
 }
+
+/*
+FUTURE NOTES: 
+*/

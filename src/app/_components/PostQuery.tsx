@@ -25,7 +25,7 @@ interface Perm{
     general: boolean
 }
 
-export default async function postQuery() {
+export default async function PostQuery() {
     const pullPosts = await api.post.getAllPosts.query()
     if (!pullPosts) return null
     

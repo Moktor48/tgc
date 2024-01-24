@@ -8,3 +8,8 @@ export default async function AccountPage( { params }: {params: { id: string } }
     <div>Private Account Page for {session?.user.name}</div>
   )
 }
+
+/*
+FUTURE NOTES
+This is where things get complicated
+*/

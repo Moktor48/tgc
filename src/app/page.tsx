@@ -14,17 +14,11 @@ export default async function Home() {
         </div>
       </div>
       <FrontContent />
-      <section className="newsletter" id="newsletter">
-        <h3>TGC News</h3>
-        <p>Our weekly newsletter with all the latest updates and news in The Gaming Council. Subscribe now!</p>
-        <form action="#" method="post">
-          <input type="email" id="email" placeholder="Enter your email" required />
-          <button style={{color: "#c5c5c5"}}>Subscribe</button>
-        </form>
-      </section>
-      <footer>
-        <p>TGC</p>
-      </footer> 
   </main>
   )
 }
+
+/*
+FUTURE NOTES: 
+
+*/

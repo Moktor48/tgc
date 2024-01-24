@@ -17,20 +17,34 @@ type FormData = {
   swtor: boolean
   general: boolean
 } | null
+const template1 = `<p><strong>Test Template 1</strong></p><p>Setting a template up for builds...</p><p></p><p>So, a table here, and some links there...</p><h2></h2>`
+const template2 = `<p><strong>Test Template 2</strong></p><p>Setting a template up for builds...</p><p></p><p>So, a table here, and some links there...</p><h2></h2>`
+const template3 = `<p><strong>Test Template 3</strong></p><p>Setting a template up for builds...</p><p></p><p>So, a table here, and some links there...</p><h2></h2>`
 
 export default function PostSubmit ({userId}: Props) {
+  const [postTemplate, setPostTemplate] = useState(template1)
   const [formData, setFormData] = useState<FormData>(null)
   const [formDataText, setFormDataText] = useState({title: 'Enter Title Here'})
   const subPerm = api.post.postPermissions.useMutation()
   const subData = api.post.post.useMutation({
+
     onSuccess(data) {
       const postId = data.id
-      console.log(postId)
       if (!postId) return
       if (!formData) return
       subPerm.mutate({postId: postId, permissions: formData})
     },
   })
+
+const handleTemplate = () => {
+  if(postTemplate === template1) {
+    setPostTemplate(template2)
+  } else if(postTemplate === template2) {
+    setPostTemplate(template3)
+  } else if(postTemplate === template3) {
+    setPostTemplate(template1)
+  } return postTemplate
+}
 
 const handleChangeT = (e: React.ChangeEvent<HTMLInputElement>) => {
   setFormDataText({...formDataText, title: e.target.value})
@@ -234,6 +248,14 @@ const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
       >
         redo
       </button>
+
+      <button
+        onClick={handleTemplate}
+        className="text-gray-100 text-xs min-w-30 justify-center transition duration-200 ease-in-out transform px-2 py-1 border-b-4 border-red-500 hover:border-b-2 bg-gradient-to-t from-red-400  via-red-600 to-red-200 rounded-2xl hover:translate-y-px"
+      >
+        Template
+      </button>
+
       <button
         onClick={submit}
         className="text-gray-100 text-xs min-w-30 justify-center transition duration-200 ease-in-out transform px-2 py-1 border-b-4 border-red-500 hover:border-b-2 bg-gradient-to-t from-red-400  via-red-600 to-red-200 rounded-2xl hover:translate-y-px"
@@ -296,7 +318,7 @@ display: none;
     <EditorProvider 
     slotBefore={<MenuBar />} 
     extensions={extensions} 
-    content={content}
+    content={postTemplate}
     children={null}
     />
     <form>
