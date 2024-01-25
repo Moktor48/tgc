@@ -120,13 +120,14 @@ model staff {
 }
 
 model post_permission {
-    id      String  @id @default(cuid())
-    postId  String
-    general Boolean @default(false)
-    eso     Boolean @default(false)
-    ffxiv   Boolean @default(false)
-    swtor   Boolean @default(false)
-    post    post    @relation(fields: [postId], references: [id], onDelete: Cascade)
+    id        String  @id @default(cuid())
+    postId    String
+    general   Boolean @default(false)
+    eso       Boolean @default(false)
+    ffxiv     Boolean @default(false)
+    swtor     Boolean @default(false)
+    published Boolean @default(false)
+    post      post    @relation(fields: [postId], references: [id], onDelete: Cascade)
 }
 
 model user_permission {

@@ -4,11 +4,12 @@ import { getServerAuthSession } from '~/server/auth'
 
 export default async function page() {
   const session = await getServerAuthSession()
+  console.log(session)
   if (!session) return null
   return (
     <div>
         <PostSubmit
-          userId={session?.user.id}
+          session={session}
         />
     </div>
   )

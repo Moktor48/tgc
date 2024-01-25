@@ -8,7 +8,14 @@ import StarterKit from '@tiptap/starter-kit'
 import { api } from '~/trpc/react'
 
 type Props = {
-  userId: string
+  session: {
+    user: {
+    name: string
+    email: string
+    id: string
+    role: string
+    }
+  }
 }
 
 type FormData = {
@@ -21,9 +28,10 @@ const template1 = `<p><strong>Test Template 1</strong></p><p>Setting a template 
 const template2 = `<p><strong>Test Template 2</strong></p><p>Setting a template up for builds...</p><p></p><p>So, a table here, and some links there...</p><h2></h2>`
 const template3 = `<p><strong>Test Template 3</strong></p><p>Setting a template up for builds...</p><p></p><p>So, a table here, and some links there...</p><h2></h2>`
 
-export default function PostSubmit ({userId}: Props) {
+export default function PostSubmit ({session}: Props) {
+  console.log(session)
   const [postTemplate, setPostTemplate] = useState(template1)
-  const [formData, setFormData] = useState<FormData>(null)
+  const [permissionData, setPermissionData] = useState<FormData>(null)
   const [formDataText, setFormDataText] = useState({title: 'Enter Title Here'})
   const subPerm = api.post.postPermissions.useMutation()
   const subData = api.post.post.useMutation({
@@ -31,8 +39,8 @@ export default function PostSubmit ({userId}: Props) {
     onSuccess(data) {
       const postId = data.id
       if (!postId) return
-      if (!formData) return
-      subPerm.mutate({postId: postId, permissions: formData})
+      if (!permissionData) return
+      subPerm.mutate({postId: postId, permissions: permissionData})
     },
   })
 
@@ -54,19 +62,19 @@ const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
   const { value } = event.target;
   console.log(value)
   if (value === 'eso') {
-  setFormData({
+  setPermissionData({
     eso: true, ffxiv: false, swtor: false, general: false
   });} else if (value === 'ffxiv') {
-    setFormData({
+    setPermissionData({
       eso: false, ffxiv: true, swtor: false, general: false
     });} else if (value ==='swtor') {
-      setFormData({
+      setPermissionData({
         eso: false, ffxiv: false, swtor: true, general: false
       });} else if (value === 'general') {
-        setFormData({
+        setPermissionData({
           eso: false, ffxiv: false, swtor: false, general: true
         });} else {
-          setFormData(null);}
+          setPermissionData(null);}
 }
 
 
@@ -80,10 +88,10 @@ const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
   async function submit() {
     if (!editor) return null
     if (formDataText.title === 'Enter Title Here') return null
-    if (formData === null) return null
+    if (permissionData === null) return null
     const content = editor.getHTML()
     subData.mutate({
-        createdById: userId,
+        createdById: session.id,
         post: content,
         name: formDataText.title,
     })
@@ -101,7 +109,7 @@ const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
             .toggleBold()
             .run()
         }
-        className={`${editor.isActive('bold') ? 'is-active' : ''} text-gray-100 text-xs min-w-30 justify-center transition duration-200 ease-in-out transform px-2 py-1 border-b-4 border-gray-500 hover:border-b-2 bg-gradient-to-t from-gray-400  via-gray-600 to-gray-200 rounded-2xl hover:translate-y-px `}
+        className={`${editor.isActive('bold') ? 'is-active border-yellow-500' : ''} text-gray-100 text-xs min-w-30 justify-center transition duration-200 ease-in-out transform px-2 py-1 border-b-4 border-gray-500 hover:border-b-2 bg-gradient-to-t from-gray-400  via-gray-600 to-gray-200 rounded-2xl hover:translate-y-px `}
       >
         bold
       </button>
@@ -114,7 +122,7 @@ const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
             .toggleItalic()
             .run()
         }
-        className={`${editor.isActive('italic') ? 'is-active' : ''} text-gray-100 text-xs min-w-30 justify-center transition duration-200 ease-in-out transform px-2 py-1 border-b-4 border-gray-500 hover:border-b-2 bg-gradient-to-t from-gray-400  via-gray-600 to-gray-200 rounded-2xl hover:translate-y-px `}
+        className={`${editor.isActive('italic') ? 'is-active border-yellow-500' : ''} text-gray-100 text-xs min-w-30 justify-center transition duration-200 ease-in-out transform px-2 py-1 border-b-4 border-gray-500 hover:border-b-2 bg-gradient-to-t from-gray-400  via-gray-600 to-gray-200 rounded-2xl hover:translate-y-px `}
       >
         italic
       </button>
@@ -127,7 +135,7 @@ const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
             .toggleStrike()
             .run()
         }
-        className={`${editor.isActive('strike') ? 'is-active' : ''} text-gray-100 text-xs min-w-30 justify-center transition duration-200 ease-in-out transform px-2 py-1 border-b-4 border-gray-500 hover:border-b-2 bg-gradient-to-t from-gray-400  via-gray-600 to-gray-200 rounded-2xl hover:translate-y-px `}
+        className={`${editor.isActive('strike') ? 'is-active border-yellow-500' : ''} text-gray-100 text-xs min-w-30 justify-center transition duration-200 ease-in-out transform px-2 py-1 border-b-4 border-gray-500 hover:border-b-2 bg-gradient-to-t from-gray-400  via-gray-600 to-gray-200 rounded-2xl hover:translate-y-px `}
       >
         strike
       </button>
@@ -140,7 +148,7 @@ const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
             .toggleCode()
             .run()
         }
-        className={`${editor.isActive('code') ? 'is-active' : ''} text-gray-100 text-xs min-w-30 justify-center transition duration-200 ease-in-out transform px-2 py-1 border-b-4 border-gray-500 hover:border-b-2 bg-gradient-to-t from-gray-400  via-gray-600 to-gray-200 rounded-2xl hover:translate-y-px `}
+        className={`${editor.isActive('code') ? 'is-active border-yellow-500' : ''} text-gray-100 text-xs min-w-30 justify-center transition duration-200 ease-in-out transform px-2 py-1 border-b-4 border-gray-500 hover:border-b-2 bg-gradient-to-t from-gray-400  via-gray-600 to-gray-200 rounded-2xl hover:translate-y-px `}
       >
         code
       </button>
@@ -152,67 +160,67 @@ const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
       </button>
       <button
         onClick={() => editor.chain().focus().setParagraph().run()}
-        className={`${editor.isActive('paragraph') ? 'is-active' : ''} text-gray-100 text-xs min-w-30 justify-center transition duration-200 ease-in-out transform px-2 py-1 border-b-4 border-gray-500 hover:border-b-2 bg-gradient-to-t from-gray-400  via-gray-600 to-gray-200 rounded-2xl hover:translate-y-px `}
+        className={`${editor.isActive('paragraph') ? 'is-active border-yellow-500' : ''} text-gray-100 text-xs min-w-30 justify-center transition duration-200 ease-in-out transform px-2 py-1 border-b-4 border-gray-500 hover:border-b-2 bg-gradient-to-t from-gray-400  via-gray-600 to-gray-200 rounded-2xl hover:translate-y-px `}
       >
         paragraph
       </button>
       <button
         onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
-        className={`${editor.isActive('heading', { level: 1 }) ? 'is-active' : ''} text-gray-100 text-xs min-w-30 justify-center transition duration-200 ease-in-out transform px-2 py-1 border-b-4 border-gray-500 hover:border-b-2 bg-gradient-to-t from-gray-400  via-gray-600 to-gray-200 rounded-2xl hover:translate-y-px `}
+        className={`${editor.isActive('heading', { level: 1 }) ? 'is-active border-yellow-500' : ''} text-gray-100 text-xs min-w-30 justify-center transition duration-200 ease-in-out transform px-2 py-1 border-b-4 border-gray-500 hover:border-b-2 bg-gradient-to-t from-gray-400  via-gray-600 to-gray-200 rounded-2xl hover:translate-y-px `}
       >
         h1
       </button>
       <button
         onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
-        className={`${editor.isActive('heading', { level: 2 }) ? 'is-active' : ''} text-gray-100 text-xs min-w-30 justify-center transition duration-200 ease-in-out transform px-2 py-1 border-b-4 border-gray-500 hover:border-b-2 bg-gradient-to-t from-gray-400  via-gray-600 to-gray-200 rounded-2xl hover:translate-y-px `}
+        className={`${editor.isActive('heading', { level: 2 }) ? 'is-active border-yellow-500' : ''} text-gray-100 text-xs min-w-30 justify-center transition duration-200 ease-in-out transform px-2 py-1 border-b-4 border-gray-500 hover:border-b-2 bg-gradient-to-t from-gray-400  via-gray-600 to-gray-200 rounded-2xl hover:translate-y-px `}
       >
         h2
       </button>
       <button
         onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
-        className={`${editor.isActive('heading', { level: 3 }) ? 'is-active' : ''} text-gray-100 text-xs min-w-30 justify-center transition duration-200 ease-in-out transform px-2 py-1 border-b-4 border-gray-500 hover:border-b-2 bg-gradient-to-t from-gray-400  via-gray-600 to-gray-200 rounded-2xl hover:translate-y-px `}
+        className={`${editor.isActive('heading', { level: 3 }) ? 'is-active border-yellow-500' : ''} text-gray-100 text-xs min-w-30 justify-center transition duration-200 ease-in-out transform px-2 py-1 border-b-4 border-gray-500 hover:border-b-2 bg-gradient-to-t from-gray-400  via-gray-600 to-gray-200 rounded-2xl hover:translate-y-px `}
       >
         h3
       </button>
 {/*      <button
         onClick={() => editor.chain().focus().toggleHeading({ level: 4 }).run()}
-        className={`${editor.isActive('heading', { level: 4 }) ? 'is-active' : ''} text-gray-100 text-xs min-w-30 justify-center transition duration-200 ease-in-out transform px-2 py-1 border-b-4 border-gray-500 hover:border-b-2 bg-gradient-to-t from-gray-400  via-gray-600 to-gray-200 rounded-2xl hover:translate-y-px `}
+        className={`${editor.isActive('heading', { level: 4 }) ? 'is-active border-yellow-500' : ''} text-gray-100 text-xs min-w-30 justify-center transition duration-200 ease-in-out transform px-2 py-1 border-b-4 border-gray-500 hover:border-b-2 bg-gradient-to-t from-gray-400  via-gray-600 to-gray-200 rounded-2xl hover:translate-y-px `}
       >
         h4
       </button>
       <button
         onClick={() => editor.chain().focus().toggleHeading({ level: 5 }).run()}
-        className={`${editor.isActive('heading', { level: 5 }) ? 'is-active' : ''} text-gray-100 text-xs min-w-30 justify-center transition duration-200 ease-in-out transform px-2 py-1 border-b-4 border-gray-500 hover:border-b-2 bg-gradient-to-t from-gray-400  via-gray-600 to-gray-200 rounded-2xl hover:translate-y-px `}
+        className={`${editor.isActive('heading', { level: 5 }) ? 'is-active border-yellow-500' : ''} text-gray-100 text-xs min-w-30 justify-center transition duration-200 ease-in-out transform px-2 py-1 border-b-4 border-gray-500 hover:border-b-2 bg-gradient-to-t from-gray-400  via-gray-600 to-gray-200 rounded-2xl hover:translate-y-px `}
       >
         h5
       </button>
       <button
         onClick={() => editor.chain().focus().toggleHeading({ level: 6 }).run()}
-        className={`${editor.isActive('heading', { level: 6 }) ? 'is-active' : ''} text-gray-100 text-xs min-w-30 justify-center transition duration-200 ease-in-out transform px-2 py-1 border-b-4 border-gray-500 hover:border-b-2 bg-gradient-to-t from-gray-400  via-gray-600 to-gray-200 rounded-2xl hover:translate-y-px `}
+        className={`${editor.isActive('heading', { level: 6 }) ? 'is-active border-yellow-500' : ''} text-gray-100 text-xs min-w-30 justify-center transition duration-200 ease-in-out transform px-2 py-1 border-b-4 border-gray-500 hover:border-b-2 bg-gradient-to-t from-gray-400  via-gray-600 to-gray-200 rounded-2xl hover:translate-y-px `}
       >
         h6
       </button> */}
       <button
         onClick={() => editor.chain().focus().toggleBulletList().run()}
-        className={`${editor.isActive('bulletList') ? 'is-active' : ''} text-gray-100 text-xs min-w-30 justify-center transition duration-200 ease-in-out transform px-2 py-1 border-b-4 border-gray-500 hover:border-b-2 bg-gradient-to-t from-gray-400  via-gray-600 to-gray-200 rounded-2xl hover:translate-y-px `}
+        className={`${editor.isActive('bulletList') ? 'is-active border-yellow-500' : ''} text-gray-100 text-xs min-w-30 justify-center transition duration-200 ease-in-out transform px-2 py-1 border-b-4 border-gray-500 hover:border-b-2 bg-gradient-to-t from-gray-400  via-gray-600 to-gray-200 rounded-2xl hover:translate-y-px `}
       >
         bullet list
       </button>
       <button
         onClick={() => editor.chain().focus().toggleOrderedList().run()}
-        className={`${editor.isActive('orderedList') ? 'is-active' : ''} text-gray-100 text-xs min-w-30 justify-center transition duration-200 ease-in-out transform px-2 py-1 border-b-4 border-gray-500 hover:border-b-2 bg-gradient-to-t from-gray-400  via-gray-600 to-gray-200 rounded-2xl hover:translate-y-px `}
+        className={`${editor.isActive('orderedList') ? 'is-active border-yellow-500' : ''} text-gray-100 text-xs min-w-30 justify-center transition duration-200 ease-in-out transform px-2 py-1 border-b-4 border-gray-500 hover:border-b-2 bg-gradient-to-t from-gray-400  via-gray-600 to-gray-200 rounded-2xl hover:translate-y-px `}
       >
         ordered list
       </button>
  {/*     <button
         onClick={() => editor.chain().focus().toggleCodeBlock().run()}
-        className={`${editor.isActive('codeBlock') ? 'is-active' : ''} text-gray-100 text-xs min-w-30 justify-center transition duration-200 ease-in-out transform px-2 py-1 border-b-4 border-gray-500 hover:border-b-2 bg-gradient-to-t from-gray-400  via-gray-600 to-gray-200 rounded-2xl hover:translate-y-px `}
+        className={`${editor.isActive('codeBlock') ? 'is-active border-yellow-500' : ''} text-gray-100 text-xs min-w-30 justify-center transition duration-200 ease-in-out transform px-2 py-1 border-b-4 border-gray-500 hover:border-b-2 bg-gradient-to-t from-gray-400  via-gray-600 to-gray-200 rounded-2xl hover:translate-y-px `}
       >
         code block
       </button>
       <button
         onClick={() => editor.chain().focus().toggleBlockquote().run()}
-        className={`${editor.isActive('blockquote') ? 'is-active' : ''} text-gray-100 text-xs min-w-30 justify-center transition duration-200 ease-in-out transform px-2 py-1 border-b-4 border-gray-500 hover:border-b-2 bg-gradient-to-t from-gray-400  via-gray-600 to-gray-200 rounded-2xl hover:translate-y-px `}
+        className={`${editor.isActive('blockquote') ? 'is-active border-yellow-500' : ''} text-gray-100 text-xs min-w-30 justify-center transition duration-200 ease-in-out transform px-2 py-1 border-b-4 border-gray-500 hover:border-b-2 bg-gradient-to-t from-gray-400  via-gray-600 to-gray-200 rounded-2xl hover:translate-y-px `}
       >
         blockquote
       </button> */}
@@ -283,36 +291,6 @@ const extensions = [
   }),
 ]
 
-const content = `
-<h2>
-  Hi there,
-</h2>
-<p>
-  this is a <em>basic</em> example of <strong>tiptap</strong>. Sure, there are all kind of basic text styles you’d probably expect from a text editor. But wait until you see the lists:
-</p>
-<ul>
-  <li>
-    That’s a bullet list with one …
-  </li>
-  <li>
-    … or two list items.
-  </li>
-</ul>
-<p>
-  Isn’t that great? And all of that is editable. But wait, there’s more. Let’s try a code block:
-</p>
-<pre><code class="language-css">body {
-display: none;
-}</code></pre>
-<p>
-  I know, I know, this is impressive. It’s only the tip of the iceberg though. Give it a try and click a little bit around. Don’t forget to check the other examples too.
-</p>
-<blockquote>
-  Wow, that’s amazing. Good work, boy! 👏
-  <br />
-  — Mom
-</blockquote>
-`
   return (
     <div className="bg-black">
     <EditorProvider 
@@ -323,12 +301,16 @@ display: none;
     />
     <form>
       <input type="text" name="name" id="name" value={formDataText.title} onChange={handleChangeT} />
+      {/* Setting permission data */}
       <select name="audience" id="audience" onChange={handleChange}>
         <option value="none">Choose an Option</option>
         <option value="eso">ESO</option>
         <option value="ffxiv">FFXIV</option>
         <option value="swtor">SWTOR</option>
         <option value="general">General</option>
+        { session.user.role === "staff" && <option value="staff">Staff</option>}
+        { session.user.role === "admin" && <option value="staff">Staff</option>}
+        { session.user.role === "gm" && <option value="staff">Staff</option>}
       </select>
     </form>
     </div>
