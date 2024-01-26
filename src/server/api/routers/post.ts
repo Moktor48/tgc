@@ -33,13 +33,13 @@ export const postRouter = createTRPCRouter({
 
 //creates a new post for approval
   post: protectedProcedure
-  .input(z.object({ createdById: z.string(), post: z.string(), name: z.string() }))
+  .input(z.object({ createdById: z.string(), post: z.string(), title: z.string() }))
   .mutation(async ({ input }) => {
     const post = await db.post.create({
       data: {
         createdById: input.createdById,
         post: input.post,
-        name: input.name,
+        title: input.title,
       }
     });
     return post;
@@ -47,15 +47,18 @@ export const postRouter = createTRPCRouter({
 
 //This one works but makes TS mad... 
   postPermissions: protectedProcedure
-  .input(z.object({ postId: z.string(), permissions: z.object({ eso: z.boolean(), ffxiv: z.boolean(), swtor: z.boolean(), general: z.boolean() }) }))
+  .input(z.object({ postId: z.string(), eso: z.boolean(), ffxiv: z.boolean(), swtor: z.boolean(), general: z.boolean(), staff: z.boolean(), raid: z.boolean(), officer: z.boolean() }))
   .mutation(async ({ input }) => {
     const post = await db.post_permission.create({
       data: {
         postId: input.postId,
-        eso: input.permissions.eso,
-        ffxiv: input.permissions.ffxiv,
-        swtor: input.permissions.swtor,
-        general: input.permissions.general,
+        eso: input.eso,
+        ffxiv: input.ffxiv,
+        swtor: input.swtor,
+        general: input.general,
+        staff: input.staff,
+        raid: input.raid,
+        officer: input.officer,
       }
     }) as Permission;
     return post;
@@ -67,7 +70,7 @@ export const postRouter = createTRPCRouter({
     const posts = await db.post.findMany({
       select: {
         id: true,
-        name: true,
+        title: true,
         createdBy: {
           select: {
             id: true,
@@ -85,6 +88,42 @@ export const postRouter = createTRPCRouter({
       }
     });
       return posts;
+  }),
+
+  staffPermission: protectedProcedure
+  .input(z.object({ userId: z.string() }))
+  .query(async ({ input }) => {
+    const user = await db.staff.findUnique({
+      where: { userId: input.userId },
+    });
+    return user;
+  }),
+
+  esoPermission: protectedProcedure
+  .input(z.object({ userId: z.string() }))
+  .query(async ({ input }) => {
+    const user = await db.eso.findUnique({
+      where: { userId: input.userId },
+    });
+    return user;
+  }),
+
+  swtorPermission: protectedProcedure
+  .input(z.object({ userId: z.string() }))
+  .query(async ({ input }) => {
+    const user = await db.swtor.findUnique({
+      where: { userId: input.userId },
+    });
+    return user;
+  }),
+
+  ffxivPermission: protectedProcedure
+  .input(z.object({ userId: z.string() }))
+  .query(async ({ input }) => {
+    const user = await db.ffxiv.findUnique({
+      where: { userId: input.userId },
+    });
+    return user;
   }),
 
 }) // This is the end, lawlz. 

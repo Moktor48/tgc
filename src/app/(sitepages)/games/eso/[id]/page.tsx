@@ -1,8 +1,14 @@
 import React from 'react'
+import PostForm from '~/app/_components/PostForm'
 
 export default function page({ params }: {params: { id: string } }) {
-  
+  const id = params.id
   return (
-    <div>ESO Guild Member Page</div>
+    <div>
+      <PostForm 
+        game="eso"
+        userId={id}
+        />
+    </div>
   )
 }

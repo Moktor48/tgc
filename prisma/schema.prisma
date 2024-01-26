@@ -14,18 +14,7 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
-model post {
-    id          String            @id @default(cuid())
-    post        String            @db.Text
-    createdAt   DateTime          @default(now())
-    updatedAt   DateTime          @updatedAt
-    name        String
-    createdBy   User              @relation(fields: [createdById], references: [id])
-    createdById String
-    permissions post_permission[]
-}
-
-// Necessary for Next auth
+// Necessary for auth.js, don't change anything here!!!
 model Account {
     id                String  @id @default(cuid())
     userId            String
@@ -53,12 +42,12 @@ model Session {
 }
 
 model User {
-    id            String            @id @default(cuid())
+    id            String    @id @default(cuid())
     name          String
-    email         String            @unique
+    email         String    @unique
     emailVerified DateTime?
     image         String
-    role          String            @default("guest") //guest, member, staff, admin, gm
+    role          String    @default("guest") //guest, member, staff
     accounts      Account[]
     sessions      Session[]
     posts         post[]
@@ -66,7 +55,6 @@ model User {
     ffxiv         ffxiv[]
     swtor         swtor[]
     staff         staff[]
-    permissions   user_permission[]
 }
 
 model VerificationToken {
@@ -77,22 +65,48 @@ model VerificationToken {
     @@unique([identifier, token])
 }
 
-// Guild role tables
+// Post tables
+model post {
+    id          String            @id @default(cuid())
+    post        String            @db.Text
+    createdAt   DateTime          @default(now())
+    updatedAt   DateTime          @updatedAt
+    title       String
+    published   Boolean           @default(false)
+    createdBy   User              @relation(fields: [createdById], references: [id])
+    createdById String
+    permissions post_permission[]
+}
 
+model post_permission {
+    id        String  @id @default(cuid())
+    postId    String
+    general   Boolean @default(false) //Game focus
+    eso       Boolean @default(false)
+    ffxiv     Boolean @default(false)
+    swtor     Boolean @default(false)
+    staff     Boolean @default(false) //Staff focus
+    officer   Boolean @default(false)
+    raid      Boolean @default(false) //Staff focused, but applicable to game
+    published Boolean @default(false)
+    post      post    @relation(fields: [postId], references: [id], onDelete: Cascade)
+}
+
+// Guild role tables
 model eso {
     id       String   @id @default(cuid())
     userId   String   @unique //FK from user
-    rank     String   @default("Member") //member, respected, officer, deputy
-    raid     Boolean? @default(false)
-    raidlead Boolean? @default(false)
-    mentor   Boolean? @default(false)
+    rank     String   @default("none") //member, respected, officer, deputy
+    raid     Boolean? @default(false) //Members that are part of a raid team
+    raidlead Boolean? @default(false) //Staff position, focused on raids
+    mentor   Boolean? @default(false) //Staff position, mentor
     user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model ffxiv {
     id       String   @id @default(cuid())
     userId   String   @unique
-    rank     String   @default("Member")
+    rank     String   @default("none")
     raid     Boolean? @default(false)
     raidlead Boolean? @default(false)
     mentor   Boolean? @default(false)
@@ -102,39 +116,21 @@ model ffxiv {
 model swtor {
     id       String   @id @default(cuid())
     userId   String   @unique
-    rank     String   @default("Member")
+    rank     String   @default("none")
     raid     Boolean? @default(false)
     raidlead Boolean? @default(false)
     mentor   Boolean? @default(false)
     user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
+// Staff role table
 model staff {
     id             String   @id @default(cuid())
     userId         String   @unique
-    specialist     String? //List roles, separate by semicolon?
-    representative String? //List roles, separate by semicolon?
-    highcouncil    Boolean? @default(false)
-    guildmaster    Boolean? @default(false)
+    admin          Boolean? @default(false) //Developers SPECIFICALLY with website access
+    specialist     Boolean? @default(false) //Kind of a catch-all for staff
+    representative Boolean? @default(false)
+    highcouncil    Boolean? @default(false) //Promote/demote ONLY by GM
+    guildmaster    Boolean? @default(false) //All permissions, should not be modifyable by ANYONE else
     user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-}
-
-model post_permission {
-    id        String  @id @default(cuid())
-    postId    String
-    general   Boolean @default(false)
-    eso       Boolean @default(false)
-    ffxiv     Boolean @default(false)
-    swtor     Boolean @default(false)
-    published Boolean @default(false)
-    post      post    @relation(fields: [postId], references: [id], onDelete: Cascade)
-}
-
-model user_permission {
-    id      String  @id @default(cuid())
-    userId  String
-    staff   Boolean @default(false)
-    member  Boolean @default(false)
-    council Boolean @default(false)
-    user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 }

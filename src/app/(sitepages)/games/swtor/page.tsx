@@ -1,7 +1,13 @@
+import Link from 'next/link'
 import React from 'react'
-
-export default function page() {
+import { getServerAuthSession } from '~/server/auth'
+export default async function page() {
+  const session = await getServerAuthSession()
+  const id = session?.user.id
   return (
-    <div>SWTOR Landing Page</div>
+    <div>
+      <Link href={`/games/swtor/${id}`}></Link>
+    </div>
+
   )
 }

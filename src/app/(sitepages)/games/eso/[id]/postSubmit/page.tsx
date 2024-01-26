@@ -33,7 +33,7 @@ const report = `<p><strong>Test Template REPORT!!!</strong></p><p>Setting a temp
 export default function PostSubmit ({userId, gameSelect, typeSelect, roleSelect}: Props) {
   const [formDataText, setFormDataText] = useState({title: 'Enter Title Here'})
   const [permissionData, setPermissionData] = useState<FormData>({postId: "", eso: false, ffxiv: false, swtor: false, general: false, staff: false, raid: false, officer: false})
-  const postTemplate = typeSelect === 1? build : typeSelect === 2? guide : typeSelect === 3? notification : report
+  const postTemplate = typeSelect === "1"? build : typeSelect === "2"? guide : typeSelect === "3"? notification : report
 
 
   useEffect(() => {

@@ -1,7 +1,13 @@
+import Link from 'next/link'
 import React from 'react'
-
-export default function page() {
+import { getServerAuthSession } from '~/server/auth'
+export default async function page() {
+  const session = await getServerAuthSession()
+  const id = session?.user.id
   return (
-    <div>FFXIV Landing Page</div>
+    <div>
+      <Link href={`/games/ffxiv/${id}`}></Link>
+    </div>
+
   )
 }
