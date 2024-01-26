@@ -53,6 +53,7 @@ export default function PostSubmit ({userId, gameSelect, typeSelect, roleSelect}
     setFormDataText({...formDataText, title: e.target.value})
   }
 
+
 // MenuBar START =====================> Watch placement of elements!!!
   const MenuBar = () => {
   const { editor } = useCurrentEditor()
@@ -68,6 +69,7 @@ export default function PostSubmit ({userId, gameSelect, typeSelect, roleSelect}
         post: content,
         title: formDataText.title,
     })
+
   }
 
   return (

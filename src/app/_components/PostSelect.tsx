@@ -2,6 +2,10 @@
 import PostSubmit from './PostSubmit'
 import React, { useState } from 'react'
 import type { Session } from 'next-auth'
+import { useRouter } from 'next/navigation'
+import { usePathname } from 'next/navigation'
+import { useSearchParams } from 'next/navigation'
+import { useCallback } from 'react'
 interface Props {
     game: string
     userId: string
@@ -42,12 +46,25 @@ interface Props {
 }
 
 export default function PostSelect({game, userId, session, staff, eso, ffxiv, swtor}: Props) {
+    const id = userId
+    const router = useRouter()
+    const pathname = usePathname()
+    const searchParams = useSearchParams()
     const [gameSelect, setGameSelect] = useState({game_select: game})
     const [typeSelect, setTypeSelect] = useState({type_select: "default"})
     const [roleSelect, setRoleSelect] = useState({role_select: "default"})
     const raid = eso?.raid ?? ffxiv?.raid ?? swtor?.raid ?? false
     const officer = eso?.rank === "officer" ?? ffxiv?.rank === "officer" ?? swtor?.rank === "officer" ?? false
-    console.log(raid)
+    const staffP = staff?.specialist ?? true ?? false
+    const createQueryString = useCallback(
+    (name: string, value: string) => {
+      const params = new URLSearchParams(searchParams.toString())
+      params.set(name, value)
+      return params.toString()
+    },
+    [searchParams]
+  )
+
     const handleGS = (e: React.ChangeEvent<HTMLSelectElement>) => {
         setGameSelect({game_select: e.target.value})
         }
@@ -63,9 +80,9 @@ export default function PostSelect({game, userId, session, staff, eso, ffxiv, sw
         <form>
             <select name="game_select" id="game_select" onChange={handleGS}> {/*Available if you have guild access */}
                 <option value="general">General</option>
-                {eso?.rank != "none" && <option value="eso">ESO</option>}
-                {ffxiv?.rank != "none" && <option value="ffxiv">FFXIV</option>}
-                {swtor?.rank != "none" && <option value="swtor">SWTOR</option>}
+                {eso?.rank != "none" && eso?.rank != null && <option value="eso">ESO</option>}
+                {ffxiv?.rank != "none" && ffxiv?.rank != null && <option value="ffxiv">FFXIV</option>}
+                {swtor?.rank != "none" && swtor?.rank != null && <option value="swtor">SWTOR</option>}
             </select>
             <select name="type_select" id="type_select" onChange={handleTS}> {/*Available after selecting game */}
                 <option value="default">Choose template type...</option>
@@ -77,18 +94,13 @@ export default function PostSelect({game, userId, session, staff, eso, ffxiv, sw
             <select name="role_select" id="role_select" onChange={handleRS}> {/*Available based on user roles */}
                 <option value="default">Choose audience type...</option>
                 <option value="1">General</option>
-                {staff && <option value="2">Staff</option>}
+                {staffP && <option value="2">Staff</option>}
                 {raid && <option value="3">Raid</option>}
                 {officer && <option value="4">Guild Officer</option>}
                 <option value="5">Guildmembers</option>
             </select>
         </form>
-        <PostSubmit
-            userId={userId}
-            gameSelect={gameSelect.game_select}
-            typeSelect={typeSelect.type_select}
-            roleSelect={roleSelect.role_select}
-            />
+
     </div>
   )
 }
