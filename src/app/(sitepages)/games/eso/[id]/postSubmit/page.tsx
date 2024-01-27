@@ -6,14 +6,9 @@ import TextStyle from '@tiptap/extension-text-style'
 import { useCurrentEditor, EditorProvider } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import { api } from '~/trpc/react'
-
-type Props = {
-  userId: string
-  gameSelect: string
-  typeSelect: string
-  roleSelect: string
-}
-
+import { useSearchParams } from 'next/navigation'
+import { useSession } from 'next-auth/react'
+import type { Session } from 'next-auth'
 type FormData = {
   postId: string
   eso: boolean
@@ -30,17 +25,24 @@ const guide = `<p><strong>Test Template GUIDE!!!</strong></p><p>Setting a templa
 const notification = `<p><strong>Test Template NOTIFICATION!!!</strong></p><p>Setting a template up for builds...</p><p></p><p>So, a table here, and some links there...</p><h2></h2>`
 const report = `<p><strong>Test Template REPORT!!!</strong></p><p>Setting a template up for builds...</p><p></p><p>So, a table here, and some links there...</p><h2></h2>`
 
-export default function PostSubmit ({userId, gameSelect, typeSelect, roleSelect}: Props) {
+export default function PostSubmit () {
+  const { data } = useSession()
+  const session = data
+  if (!session) return null
+  const userId = session.user.id
+  const searchParams = useSearchParams()
+  //These will set GAME, TYPE of document, and ROLE the document is intended for.
+  const gameSelect = searchParams.get('game')!
+  const typeSelect = searchParams.get('type')!
+  const roleSelect = searchParams.get('role')!
   const [formDataText, setFormDataText] = useState({title: 'Enter Title Here'})
+  //Permission data is set through the previous page set-up
   const [permissionData, setPermissionData] = useState<FormData>({postId: "", eso: false, ffxiv: false, swtor: false, general: false, staff: false, raid: false, officer: false})
   const postTemplate = typeSelect === "1"? build : typeSelect === "2"? guide : typeSelect === "3"? notification : report
 
-  useEffect(() => {
-    setPermissionData({...permissionData, [gameSelect]: true, [roleSelect]: true})
-  }, [gameSelect])
-
+//Function to submit the permission data
   const subPerm = api.post.postPermissions.useMutation()
-
+//Function to submit the post data, then on response adds permissions to the post_permission table
   const subData = api.post.post.useMutation({
     onSuccess(data) {
       const postId = data.id
@@ -48,7 +50,7 @@ export default function PostSubmit ({userId, gameSelect, typeSelect, roleSelect}
       subPerm.mutate(permissionData)
     },
   })
-
+//State for post TITLE
   const handleChangeT = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormDataText({...formDataText, title: e.target.value})
   }
@@ -60,6 +62,7 @@ export default function PostSubmit ({userId, gameSelect, typeSelect, roleSelect}
   if (!editor) return null
 
   async function submit() {
+    setPermissionData({...permissionData, [gameSelect]: true, [roleSelect]: true})
     if (!editor) return null
     if (formDataText.title === 'Enter Title Here') return null
     const content = editor.getHTML()

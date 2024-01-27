@@ -3,19 +3,22 @@ import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
 import { getSession } from 'next-auth/react'
 import type { Session } from 'node_modules/next-auth/core/types'
-import { useSession } from 'next-auth/react'
+import { api } from '~/trpc/react'
 
-export default function SideBar() {
+export default function SideBar({staff}: {staff: {id: string; userId: string; admin: boolean | null; specialist: boolean | null; representative: boolean | null; highcouncil: boolean | null; guildmaster: boolean | null;} | null}) {
   const [session, setSession] = useState<Session | null>(null)
 
-  useEffect(() => {
-    getSession().then((session) => {
-      setSession(session)
-    }) .catch((err) => {
-      console.error(err)
-    }
-  )}, [])
 
+//Hook attempts to pull the session
+useEffect(() => {
+    getSession().then((session) => {
+    setSession(session)
+    }) .catch((err) => {
+    console.error(err)
+    }
+)}, [])
+
+//Sidebar set-up  
   const [sidebar, setSidebar] = useState(false) 
   useEffect(() => {
     const handleResize = () => {
@@ -27,9 +30,6 @@ export default function SideBar() {
     return () => 
         window.removeEventListener('resize', handleResize)
     }, [sidebar])
-  
-
-
 
 // Session is not valid
     if(!session){
@@ -52,9 +52,14 @@ export default function SideBar() {
         </div>
     
     )}
+
+
 // Session is valid, "guest" is the generic role granted to first-time users
-      const id: string = session?.user?.id
-      const role: string = session?.user?.role
+    const id: string = session?.user?.id
+    const role: string = session?.user?.role
+    const admin = staff?.admin
+
+  
   return (
     <div>
     <button onClick={()=> setSidebar(!sidebar)} className="nav-button">
@@ -64,9 +69,8 @@ export default function SideBar() {
         <ul>
             <li><Link className="links" href="/"><span className="material-symbols-outlined">Home</span> Home</Link></li>
             { role != "guest" && <li><Link className="links" href={`/account/${id}`}><span className="material-symbols-outlined">Person</span> Account</Link></li>}
-            { role === "admin" && <li><Link className="links" href={`/staff/${id}`}><span className="material-symbols-outlined">Supervisor_Account</span> Staff</Link></li>}
             { role === "staff" && <li><Link className="links" href={`/staff/${id}`}><span className="material-symbols-outlined">Supervisor_Account</span> Staff</Link></li>}
-            { role === "admin" && <li><Link className="links" href={`/admin`}><span className="material-symbols-outlined">Admin_Panel_Settings</span> Admin</Link></li>}
+            { admin && <li><Link className="links" href={`/admin`}><span className="material-symbols-outlined">Admin_Panel_Settings</span> Admin</Link></li>}
             <li><Link className="links" href="/games"><span className="material-symbols-outlined">Casino</span> Games</Link></li>            
             <li><Link className="links" href="/about"><span className="material-symbols-outlined">Question_Mark</span> About</Link></li>
             <li><Link className="links" href="/api/auth/signout"><span className="material-symbols-outlined">Logout</span> Sign-out</Link></li>

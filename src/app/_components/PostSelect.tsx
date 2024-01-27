@@ -46,16 +46,23 @@ interface Props {
 }
 
 export default function PostSelect({game, userId, session, staff, eso, ffxiv, swtor}: Props) {
-    const id = userId
+    const id = session.user.id
     const router = useRouter()
     const pathname = usePathname()
     const searchParams = useSearchParams()
+    console.log(session.user)
     const [gameSelect, setGameSelect] = useState({game_select: game})
     const [typeSelect, setTypeSelect] = useState({type_select: "default"})
     const [roleSelect, setRoleSelect] = useState({role_select: "default"})
+    console.log(gameSelect)
+    console.log(typeSelect)
+    console.log(roleSelect)
     const raid = eso?.raid ?? ffxiv?.raid ?? swtor?.raid ?? false
     const officer = eso?.rank === "officer" ?? ffxiv?.rank === "officer" ?? swtor?.rank === "officer" ?? false
     const staffP = staff?.specialist ?? true ?? false
+    console.log(officer)
+    console.log(staffP)
+    console.log(raid)
     const createQueryString = useCallback(
     (name: string, value: string) => {
       const params = new URLSearchParams(searchParams.toString())
@@ -100,7 +107,17 @@ export default function PostSelect({game, userId, session, staff, eso, ffxiv, sw
                 <option value="5">Guildmembers</option>
             </select>
         </form>
-
+        <button
+        onClick={() => {
+          // <pathname>?sort=asc
+          router.push(pathname + '?' + 
+        createQueryString('game', gameSelect.game_select) + '&' +
+        createQueryString('type', typeSelect.type_select) + '&' + 
+        createQueryString('role', roleSelect.role_select)
+        )
+        }}>
+        Submit to Editor
+      </button>
     </div>
   )
 }

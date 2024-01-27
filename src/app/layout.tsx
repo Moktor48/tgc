@@ -9,7 +9,7 @@ import StatBar from "./_components/StatBar";
 import bg from "./_components/img/body-background-img-rock.png"
 import SideBar from "./_components/SideBar";
 import BottomComp from "./_components/BottomComp";
-
+import { api } from "~/trpc/server";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -27,6 +27,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   const session = await getServerAuthSession();
+  const staff = await api.post.staffPermission.query({userId: session.user.id});
   return (
     <html lang="en" style={{
       backgroundImage: `url(${bg.src})`,
@@ -38,7 +39,9 @@ export default async function RootLayout({
           <TRPCReactProvider cookies={cookies().toString()}>
             <header>
               <StatBar />
-              <SideBar />
+              <SideBar
+                staff={staff}
+              />
             </header>
             <main>
               <NavBar />
