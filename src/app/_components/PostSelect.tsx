@@ -86,11 +86,10 @@ export default function PostSelect({id, staff, eso, ffxiv, swtor}: Props) {
             </select>
             <select name="role_select" id="role_select" onChange={handleRS}> {/*Available based on user roles */}
                 <option value="default">Choose audience type...</option>
-                <option value="1">General</option>
-                {staffP && <option value="2">Staff</option>}
-                {raid && <option value="3">Raid</option>}
-                {officer && <option value="4">Guild Officer</option>}
-                <option value="5">Guildmembers</option>
+                <option value="0">General</option>
+                {staffP && <option value="staff">Staff</option>}
+                {raid && <option value="raid">Raid</option>}
+                {officer && <option value="officer">Guild Officer</option>}
             </select>
         </form>
         <button

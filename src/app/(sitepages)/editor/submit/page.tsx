@@ -10,7 +10,6 @@ import { useSearchParams } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 
 type FormData = {
-  postId: string
   eso: boolean
   ffxiv: boolean
   swtor: boolean
@@ -37,21 +36,25 @@ export default function PostSubmit () {
   const typeSelect = searchParams.get('type')!
   const roleSelect = searchParams.get('role')!
   const [title, setTitle] = useState({title: "==> SET TITLE <=="})
+
   //Permission data is set through the previous page set-up
-  const [permissionData, setPermissionData] = useState<FormData>({postId: "", eso: false, ffxiv: false, swtor: false, general: false, staff: false, raid: false, officer: false})
+  const [permissionData, setPermissionData] = useState<FormData>({eso: false, ffxiv: false, swtor: false, general: false, staff: false, raid: false, officer: false})
   const postTemplate = typeSelect === "1"? build : typeSelect === "2"? guide : typeSelect === "3"? notification : report
 
 //Function to submit the permission data
   const subPerm = api.post.postPermissions.useMutation()
+
 //Function to submit the post data, then on response adds permissions to the post_permission table
   const subData = api.post.post.useMutation({
     onSuccess(data) {
-      console.log(data)
-      const postId = data.id
-      if (!postId) return null
-      subPerm.mutate(permissionData)
+      const id = data.id
+      const pId = {postId: id}
+      const permissionDataX = {...permissionData, ...pId}
+      if (!data.id) return null
+      subPerm.mutate(permissionDataX)
     },
   })
+
   function handleChangeT(e: React.ChangeEvent<HTMLInputElement>) {
     setTitle(prev => {
       return {...prev, title: e.target.value}})
@@ -65,7 +68,6 @@ export default function PostSubmit () {
 
   async function submit() {
     setPermissionData({...permissionData, [gameSelect]: true, [roleSelect]: true})
-    
     if (!editor) return null
     if (title.title === "==> SET TITLE <==") return null
     console.log(title)
@@ -79,11 +81,6 @@ export default function PostSubmit () {
 
   return (
     <>
-    <div>
-      <form>
-        <input type="text" name="name" id="name" value={title.title} onChange={handleChangeT} />
-      </form>
-    </div>
       <button
         onClick={() => editor.chain().focus().toggleBold().run()}
         disabled={
@@ -270,6 +267,9 @@ const extensions = [
 
   return (
     <div className="bg-black">
+      <form>
+        <input type="text" name="name" id="name" value={title.title} onChange={handleChangeT} />
+      </form>
       <EditorProvider 
         slotBefore={<MenuBar />} 
         extensions={extensions} 
