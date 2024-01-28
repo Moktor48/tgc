@@ -21,3 +21,14 @@ export default async function page() {
   )
 }
 }
+
+/*
+Components for Admin:
+- User Search, pulls all records of users
+- Post Query, pulls all posts and their permissions
+Linking to post form is fine
+
+Activation button for new members
+edit user/post forms
+
+*/

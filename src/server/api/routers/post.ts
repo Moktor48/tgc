@@ -15,6 +15,12 @@ interface Permission{
 }
 
 export const postRouter = createTRPCRouter({
+  allUsers: protectedProcedure
+  .query(async () => {
+    const users = await db.user.findMany({
+    });
+    return users;
+  }),
 
  //pulls relations for a userId, can be used to determine access and profiles
   fullProfile: protectedProcedure

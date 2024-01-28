@@ -93,6 +93,7 @@ export default function PostSelect({id, staff, eso, ffxiv, swtor}: Props) {
             </select>
         </form>
         <button
+        className="text-white"
         onClick={() => {
           // <pathname>?sort=asc
         router.push(
