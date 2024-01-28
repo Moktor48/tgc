@@ -1,5 +1,5 @@
 'use client'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { Color } from '@tiptap/extension-color'
 import ListItem from '@tiptap/extension-list-item'
 import TextStyle from '@tiptap/extension-text-style'
@@ -8,7 +8,7 @@ import StarterKit from '@tiptap/starter-kit'
 import { api } from '~/trpc/react'
 import { useSearchParams } from 'next/navigation'
 import { useSession } from 'next-auth/react'
-import type { Session } from 'next-auth'
+
 type FormData = {
   postId: string
   eso: boolean
@@ -31,11 +31,12 @@ export default function PostSubmit () {
   if (!session) return null
   const userId = session.user.id
   const searchParams = useSearchParams()
+
   //These will set GAME, TYPE of document, and ROLE the document is intended for.
   const gameSelect = searchParams.get('game')!
   const typeSelect = searchParams.get('type')!
   const roleSelect = searchParams.get('role')!
-  const [formDataText, setFormDataText] = useState({title: 'Enter Title Here'})
+  const [title, setTitle] = useState({title: "==> SET TITLE <=="})
   //Permission data is set through the previous page set-up
   const [permissionData, setPermissionData] = useState<FormData>({postId: "", eso: false, ffxiv: false, swtor: false, general: false, staff: false, raid: false, officer: false})
   const postTemplate = typeSelect === "1"? build : typeSelect === "2"? guide : typeSelect === "3"? notification : report
@@ -45,15 +46,16 @@ export default function PostSubmit () {
 //Function to submit the post data, then on response adds permissions to the post_permission table
   const subData = api.post.post.useMutation({
     onSuccess(data) {
+      console.log(data)
       const postId = data.id
       if (!postId) return null
       subPerm.mutate(permissionData)
     },
   })
-//State for post TITLE
-  const handleChangeT = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormDataText({...formDataText, title: e.target.value})
-  }
+  function handleChangeT(e: React.ChangeEvent<HTMLInputElement>) {
+    setTitle(prev => {
+      return {...prev, title: e.target.value}})
+    }
 
 // MenuBar START =====================> Watch placement of elements!!!
   const MenuBar = () => {
@@ -63,13 +65,15 @@ export default function PostSubmit () {
 
   async function submit() {
     setPermissionData({...permissionData, [gameSelect]: true, [roleSelect]: true})
+    
     if (!editor) return null
-    if (formDataText.title === 'Enter Title Here') return null
+    if (title.title === "==> SET TITLE <==") return null
+    console.log(title)
     const content = editor.getHTML()
     subData.mutate({
         createdById: userId,
         post: content,
-        title: formDataText.title,
+        title: title.title
     })
   }
 
@@ -77,7 +81,7 @@ export default function PostSubmit () {
     <>
     <div>
       <form>
-        <input type="text" name="name" id="name" value={formDataText.title} onChange={handleChangeT} />
+        <input type="text" name="name" id="name" value={title.title} onChange={handleChangeT} />
       </form>
     </div>
       <button

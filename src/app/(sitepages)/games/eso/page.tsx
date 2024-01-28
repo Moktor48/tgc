@@ -7,7 +7,7 @@ export default async function page() {
   const id = session?.user.id
   return (
     <div>
-      <Link href={`/games/eso/${id}`}>Member Page!</Link>
+      <Link href={`/games/eso/${id}`} className="text-white">Member Page!</Link>
     </div>
 
   )

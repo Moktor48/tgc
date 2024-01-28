@@ -1,14 +1,14 @@
+import Link from 'next/link'
 import React from 'react'
-import PostForm from '~/app/_components/PostForm'
+import { getServerAuthSession } from '~/server/auth'
 
-export default function page({ params }: {params: { id: string } }) {
-  const id = params.id  
+export default async function page({ params }: {params: { id: string } }) {
+  const id = params.id
+  const session = await getServerAuthSession()
+  if (!session) return null
   return (
     <div>
-      <PostForm 
-        game="swtor"
-        userId={id}
-        />
+      <Link href="/editor" className="text-white">POST FORM</Link>
     </div>
   )
 }

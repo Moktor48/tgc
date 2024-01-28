@@ -1,15 +1,10 @@
 "use client"
-import PostSubmit from './PostSubmit'
 import React, { useState } from 'react'
-import type { Session } from 'next-auth'
 import { useRouter } from 'next/navigation'
-import { usePathname } from 'next/navigation'
 import { useSearchParams } from 'next/navigation'
 import { useCallback } from 'react'
 interface Props {
-    game: string
-    userId: string
-    session: Session
+    id: string
     staff: {
         id: string;
         userId: string;
@@ -45,24 +40,15 @@ interface Props {
     } | null
 }
 
-export default function PostSelect({game, userId, session, staff, eso, ffxiv, swtor}: Props) {
-    const id = session.user.id
+export default function PostSelect({id, staff, eso, ffxiv, swtor}: Props) {
     const router = useRouter()
-    const pathname = usePathname()
     const searchParams = useSearchParams()
-    console.log(session.user)
-    const [gameSelect, setGameSelect] = useState({game_select: game})
+    const [gameSelect, setGameSelect] = useState({game_select: "general"})
     const [typeSelect, setTypeSelect] = useState({type_select: "default"})
     const [roleSelect, setRoleSelect] = useState({role_select: "default"})
-    console.log(gameSelect)
-    console.log(typeSelect)
-    console.log(roleSelect)
     const raid = eso?.raid ?? ffxiv?.raid ?? swtor?.raid ?? false
     const officer = eso?.rank === "officer" ?? ffxiv?.rank === "officer" ?? swtor?.rank === "officer" ?? false
     const staffP = staff?.specialist ?? true ?? false
-    console.log(officer)
-    console.log(staffP)
-    console.log(raid)
     const createQueryString = useCallback(
     (name: string, value: string) => {
       const params = new URLSearchParams(searchParams.toString())
@@ -110,7 +96,8 @@ export default function PostSelect({game, userId, session, staff, eso, ffxiv, sw
         <button
         onClick={() => {
           // <pathname>?sort=asc
-          router.push(pathname + '?' + 
+        router.push(
+        `/editor/submit?` + 
         createQueryString('game', gameSelect.game_select) + '&' +
         createQueryString('type', typeSelect.type_select) + '&' + 
         createQueryString('role', roleSelect.role_select)

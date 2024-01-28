@@ -1,5 +1,5 @@
+import Link from 'next/link'
 import React from 'react'
-import PostForm from '~/app/_components/PostForm'
 import { getServerAuthSession } from '~/server/auth'
 
 export default async function page({ params }: {params: { id: string } }) {
@@ -8,10 +8,7 @@ export default async function page({ params }: {params: { id: string } }) {
   if (!session) return null
   return (
     <div>
-      <PostForm 
-        game="eso"
-        userId={id}
-        />
+      <Link href="/editor" className="text-white">POST FORM</Link>
     </div>
   )
 }

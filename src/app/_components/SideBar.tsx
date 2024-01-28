@@ -3,11 +3,9 @@ import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
 import { getSession } from 'next-auth/react'
 import type { Session } from 'node_modules/next-auth/core/types'
-import { api } from '~/trpc/react'
 
 export default function SideBar({staff}: {staff: {id: string; userId: string; admin: boolean | null; specialist: boolean | null; representative: boolean | null; highcouncil: boolean | null; guildmaster: boolean | null;} | null}) {
   const [session, setSession] = useState<Session | null>(null)
-
 
 //Hook attempts to pull the session
 useEffect(() => {
@@ -35,22 +33,18 @@ useEffect(() => {
     if(!session){
     return (
         <div>
-        <button onClick={()=> setSidebar(!sidebar)} className="nav-button">
-        <span className="menu-button material-symbols-outlined">{sidebar? "Close":"Menu"}</span>
-        </button>
-        <nav className={`nav ${sidebar ? "nav-open":"nav-closed"}`}>
-
-
-        <ul>
-            <li><Link className="links" href="/"><span className="material-symbols-outlined">Home</span> Home</Link></li>
-            <li><Link className="links" href="/games"><span className="material-symbols-outlined">Casino</span> Games</Link></li>
-            <li><Link className="links" href="/about"><span className="material-symbols-outlined">Question_Mark</span> About</Link></li>
-            <li><Link className="links" href="/api/auth/signin"><span className="material-symbols-outlined">Login</span> Sign-in</Link></li>
-        </ul>
-        </nav>
-
+            <button onClick={()=> setSidebar(!sidebar)} className="nav-button">
+                <span className="menu-button material-symbols-outlined">{sidebar? "Close":"Menu"}</span>
+            </button>
+            <nav className={`nav ${sidebar ? "nav-open":"nav-closed"}`}>
+                <ul>
+                    <li><Link className="links" href="/"><span className="material-symbols-outlined">Home</span> Home</Link></li>
+                    <li><Link className="links" href="/games"><span className="material-symbols-outlined">Casino</span> Games</Link></li>
+                    <li><Link className="links" href="/about"><span className="material-symbols-outlined">Question_Mark</span> About</Link></li>
+                    <li><Link className="links" href="/api/auth/signin"><span className="material-symbols-outlined">Login</span> Sign-in</Link></li>
+                </ul>
+            </nav>
         </div>
-    
     )}
 
 
