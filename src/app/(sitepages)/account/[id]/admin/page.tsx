@@ -1,4 +1,5 @@
 import React from 'react'
+import UserBuilder from '~/app/_components/UserBuilder'
 import UserPull from '~/app/_components/UserPull'
 import UserSearch from '~/app/_components/UserSearch'
 import { getServerAuthSession } from '~/server/auth'
@@ -15,6 +16,8 @@ export default async function page() {
     <div>
       <p>If I did this right, you are {session.user.name}, are set as {session.user.role}, and have access as {permission.admin && "Administrator"}</p>
         <UserPull />
+        <UserSearch />
+        <UserBuilder />
     </div>
   )
 }

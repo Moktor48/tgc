@@ -96,6 +96,83 @@ export const postRouter = createTRPCRouter({
       return posts;
   }),
 
+//Create
+  createUser: protectedProcedure
+  .input(z.object({ name: z.string(), email: z.string(), role: z.string(), image: z.string() }))
+  .mutation(async ({ input }) => {
+    const user = await db.user.create({
+      data: {
+        name: input.name,
+        email: input.email,
+        role: input.role,
+        image: input.image,
+      }
+    });
+    return user;
+  }),
+
+  createStaffPermission: protectedProcedure
+  .input(z.object({ userId: z.string(), admin: z.boolean(), specialist: z.boolean(), representative: z.boolean(), highcouncil: z.boolean(), guildmaster: z.boolean() }))
+  .mutation(async ({ input }) => {
+    const staff = await db.staff.create({
+      data: {
+        userId: input.userId,
+        admin: input.admin,
+        specialist: input.specialist,
+        representative: input.representative,
+        highcouncil: input.highcouncil,
+        guildmaster: input.guildmaster,
+      }
+    });
+    return staff;
+  }),
+
+  createEsoPermission: protectedProcedure
+  .input(z.object({ userId: z.string(), rank: z.string(), raid: z.boolean(), raidlead: z.boolean(), mentor: z.boolean()}))
+  .mutation(async ({ input }) => {
+    const eso = await db.eso.create({
+      data: {
+        userId: input.userId,
+        rank: input.rank,
+        raid: input.raid,
+        raidlead: input.raidlead,
+        mentor: input.mentor,
+      }
+    });
+    return eso;
+  }),
+
+  createSwtorPermission: protectedProcedure
+  .input(z.object({ userId: z.string(), rank: z.string(), raid: z.boolean(), raidlead: z.boolean(), mentor: z.boolean()}))
+  .mutation(async ({ input }) => {
+    const swtor = await db.swtor.create({
+      data: {
+        userId: input.userId,
+        rank: input.rank,
+        raid: input.raid,
+        raidlead: input.raidlead,
+        mentor: input.mentor,
+      }
+    });
+    return swtor;
+  }),
+
+  createFfxivPermission: protectedProcedure
+  .input(z.object({ userId: z.string(), rank: z.string(), raid: z.boolean(), raidlead: z.boolean(), mentor: z.boolean()}))
+  .mutation(async ({ input }) => {
+    const ffxiv = await db.ffxiv.create({
+      data: {
+        userId: input.userId,
+        rank: input.rank,
+        raid: input.raid,
+        raidlead: input.raidlead,
+        mentor: input.mentor,
+      }
+    });
+    return ffxiv;
+  }),
+
+//Query Permissions
   staffPermission: protectedProcedure
   .input(z.object({ userId: z.string() }))
   .query(async ({ input }) => {

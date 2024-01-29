@@ -1,6 +1,7 @@
 import React from 'react'
 import { api } from '~/trpc/server'
 import { getServerAuthSession } from '~/server/auth'
+import DisplayUsers from './DisplayUsers'
 
 export default async function UserPull() {
     const parsedUsers = []
@@ -31,7 +32,9 @@ export default async function UserPull() {
 }
   return (
     <div>
-        <h1>User Pull</h1>
+        <DisplayUsers
+          users={parseUser()}
+        />
     </div>
   )
 }
