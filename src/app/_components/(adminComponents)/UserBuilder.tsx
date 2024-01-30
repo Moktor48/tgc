@@ -10,7 +10,7 @@ interface User {
     role: string
 }
 
-interface Staff {s
+interface Staff {
     admin: boolean,
     specialist: boolean,
     representative: boolean,

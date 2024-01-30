@@ -28,7 +28,8 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   const session = await getServerAuthSession();
-  const staff = await api.post.staffPermission.query({userId: session.user.id});
+
+  const staff = await api.post.staffPermission.query({userId: session!.user.id});
   return (
     <html lang="en" style={{
       backgroundImage: `url(${bg.src})`,
