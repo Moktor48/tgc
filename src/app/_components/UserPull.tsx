@@ -1,7 +1,7 @@
 import React from 'react'
 import { api } from '~/trpc/server'
 import { getServerAuthSession } from '~/server/auth'
-import DisplayUsers from './DisplayUsers'
+import DisplayUsers from '~/app/_components/DisplayUsers'
 
 export default async function UserPull() {
     const parsedUsers = []

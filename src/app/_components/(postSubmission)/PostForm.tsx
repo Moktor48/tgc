@@ -1,3 +1,4 @@
+//This form is a server-side component that does initial db queries to prep information for the child component, PostSelect.
 import React from 'react'
 import { getServerAuthSession } from '~/server/auth'
 import { api } from '~/trpc/server'

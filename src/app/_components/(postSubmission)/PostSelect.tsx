@@ -1,3 +1,4 @@
+//This is the client component for the post submission function. I had the queries run in server and passed here. This page allows you to set up the editor with your intended audience and template, and grants those choices based on your roles/permissions. 
 "use client"
 import React, { useState } from 'react'
 import { useRouter } from 'next/navigation'

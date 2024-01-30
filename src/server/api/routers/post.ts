@@ -96,6 +96,34 @@ export const postRouter = createTRPCRouter({
       return posts;
   }),
 
+  getPost: protectedProcedure
+  .input(z.object({ postId: z.string() }))
+  .query(async ({ input }) => {
+    const post = await db.post.findUnique({
+      where: { id: input.postId },
+      select: {
+        id: true,
+        title: true,
+        post: true,
+        createdBy: {
+          select: {
+            id: true,
+            name: true,
+          }
+        },
+        permissions: {
+          select: {
+            eso: true,
+            ffxiv: true,
+            swtor: true,
+            general: true,
+          }
+        },
+      }
+    });
+    return post;
+  }),
+
 //Create
   createUser: protectedProcedure
   .input(z.object({ name: z.string(), email: z.string(), role: z.string(), image: z.string() }))
@@ -208,6 +236,141 @@ export const postRouter = createTRPCRouter({
     });
     return user;
   }),
+
+  //Post queries
+  unpublishedPosts: protectedProcedure
+  .query(async () => {
+    const posts = await db.post.findMany({
+      where: { published: false },
+      select: {
+        id: true,
+        title: true,
+        createdBy: {
+          select: {
+            id: true,
+            name: true,
+          }
+        },
+        permissions: {
+          select: {
+            eso: true,
+            ffxiv: true,
+            swtor: true,
+            general: true,
+          }
+        },
+      }
+    });
+    return posts;
+  }),
+
+  unpublishedPostsEso: protectedProcedure
+  .query(async () => {
+    const posts = await db.post.findMany({
+      where: { published: false },
+      select: {
+        id: true,
+        title: true,
+        createdBy: {
+          select: {
+            id: true,
+            name: true,
+          }
+        },
+        permissions: {
+          select: {
+            eso: true,
+            ffxiv: false,
+            swtor: false,
+            general: false,
+          }
+        },
+      }
+    });
+    return posts;
+  }),
+
+  unpublishedPostsFfxiv: protectedProcedure
+  .query(async () => {
+    const posts = await db.post.findMany({
+      where: { published: false },
+      select: {
+        id: true,
+        title: true,
+        createdBy: {
+          select: {
+            id: true,
+            name: true,
+          }
+        },
+        permissions: {
+          select: {
+            eso: false,
+            ffxiv: true,
+            swtor: false,
+            general: false,
+          }
+        },
+      }
+    });
+    return posts;
+  }),
+
+    unpublishedPostsSwtor: protectedProcedure
+  .query(async () => {
+    const posts = await db.post.findMany({
+      where: { published: false },
+      select: {
+        id: true,
+        title: true,
+        createdBy: {
+          select: {
+            id: true,
+            name: true,
+          }
+        },
+        permissions: {
+          select: {
+            eso: false,
+            ffxiv: false,
+            swtor: true,
+            general: false,
+          }
+        },
+      }
+    });
+    return posts;
+  }),
+
+  displayPost: protectedProcedure
+  .input(z.object({ postId: z.string() }))
+  .query(async ({ input }) => {
+    const post = await db.post.findUnique({
+      where: { id: input.postId },
+      select: {
+        id: true,
+        title: true,
+        post: true,
+        createdBy: {
+          select: {
+            id: true,
+            name: true,
+            image: true,
+          }
+        },
+        published: true,
+        permissions: {
+          select: {
+            eso: true,
+            ffxiv: true,
+            swtor: true,
+            general: true,
+          }
+        },
+      }
+    });
+    return post;
+  })
 
 }) // This is the end, lawlz. 
 

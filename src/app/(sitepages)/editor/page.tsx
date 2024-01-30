@@ -1,5 +1,6 @@
+//This is the lead page for editor submissions. 
 import React from 'react'
-import PostForm from '~/app/_components/PostForm'
+import PostForm from '~/app/_components/(postSubmission)/PostForm'
 import { getServerAuthSession } from '~/server/auth'
 
 export default async function page() {

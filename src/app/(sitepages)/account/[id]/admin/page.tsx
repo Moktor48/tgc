@@ -1,7 +1,7 @@
 import React from 'react'
-import UserBuilder from '~/app/_components/UserBuilder'
+import UserBuilder from '~/app/_components/(adminComponents)/UserBuilder'
 import UserPull from '~/app/_components/UserPull'
-import UserSearch from '~/app/_components/UserSearch'
+import UserSearch from '~/app/_components/(adminComponents)/UserSearch'
 import { getServerAuthSession } from '~/server/auth'
 import { api } from '~/trpc/server'
 
