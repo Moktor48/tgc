@@ -66,7 +66,7 @@ export const postRouter = createTRPCRouter({
         raid: input.raid,
         officer: input.officer,
       }
-    }) as Permission;
+    });
     return post;
   }),
 

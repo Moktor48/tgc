@@ -3,6 +3,17 @@ import { api } from "~/trpc/server";
 
 import React from 'react'
 import Link from "next/link";
+interface Post {
+    title: string;
+    id: string;
+    createdBy: {
+        name: string;
+        id: string;
+    };
+    permissions: {
+        eso: boolean;
+    }[];
+}[]
 
 export default async function EsoPosts() {
   const session = await getServerAuthSession()

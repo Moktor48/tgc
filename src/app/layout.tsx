@@ -43,6 +43,7 @@ export default async function RootLayout({
               <StatBar />
               <SideBar
                 staff={staff}
+                session={session}
               />
             </header>
             <main>
