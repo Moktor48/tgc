@@ -10,7 +10,7 @@ import { api } from '~/trpc/react'
 import { useSession } from 'next-auth/react'
 
 
-export default function EditorShell () {
+export default function EditorShell (id, title, post, game, ) {
 
 
 // MenuBar START =====================> Watch placement of elements!!!
