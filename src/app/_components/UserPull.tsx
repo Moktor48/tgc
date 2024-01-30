@@ -1,10 +1,10 @@
 import React from 'react'
 import { api } from '~/trpc/server'
 import { getServerAuthSession } from '~/server/auth'
-import DisplayUsers from '~/app/_components/DisplayUsers'
+
 
 export default async function UserPull() {
-    const parsedUsers = []
+    const parsedUsers: ({ id: string; name: string; email: string; emailVerified: Date | null; image: string; role: string } | { id: string; userId: string; admin: boolean | null; specialist: boolean | null; representative: boolean | null; highcouncil: boolean | null; guildmaster: boolean | null } | { id: string; userId: string; rank: string; raid: boolean | null; raidlead: boolean | null; mentor: boolean | null } | null)[][] = []
     const session = await getServerAuthSession()
     if (!session) return null
     const users = await api.post.allUsers.query()
@@ -32,9 +32,7 @@ export default async function UserPull() {
 }
   return (
     <div>
-        <DisplayUsers
-          users={parseUser()}
-        />
+
     </div>
   )
 }

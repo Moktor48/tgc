@@ -5,7 +5,8 @@ import { getSession } from 'next-auth/react'
 import type { Session } from 'node_modules/next-auth/core/types'
 
 export default function SideBar({staff}: {staff: {id: string; userId: string; admin: boolean | null; specialist: boolean | null; representative: boolean | null; highcouncil: boolean | null; guildmaster: boolean | null;} | null}) {
-  const [session, setSession] = useState<Session | null>(null)
+  
+    const [session, setSession] = useState<Session | null>(null)
 
 //Hook attempts to pull the session
 useEffect(() => {
