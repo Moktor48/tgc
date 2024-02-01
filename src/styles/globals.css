@@ -62,7 +62,7 @@ header {
     padding-bottom: 10%;
     grid-template-columns: 1fr 25%;
 }
-
+/* Sidebar styling */
 .nav {
     width: 310px;
     position: fixed;
@@ -76,7 +76,7 @@ header {
     padding-top: 60px;
     display: flex;
     flex-direction: column;
-    z-index: 2;
+    z-index: 5;
 }
 
 .nav-open {
@@ -132,7 +132,7 @@ header {
     margin: 0%;
     padding: 0%;
     background-color: rgba(44, 4, 4, 0.75);
-    min-height: 35vh;
+    min-height: 15vh;
 }
 
 #newsletter form {
@@ -163,7 +163,7 @@ header {
     height: 50px;
     padding-top: .5%;
     padding-bottom: .5%;
-    z-index: 0;
+    z-index: 2;
 }
 
 .stats-item {
@@ -185,6 +185,12 @@ header {
     padding: 0;
     margin: 0;
 }/* end of stats bar **************************/
+/* Menu bar **********************************/
+.menu-bar {
+    top: 115px;
+    position: sticky;
+    z-index: 0;
+}
 /* nav bar ************************************/
 .navbar{
     background-color: rgb(0, 0, 0);
@@ -197,7 +203,8 @@ header {
     top: 50px;
     padding-top: 0%;
     padding-bottom: 0%;
-    z-index: 0;
+    max-height: 65px;
+    z-index: 2;
 }
 
 .nav-item {

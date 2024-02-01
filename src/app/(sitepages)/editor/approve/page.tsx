@@ -12,7 +12,7 @@ export default async function page() {
     if (!session) return <p>You must be logged in to view this page.</p>
     if (session.user.role != "staff") return <p className="text-white text-3xl">You are not authorized to view this page</p>
     const id = session.user.id
-    const permission = await api.post.staffPermission.query({userId: id})
+    //const permission = await api.post.staffPermission.query({userId: id})
     const eso = await api.post.esoPermission.query({userId: id})
     const ffxiv = await api.post.ffxivPermission.query({userId: id})
     const swtor = await api.post.swtorPermission.query({userId: id})

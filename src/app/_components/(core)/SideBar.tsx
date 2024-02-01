@@ -1,9 +1,12 @@
 "use client"
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
-import type { Session } from 'next-auth';
-export default function SideBar(session: { user: Session | null }, { staff }: { staff: { id: string; userId: string; admin: boolean | null; specialist: boolean | null; representative: boolean | null; highcouncil: boolean | null; guildmaster: boolean | null; } | null }) {
+import { useSession } from 'next-auth/react'
+import { api } from '~/trpc/react'
 
+export default function SideBar() {
+
+    const { data: session } = useSession()
     //Sidebar set-up  
     const [sidebar, setSidebar] = useState(false)
     useEffect(() => {
@@ -38,9 +41,10 @@ export default function SideBar(session: { user: Session | null }, { staff }: { 
 
 
     // Session is valid, "guest" is the generic role granted to first-time users
-    const id: string = session?.user?.id
-    const role: string = session?.user?.role
-    const admin = staff?.admin
+    const id = session?.user?.id
+    const role = session?.user?.role
+    const staff = api.post.staffPermission.useQuery({userId: id})
+    const admin = staff?.data?.admin
 
 
     return (

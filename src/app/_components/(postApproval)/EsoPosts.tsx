@@ -27,7 +27,7 @@ export default async function EsoPosts() {
   return (
     <div>
       <h1 className="text-white">UnPublished Posts for ESO</h1>
-      {unpubPostEso.map((post: { id: React.Key | null | undefined; title: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | React.PromiseLikeOfReactNode | null | undefined; createdBy: { name: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | React.PromiseLikeOfReactNode | null | undefined; }; }) => {
+      {unpubPostEso.map((post: { id: React.Key | null | undefined; title: string | number | boolean | React.ReactElement<unknown, string | React.JSXElementConstructor<unknown>> | Iterable<React.ReactNode> | React.ReactPortal | React.PromiseLikeOfReactNode | null | undefined; createdBy: { name: string | number | boolean | React.ReactElement<unknown, string | React.JSXElementConstructor<unknown>> | Iterable<React.ReactNode> | React.ReactPortal | React.PromiseLikeOfReactNode | null | undefined; }; }) => {
         return (
           <div>
             <Link href={`./approve/${post.id}`}><p key={post.id}>Title: {post.title} Created by: {post.createdBy.name}</p></Link>

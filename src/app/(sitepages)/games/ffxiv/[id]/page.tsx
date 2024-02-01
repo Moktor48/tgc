@@ -8,7 +8,7 @@ export default async function page({ params }: {params: { id: string } }) {
   if (!session) return null
   return (
     <div>
-      <Link href="/editor" className="text-white">POST FORM</Link>
+      <Link href={`/editor?${id}`} className="text-white">Click to run editor</Link>
     </div>
   )
 }
