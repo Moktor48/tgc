@@ -47,11 +47,14 @@ header {
     max-height: 50vh;
     display: block;
     background-size: cover;
-    background-position-y: 15%;
+    background-position-y: 25%;
     color: #c5c5c5;
     background-image: url("/img/tgc.png");
 }
 
+.tiptap {
+    min-height: 80vh;
+}
 
 .home-grid-container {
     display: grid;
@@ -88,7 +91,7 @@ header {
 }
 
 .nav-button {
-    z-index: 5;
+    z-index: 900;
     position: fixed;
     top: 0;
     right: 0;
@@ -153,7 +156,7 @@ header {
 .stats-bar {
     display: flex;
     overflow: hidden;
-    background-color: rgba(8, 1, 1, 0.80);
+    background-color: rgba(8, 1, 1);
     color: rgb(255, 255, 255);
     font-size: 1vw;
     position: fixed;
@@ -189,7 +192,7 @@ header {
 .menu-bar {
     top: 115px;
     position: sticky;
-    z-index: 0;
+    z-index: 1;
 }
 /* nav bar ************************************/
 .navbar{

@@ -1,4 +1,4 @@
-//page for approvals to be viewed
+//page for approvals to be viewed by name and individual posts selected
 import React from 'react'
 import EsoPosts from '~/app/_components/(postApproval)/EsoPosts'
 import FfxivPosts from '~/app/_components/(postApproval)/FfxivPosts'
@@ -7,12 +7,12 @@ import { getServerAuthSession } from '~/server/auth'
 import { api } from '~/trpc/server'
 
 
-export default async function page() {
+export default async function page({params}: {params: { id: string }}) {
     const session = await getServerAuthSession()
     if (!session) return <p>You must be logged in to view this page.</p>
     if (session.user.role != "staff") return <p className="text-white text-3xl">You are not authorized to view this page</p>
     const id = session.user.id
-    //const permission = await api.post.staffPermission.query({userId: id})
+    const permission = await api.post.staffPermission.query({userId: id})
     const eso = await api.post.esoPermission.query({userId: id})
     const ffxiv = await api.post.ffxivPermission.query({userId: id})
     const swtor = await api.post.swtorPermission.query({userId: id})
@@ -31,7 +31,10 @@ export default async function page() {
         <p>General/Full Guild</p>
         <p>Notifications</p>
         <p>Reports</p>
+
+
         {eso?.rank !="none" && <p>ESO</p>}
+
         {eso?.rank !="none" && <p>Notifications</p>}
         {eso?.rank !="none" && <p>Reports</p>}
         {eso?.rank !="none" && eso?.raidlead && <p>Raid</p>}
@@ -72,4 +75,13 @@ const unpubPost: {
         swtor: boolean;
         general: boolean;
     }[];
+
+Queries
+Approval: GEFS, Staff(G), Raid(EFS), Officer(EFS), All(GEFS)
+
+Query: pull all unpublished posts from db, map them through a link list by title
+
+
+
+
 */

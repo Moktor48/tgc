@@ -1,86 +1,64 @@
-//Page for actual editor, editor will submit post data to include the game and audience.
+//Page for posts to be read, edited, and approved
+
 'use client'
 import React, { useState } from 'react'
+import { useSession } from 'next-auth/react'
+import { api } from '~/trpc/react'
 import { Color } from '@tiptap/extension-color'
 import ListItem from '@tiptap/extension-list-item'
 import TextStyle from '@tiptap/extension-text-style'
 import { useCurrentEditor, EditorProvider } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
-import { api } from '~/trpc/react'
 import { useSearchParams } from 'next/navigation'
-import { useSession } from 'next-auth/react'
 
-type FormData = {
-  eso: boolean
-  ffxiv: boolean
-  swtor: boolean
-  general: boolean
-  staff: boolean
-  raid: boolean
-  officer: boolean
-}
+export default function page({params}: {params: {postId: string}}) {
+    const session = useSession()
+    const searchParams = useSearchParams()
+    const title = searchParams.get('title')!
+    const modPost = {post: "", title: ""}
+    const [modTitle, setModTitle] = useState({title: title})
+    const postId = params.postId
+    const {data: post} = api.post.getPost.useQuery({postId})
+    if (!session ?? !session.data) return <div>You must be logged in to view this page.</div>
+    const userId = session.data.user.id
+    if (!post) return <div>Post not found.</div>
 
-const build = `<p><strong>Test Template BUILD!!!</strong></p><p>Setting a template up for builds...</p><p></p><p>So, a table here, and some links there...</p><h2></h2>`
-const guide = `<p><strong>Test Template GUIDE!!!</strong></p><p>Setting a template up for builds...</p><p></p><p>So, a table here, and some links there...</p><h2></h2>`
-const notification = `<p><strong>Test Template NOTIFICATION!!!</strong></p><p>Setting a template up for builds...</p><p></p><p>So, a table here, and some links there...</p><h2></h2>`
-const report = `<p><strong>Test Template REPORT!!!</strong></p><p>Setting a template up for builds...</p><p></p><p>So, a table here, and some links there...</p><h2></h2>`
-
-export default function PostSubmit () {
-  const { data } = useSession()
-  const session = data
-  if (!session) return <p className="text-white text-3xl">You must be logged in to view this page</p>
-  if (session.user.role != "staff") return <p className="text-white text-3xl">You are not authorized to view this page</p>
-  const userId = session.user.id
-  const searchParams = useSearchParams()
-
-  //These will set GAME, TYPE of document, and ROLE the document is intended for.
-  const gameSelect = searchParams.get('game')!
-  const typeSelect = searchParams.get('type')!
-  const roleSelect = searchParams.get('role')!
-  const [title, setTitle] = useState({title: "==> SET TITLE <=="})
-
-  //Permission data is set through the previous page set-up
-  const [permissionData, setPermissionData] = useState<FormData>({eso: false, ffxiv: false, swtor: false, general: false, staff: false, raid: false, officer: false})
-  const postTemplate = typeSelect === "1"? build : typeSelect === "2"? guide : typeSelect === "3"? notification : report
-
-//Function to submit the permission data
-  const subPerm = api.post.postPermissions.useMutation()
-
-//Function to submit the post data, then on response adds permissions to the post_permission table
-  const subData = api.post.post.useMutation({
-    onSuccess(data) {
-      const id = data.id
-      const pId = {postId: id}
-      const permissionDataX = {...permissionData, ...pId}
-      if (!data.id) return null
-      subPerm.mutate(permissionDataX)
-    },
-  })
-
-  function handleChangeT(e: React.ChangeEvent<HTMLInputElement>) {
-    setTitle(prev => {
-      return {...prev, title: e.target.value}})
+    function handleChange(e: React.ChangeEvent<HTMLInputElement>){
+      setModTitle({...modTitle, title: e.target.value})
     }
 
-// MenuBar START =====================> Watch placement of elements!!!
   const MenuBar = () => {
-  const { editor } = useCurrentEditor()
 
-  if (!editor) return null
-
-  async function submit() {
-    setPermissionData({...permissionData, [gameSelect]: true, [roleSelect]: true})
+    const { editor } = useCurrentEditor()
     if (!editor) return null
-    if (title.title === "==> SET TITLE <==") return null
-    console.log(title)
-    const content = editor.getHTML()
-    subData.mutate({
-        createdById: userId,
-        post: content,
-        title: title.title
-    })
-  }
 
+    const mod = api.post.modTrack.useMutation({
+      onSuccess: () => {
+        location.assign("/editor/approve")
+      }
+    })
+
+    const update = api.post.updatePost.useMutation({
+      onSuccess: () => {
+        mod.mutate({postId: postId, modById: userId, post: modPost.post, title: modPost.title, published: "Published"})
+      }
+    })
+
+    function submit(){
+      if (!editor) return null
+
+      const content = editor.getHTML()
+      if (post?.title === modTitle.title) modPost.title = "No changes made"
+      if (post?.post === content) modPost.post = "No changes made"
+      if (post?.title != modTitle.title) modPost.title =  modTitle.title
+      if (post?.post != content) modPost.post = content
+      update.mutate({
+        postId: postId,
+        title: modTitle.title,
+        post: content,
+        published: true,
+      })
+    }
   return (
     <div className="menu-bar">
       <button
@@ -270,12 +248,12 @@ const extensions = [
   return (
     <div className="bg-black">
       <form>
-        <input type="text" name="name" id="name" value={title.title} onChange={handleChangeT} />
+        <input type="text" name="name" id="name" value={modTitle.title} onChange={handleChange} />
       </form>
       <EditorProvider 
         slotBefore={<MenuBar />} 
         extensions={extensions} 
-        content={postTemplate}
+        content={post.post}
         children={null}
       />
     </div>

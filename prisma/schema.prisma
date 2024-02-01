@@ -42,12 +42,12 @@ model Session {
 }
 
 model User {
-    id            String    @id @default(cuid())
+    id            String              @id @default(cuid())
     name          String
-    email         String    @unique
+    email         String              @unique
     emailVerified DateTime?
     image         String
-    role          String    @default("guest") //guest, member, staff
+    role          String              @default("guest") //guest, member, staff
     accounts      Account[]
     sessions      Session[]
     posts         post[]
@@ -55,6 +55,7 @@ model User {
     ffxiv         ffxiv[]
     swtor         swtor[]
     staff         staff[]
+    post_mod      post_modification[]
 }
 
 model VerificationToken {
@@ -67,15 +68,16 @@ model VerificationToken {
 
 // Post tables
 model post {
-    id          String            @id @default(cuid())
-    post        String            @db.Text
-    createdAt   DateTime          @default(now())
-    updatedAt   DateTime          @updatedAt
+    id          String              @id @default(cuid())
+    post        String              @db.Text
+    createdAt   DateTime            @default(now())
+    updatedAt   DateTime            @updatedAt
     title       String
-    published   Boolean           @default(false)
-    createdBy   User              @relation(fields: [createdById], references: [id])
+    published   Boolean             @default(false)
+    createdBy   User                @relation(fields: [createdById], references: [id])
     createdById String
     permissions post_permission[]
+    mod         post_modification[]
 }
 
 model post_permission {
@@ -98,7 +100,7 @@ model eso {
     userId   String   @unique //FK from user
     rank     String   @default("none") //member, respected, officer, deputy
     raid     Boolean? @default(false) //Members that are part of a raid team
-    raidlead Boolean? @default(false) //Staff position, focused on raids
+    raidlead Boolean? @default(false) //Staff/Non-Staff position?, focused on raids
     mentor   Boolean? @default(false) //Staff position, mentor
     user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
@@ -133,4 +135,15 @@ model staff {
     highcouncil    Boolean? @default(false) //Promote/demote ONLY by GM
     guildmaster    Boolean? @default(false) //All permissions, should not be modifyable by ANYONE else
     user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model post_modification {
+    id        String @id @default(cuid())
+    postRef   post   @relation(fields: [postId], references: [id], onDelete: Cascade)
+    postId    String
+    post      String @db.Text
+    title     String
+    published String
+    modBy     User   @relation(fields: [modById], references: [id])
+    modById   String
 }

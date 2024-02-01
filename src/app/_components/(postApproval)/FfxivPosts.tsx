@@ -13,7 +13,7 @@ export default async function FfxivPosts() {
     const unpubPostFfxiv = await api.post.unpublishedPostsFfxiv.query()
     return (
         <div>
-            {unpubPostFfxiv.map((post: { id: React.Key | null | undefined; title: string | number | boolean | React.ReactElement<unknown, string | React.JSXElementConstructor<unknown>> | Iterable<React.ReactNode> | React.ReactPortal | React.PromiseLikeOfReactNode | null | undefined; createdBy: { name: string | number | boolean | React.ReactElement<unknown, string | React.JSXElementConstructor<unknown>> | Iterable<React.ReactNode> | React.ReactPortal | React.PromiseLikeOfReactNode | null | undefined; }; }) => {
+            {unpubPostFfxiv.map((post: { id: string; title: string; createdBy: { name: string  }; }) => {
                 return (
                     <div>
                         <p>

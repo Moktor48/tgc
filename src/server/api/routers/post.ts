@@ -96,6 +96,7 @@ export const postRouter = createTRPCRouter({
           id: true,
           title: true,
           post: true,
+          published: true,
           createdBy: {
             select: {
               id: true,
@@ -359,6 +360,35 @@ export const postRouter = createTRPCRouter({
             }
           },
         }
+      });
+      return post;
+    }),
+
+    updatePost: protectedProcedure
+    .input(z.object({ postId: z.string(), title: z.string().optional(), post: z.string().optional(), published: z.boolean().optional() }))
+    .mutation(async ({ input }) => {
+      const post = await db.post.update({
+        where: { id: input.postId },
+        data: {
+          title: input.title,
+          post: input.post,
+          published: input.published,
+        },
+      });
+      return post;
+    }),
+
+    modTrack: protectedProcedure
+    .input(z.object({ postId: z.string(), title: z.string(), post: z.string(), published: z.string(), modById: z.string() }))
+    .mutation(async ({ input }) => {
+      const post = await db.post_modification.create({
+        data: {
+          postId: input.postId,
+          title: input.title,
+          post: input.post,
+          published: input.published,
+          modById: input.modById,
+        },
       });
       return post;
     })
