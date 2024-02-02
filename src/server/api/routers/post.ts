@@ -245,9 +245,6 @@ export const postRouter = createTRPCRouter({
           },
           permissions: {
             select: {
-              eso: true,
-              ffxiv: true,
-              swtor: true,
               general: true,
             }
           },

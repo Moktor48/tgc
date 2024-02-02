@@ -9,7 +9,8 @@ import StarterKit from '@tiptap/starter-kit'
 import { api } from '~/trpc/react'
 import { useSearchParams } from 'next/navigation'
 import { useSession } from 'next-auth/react'
-
+import { BubbleMenu } from '@tiptap/react'
+import { FloatingMenu } from '@tiptap/react'
 type FormData = {
   eso: boolean
   ffxiv: boolean
@@ -83,6 +84,15 @@ export default function PostSubmit () {
 
   return (
     <div className="menu-bar">
+      {editor && <BubbleMenu editor={editor} tippyOptions={{ duration: 100 }}>
+      <input
+        type="color"
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+        onInput={event => editor.chain().focus().setColor((event.target as HTMLButtonElement).value).run()}
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        value={editor.getAttributes('textStyle').color}
+        data-testid="setColor"
+      />
       <button
         onClick={() => editor.chain().focus().toggleBold().run()}
         disabled={
@@ -122,6 +132,7 @@ export default function PostSubmit () {
       >
         strike
       </button>
+      </BubbleMenu>}
       <button
         onClick={() => editor.chain().focus().toggleCode().run()}
         disabled={
@@ -147,6 +158,7 @@ export default function PostSubmit () {
       >
         paragraph
       </button>
+      {editor && <FloatingMenu editor={editor} tippyOptions={{ duration: 100 }}>
       <button
         onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
         className={`${editor.isActive('heading', { level: 1 }) ? 'is-active border-yellow-500' : ''} text-gray-100 text-xs min-w-30 justify-center transition duration-200 ease-in-out transform px-2 py-1 border-b-4 border-gray-500 hover:border-b-2 bg-gradient-to-t from-gray-400  via-gray-600 to-gray-200 rounded-2xl hover:translate-y-px `}
@@ -195,6 +207,7 @@ export default function PostSubmit () {
       >
         ordered list
       </button>
+      </FloatingMenu>}
       <button
         onClick={() => editor.chain().focus().toggleCodeBlock().run()}
         className={`${editor.isActive('codeBlock') ? 'is-active border-yellow-500' : ''} text-gray-100 text-xs min-w-30 justify-center transition duration-200 ease-in-out transform px-2 py-1 border-b-4 border-gray-500 hover:border-b-2 bg-gradient-to-t from-gray-400  via-gray-600 to-gray-200 rounded-2xl hover:translate-y-px `}

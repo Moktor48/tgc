@@ -40,6 +40,7 @@ export default function page({params}: {params: {postId: string}}) {
 
     const update = api.post.updatePost.useMutation({
       onSuccess: () => {
+
         mod.mutate({postId: postId, modById: userId, post: modPost.post, title: modPost.title, published: "Published"})
       }
     })
@@ -50,8 +51,8 @@ export default function page({params}: {params: {postId: string}}) {
       const content = editor.getHTML()
       if (post?.title === modTitle.title) modPost.title = "No changes made"
       if (post?.post === content) modPost.post = "No changes made"
-      if (post?.title != modTitle.title) modPost.title =  modTitle.title
-      if (post?.post != content) modPost.post = content
+      if (post?.title != modTitle.title) modPost.title =  post!.title!
+      if (post?.post != content) modPost.post = post!.post!
       update.mutate({
         postId: postId,
         title: modTitle.title,
