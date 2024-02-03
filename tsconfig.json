@@ -36,7 +36,8 @@
     "**/*.tsx",
     "**/*.cjs",
     "**/*.js",
-    ".next/types/**/*.ts"
-, "prisma/tgc_hold.info"  ],
+    ".next/types/**/*.ts",
+    "prisma/tgc_hold.info"
+  ],
   "exclude": ["node_modules"]
 }

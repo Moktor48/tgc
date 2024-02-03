@@ -1,25 +1,19 @@
 import { z } from "zod";
 import { db } from "~/server/db";
-import {
-  createTRPCRouter,
-  protectedProcedure
-} from "~/server/api/trpc";
+import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 
 export const postRouter = createTRPCRouter({
-  allUsers: protectedProcedure
-    .query(async () => {
-      const users = await db.user.findMany({
-      });
-      return users;
-    }),
+  allUsers: protectedProcedure.query(async () => {
+    const users = await db.user.findMany({});
+    return users;
+  }),
 
-  allGuests: protectedProcedure
-  .query(async () => {
+  allGuests: protectedProcedure.query(async () => {
     const guests = await db.user.findMany({
       where: { role: "guest" },
-      });
-      return guests;
-    }),
+    });
+    return guests;
+  }),
 
   //pulls relations for a userId, can be used to determine access and profiles
   fullProfile: protectedProcedure
@@ -31,28 +25,45 @@ export const postRouter = createTRPCRouter({
           eso: true,
           swtor: true,
           ffxiv: true,
-        }
+        },
       });
       return user;
     }),
 
   //creates a new post for approval
   post: protectedProcedure
-    .input(z.object({ createdById: z.string(), post: z.string(), title: z.string() }))
+    .input(
+      z.object({
+        createdById: z.string(),
+        post: z.string(),
+        title: z.string(),
+      }),
+    )
     .mutation(async ({ input }) => {
       const post = await db.post.create({
         data: {
           createdById: input.createdById,
           post: input.post,
           title: input.title,
-        }
+        },
       });
       return post;
     }),
 
-  //This one works but makes TS mad... 
+  //This one works but makes TS mad...
   postPermissions: protectedProcedure
-    .input(z.object({ postId: z.string(), eso: z.boolean(), ffxiv: z.boolean(), swtor: z.boolean(), general: z.boolean(), staff: z.boolean(), raid: z.boolean(), officer: z.boolean() }))
+    .input(
+      z.object({
+        postId: z.string(),
+        eso: z.boolean(),
+        ffxiv: z.boolean(),
+        swtor: z.boolean(),
+        general: z.boolean(),
+        staff: z.boolean(),
+        raid: z.boolean(),
+        officer: z.boolean(),
+      }),
+    )
     .mutation(async ({ input }) => {
       const post = await db.post_permission.create({
         data: {
@@ -64,36 +75,35 @@ export const postRouter = createTRPCRouter({
           staff: input.staff,
           raid: input.raid,
           officer: input.officer,
-        }
+        },
       });
       return post;
     }),
 
   //queries all posts, other queries will include "byGuild" or "byUserId" to filter by guild or user
-  getAllPosts: protectedProcedure
-    .query(async () => {
-      const posts = await db.post.findMany({
-        select: {
-          id: true,
-          title: true,
-          createdBy: {
-            select: {
-              id: true,
-              name: true,
-            }
+  getAllPosts: protectedProcedure.query(async () => {
+    const posts = await db.post.findMany({
+      select: {
+        id: true,
+        title: true,
+        createdBy: {
+          select: {
+            id: true,
+            name: true,
           },
-          permissions: {
-            select: {
-              eso: true,
-              ffxiv: true,
-              swtor: true,
-              general: true,
-            }
+        },
+        permissions: {
+          select: {
+            eso: true,
+            ffxiv: true,
+            swtor: true,
+            general: true,
           },
-        }
-      });
-      return posts;
-    }),
+        },
+      },
+    });
+    return posts;
+  }),
 
   getPost: protectedProcedure
     .input(z.object({ postId: z.string() }))
@@ -109,7 +119,7 @@ export const postRouter = createTRPCRouter({
             select: {
               id: true,
               name: true,
-            }
+            },
           },
           permissions: {
             select: {
@@ -117,16 +127,23 @@ export const postRouter = createTRPCRouter({
               ffxiv: true,
               swtor: true,
               general: true,
-            }
+            },
           },
-        }
+        },
       });
       return post;
     }),
 
   //Create
   createUser: protectedProcedure
-    .input(z.object({ name: z.string(), email: z.string(), role: z.string(), image: z.string() }))
+    .input(
+      z.object({
+        name: z.string(),
+        email: z.string(),
+        role: z.string(),
+        image: z.string(),
+      }),
+    )
     .mutation(async ({ input }) => {
       const user = await db.user.create({
         data: {
@@ -134,13 +151,22 @@ export const postRouter = createTRPCRouter({
           email: input.email,
           role: input.role,
           image: input.image,
-        }
+        },
       });
       return user;
     }),
 
   createStaffPermission: protectedProcedure
-    .input(z.object({ userId: z.string(), admin: z.boolean(), specialist: z.boolean(), representative: z.boolean(), highcouncil: z.boolean(), guildmaster: z.boolean() }))
+    .input(
+      z.object({
+        userId: z.string(),
+        admin: z.boolean(),
+        specialist: z.boolean(),
+        representative: z.boolean(),
+        highcouncil: z.boolean(),
+        guildmaster: z.boolean(),
+      }),
+    )
     .mutation(async ({ input }) => {
       const staff = await db.staff.create({
         data: {
@@ -150,13 +176,21 @@ export const postRouter = createTRPCRouter({
           representative: input.representative,
           highcouncil: input.highcouncil,
           guildmaster: input.guildmaster,
-        }
+        },
       });
       return staff;
     }),
 
   createEsoPermission: protectedProcedure
-    .input(z.object({ userId: z.string(), rank: z.string(), raid: z.boolean(), raidlead: z.boolean(), mentor: z.boolean() }))
+    .input(
+      z.object({
+        userId: z.string(),
+        rank: z.string(),
+        raid: z.boolean(),
+        raidlead: z.boolean(),
+        mentor: z.boolean(),
+      }),
+    )
     .mutation(async ({ input }) => {
       const eso = await db.eso.create({
         data: {
@@ -165,13 +199,21 @@ export const postRouter = createTRPCRouter({
           raid: input.raid,
           raidlead: input.raidlead,
           mentor: input.mentor,
-        }
+        },
       });
       return eso;
     }),
 
   createSwtorPermission: protectedProcedure
-    .input(z.object({ userId: z.string(), rank: z.string(), raid: z.boolean(), raidlead: z.boolean(), mentor: z.boolean() }))
+    .input(
+      z.object({
+        userId: z.string(),
+        rank: z.string(),
+        raid: z.boolean(),
+        raidlead: z.boolean(),
+        mentor: z.boolean(),
+      }),
+    )
     .mutation(async ({ input }) => {
       const swtor = await db.swtor.create({
         data: {
@@ -180,13 +222,21 @@ export const postRouter = createTRPCRouter({
           raid: input.raid,
           raidlead: input.raidlead,
           mentor: input.mentor,
-        }
+        },
       });
       return swtor;
     }),
 
   createFfxivPermission: protectedProcedure
-    .input(z.object({ userId: z.string(), rank: z.string(), raid: z.boolean(), raidlead: z.boolean(), mentor: z.boolean() }))
+    .input(
+      z.object({
+        userId: z.string(),
+        rank: z.string(),
+        raid: z.boolean(),
+        raidlead: z.boolean(),
+        mentor: z.boolean(),
+      }),
+    )
     .mutation(async ({ input }) => {
       const ffxiv = await db.ffxiv.create({
         data: {
@@ -195,7 +245,7 @@ export const postRouter = createTRPCRouter({
           raid: input.raid,
           raidlead: input.raidlead,
           mentor: input.mentor,
-        }
+        },
       });
       return ffxiv;
     }),
@@ -238,106 +288,102 @@ export const postRouter = createTRPCRouter({
     }),
 
   //Post queries
-  unpublishedPosts: protectedProcedure
-    .query(async () => {
-      const posts = await db.post.findMany({
-        where: { published: false },
-        select: {
-          id: true,
-          title: true,
-          createdBy: {
-            select: {
-              id: true,
-              name: true,
-            }
+  unpublishedPosts: protectedProcedure.query(async () => {
+    const posts = await db.post.findMany({
+      where: { published: false },
+      select: {
+        id: true,
+        title: true,
+        createdBy: {
+          select: {
+            id: true,
+            name: true,
           },
-          permissions: {
-            select: {
-              general: true,
-            }
+        },
+        permissions: {
+          select: {
+            general: true,
           },
-        }
-      });
-      return posts;
-    }),
+        },
+      },
+    });
+    return posts;
+  }),
 
-  unpublishedPostsEso: protectedProcedure
-    .query(async () => {
-      const posts = await db.post.findMany({
-        where: { published: false },
-        select: {
-          id: true,
-          title: true,
-          createdBy: {
-            select: {
-              id: true,
-              name: true,
-            }
+  unpublishedPostsEso: protectedProcedure.query(async () => {
+    const posts = await db.post.findMany({
+      where: { published: false },
+      select: {
+        id: true,
+        title: true,
+        createdBy: {
+          select: {
+            id: true,
+            name: true,
           },
-          permissions: {
-            select: {
-              eso: true,
-              ffxiv: false,
-              swtor: false,
-              general: false,
-            }
+        },
+        permissions: {
+          select: {
+            eso: true,
+            ffxiv: false,
+            swtor: false,
+            general: false,
           },
-        }
-      });
-      return posts;
-    }),
+        },
+      },
+    });
+    return posts;
+  }),
 
-  unpublishedPostsFfxiv: protectedProcedure
-    .query(async () => {
-      const posts = await db.post.findMany({
-        where: { published: false },
-        select: {
-          id: true,
-          title: true,
-          createdBy: {
-            select: {
-              id: true,
-              name: true,
-            }
+  unpublishedPostsFfxiv: protectedProcedure.query(async () => {
+    const posts = await db.post.findMany({
+      where: { published: false },
+      select: {
+        id: true,
+        title: true,
+        createdBy: {
+          select: {
+            id: true,
+            name: true,
           },
-          permissions: {
-            select: {
-              eso: false,
-              ffxiv: true,
-              swtor: false,
-              general: false,
-            }
+        },
+        permissions: {
+          select: {
+            eso: false,
+            ffxiv: true,
+            swtor: false,
+            general: false,
           },
-        }
-      });
-      return posts;
-    }),
+        },
+      },
+    });
+    return posts;
+  }),
 
-  unpublishedPostsSwtor: protectedProcedure
-    .query(async () => {
-      const posts = await db.post.findMany({
-        where: { published: false },
-        select: {
-          id: true,
-          title: true,
-          createdBy: {
-            select: {
-              id: true,
-              name: true,
-            }
+  unpublishedPostsSwtor: protectedProcedure.query(async () => {
+    const posts = await db.post.findMany({
+      where: { published: false },
+      select: {
+        id: true,
+        title: true,
+        createdBy: {
+          select: {
+            id: true,
+            name: true,
           },
-          permissions: {
-            select: {
-              eso: false,
-              ffxiv: false,
-              swtor: true,
-              general: false,
-            }
+        },
+        permissions: {
+          select: {
+            eso: false,
+            ffxiv: false,
+            swtor: true,
+            general: false,
           },
-        }
-      });
-      return posts;
-    }),
+        },
+      },
+    });
+    return posts;
+  }),
 
   displayPost: protectedProcedure
     .input(z.object({ postId: z.string() }))
@@ -353,7 +399,7 @@ export const postRouter = createTRPCRouter({
               id: true,
               name: true,
               image: true,
-            }
+            },
           },
           published: true,
           permissions: {
@@ -362,15 +408,22 @@ export const postRouter = createTRPCRouter({
               ffxiv: true,
               swtor: true,
               general: true,
-            }
+            },
           },
-        }
+        },
       });
       return post;
     }),
 
-    updatePost: protectedProcedure
-    .input(z.object({ postId: z.string(), title: z.string().optional(), post: z.string().optional(), published: z.boolean().optional() }))
+  updatePost: protectedProcedure
+    .input(
+      z.object({
+        postId: z.string(),
+        title: z.string().optional(),
+        post: z.string().optional(),
+        published: z.boolean().optional(),
+      }),
+    )
     .mutation(async ({ input }) => {
       const post = await db.post.update({
         where: { id: input.postId },
@@ -383,8 +436,16 @@ export const postRouter = createTRPCRouter({
       return post;
     }),
 
-    modTrack: protectedProcedure
-    .input(z.object({ postId: z.string(), title: z.string(), post: z.string(), published: z.string(), modById: z.string() }))
+  modTrack: protectedProcedure
+    .input(
+      z.object({
+        postId: z.string(),
+        title: z.string(),
+        post: z.string(),
+        published: z.string(),
+        modById: z.string(),
+      }),
+    )
     .mutation(async ({ input }) => {
       const post = await db.post_modification.create({
         data: {
@@ -396,7 +457,5 @@ export const postRouter = createTRPCRouter({
         },
       });
       return post;
-    })
-
-}) // This is the end, lawlz. 
-
+    }),
+}); // This is the end, lawlz.

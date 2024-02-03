@@ -1,27 +1,25 @@
-import React from 'react'
-import { api } from '~/trpc/server'
-import Link from 'next/link'
-
+import React from "react";
+import { api } from "~/trpc/server";
+import Link from "next/link";
 
 export default async function UserPull() {
-  const guest = await api.post.allGuests.query()
-
-
-
+  const guest = await api.post.allGuests.query();
 
   return (
     <div>
       {guest.map((user: { id: string; name: string; email: string }) => {
         return (
-          <Link href={`/userManage?id=${user.id}&name=${user.name}&email=${user.email}`}>
-            <p>Username: {user.name}</p><p>Email: {user.email}</p>
+          <Link
+            href={`/userManage?id=${user.id}&name=${user.name}&email=${user.email}`}
+          >
+            <p>Username: {user.name}</p>
+            <p>Email: {user.email}</p>
           </Link>
-        )
+        );
       })}
     </div>
-  )
+  );
 }
-
 
 /*
 Users: [{U}{U}{U}]

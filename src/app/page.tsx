@@ -2,10 +2,8 @@
 import FrontContent from "./_components/(core)/FrontContent";
 
 export default async function Home() {
-
   return (
-
-  <main>
+    <main>
       <div className="header-container">
         <div className="header">
           <h3>TGC Community Updates</h3>
@@ -15,8 +13,8 @@ export default async function Home() {
         </div>
       </div>
       <FrontContent />
-  </main>
-  )
+    </main>
+  );
 }
 
 /*

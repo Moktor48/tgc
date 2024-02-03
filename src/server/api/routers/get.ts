@@ -1,13 +1,9 @@
 import { z } from "zod";
 import { db } from "~/server/db";
-import {
-  createTRPCRouter,
-  protectedProcedure
-} from "~/server/api/trpc";
+import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 
 export const postRouter = createTRPCRouter({
-
-    getPost: protectedProcedure
+  getPost: protectedProcedure
     .input(z.object({ postId: z.string() }))
     .query(async ({ input }) => {
       const post = await db.post.findUnique({
@@ -21,7 +17,7 @@ export const postRouter = createTRPCRouter({
             select: {
               id: true,
               name: true,
-            }
+            },
           },
           permissions: {
             select: {
@@ -29,11 +25,10 @@ export const postRouter = createTRPCRouter({
               ffxiv: true,
               swtor: true,
               general: true,
-            }
+            },
           },
-        }
+        },
       });
       return post;
     }),
-
-}) // This is the end, lawlz. 
+}); // This is the end, lawlz.
