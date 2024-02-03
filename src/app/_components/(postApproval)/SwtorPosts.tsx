@@ -8,7 +8,7 @@ export default async function SwtorPosts() {
         if (!session) return <div>You must be logged in to view this page.</div>
         const id = session.user.id
         const swtorPerms = await api.post.swtorPermission.query({ userId: id })
-        if (!swtorPerms) return <div>You must be a member of the Swtor Discord to view this page.</div>
+        if (!swtorPerms) return <div className="text-3xl text-yellow-500">LOCKED: No access to SWTOR-specific posts!</div>
         if (!swtorPerms.raidlead && !swtorPerms.mentor && swtorPerms.rank != "officer") return null
     const unpubPost = await api.post.unpublishedPostsSwtor.query()
   return (

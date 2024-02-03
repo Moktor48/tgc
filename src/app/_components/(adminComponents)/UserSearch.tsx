@@ -1,5 +1,7 @@
 "use client"
 import React, { useState } from 'react'
+import { api } from '~/trpc/react'
+import { useSession } from 'next-auth/react'
 
 export default function UserSearch() {
     const [formData, setFormData] = useState("")

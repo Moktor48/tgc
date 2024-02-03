@@ -11,12 +11,13 @@ export default async function AccountPage( { params }: {params: { id: string } }
   if (!session) return <div>You must be logged in to view this page.</div>
   const permission = await api.post.staffPermission.query({userId: session?.user.id})
   return (
-    <div>
-      <p>Private Account Page for {session?.user.name}</p>
-      {permission?.admin && <Link href={`/account/${id}/admin`}>Admin Page</Link>}
-      {role === "staff" && <Link href={`/account/${id}/staff`}>Staff Page</Link>}
+    <div className="flex justify-center w-full">
+      <div className="flex newsletter w-1/2">
+        <p className="text-white text-center text-5xl">Private Account Page for {session?.user.name}</p>
+        {permission?.admin && <Link href={`/account/${id}/admin`}>Admin Page</Link>}<br />
+        {role === "staff" && <Link href={`/account/${id}/staff`}>Staff Page</Link>}
+      </div>
     </div>
-
   )
 }
 

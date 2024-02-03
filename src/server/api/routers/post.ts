@@ -13,6 +13,14 @@ export const postRouter = createTRPCRouter({
       return users;
     }),
 
+  allGuests: protectedProcedure
+  .query(async () => {
+    const guests = await db.user.findMany({
+      where: { role: "guest" },
+      });
+      return guests;
+    }),
+
   //pulls relations for a userId, can be used to determine access and profiles
   fullProfile: protectedProcedure
     .input(z.object({ userId: z.string() }))

@@ -14,11 +14,11 @@ export default async function page() {
   return (
     <div className="flex justify-center w-full">
         <div className="flex newsletter w-1/2">
-            <h1 className="text-white text-center">Post Approvals</h1>
-            <GenPosts />
-            <EsoPosts />
-            <FfxivPosts />
-            <SwtorPosts />
+            <h1 className="text-white text-center text-5xl">Post Approvals</h1><br />
+            <GenPosts /><br />
+            <EsoPosts /><br />
+            <FfxivPosts /><br />
+            <SwtorPosts /><br />
         </div>
     </div>
   )

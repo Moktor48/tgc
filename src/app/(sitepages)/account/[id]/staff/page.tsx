@@ -12,7 +12,8 @@ export default async function StaffPage( { params }: {params: { id: string } }) 
   if (session.user.role != "staff") return <p className="text-white text-3xl">You are not authorized to view this page</p>
 
   return (
-    <div>
+    <div className="flex justify-center w-full">
+      <div className="flex newsletter w-1/2">
       <p>Clearly you are a staff member, {session?.user.name}, permissions include {permissions?.specialist && "specialist "} {permissions?.representative && "representative "} {permissions?.admin && "admin "} {permissions?.highcouncil && "high council "} {permissions?.guildmaster && "guildmaster"}.</p>
       <p>Custom Page for officers</p>
       <p>Guild breakdown for this officer</p>
@@ -21,7 +22,7 @@ export default async function StaffPage( { params }: {params: { id: string } }) 
       <p>Ability to make guild page announcements</p>
 
       <Link href={`../../../editor/approve`}><span className="text-3xl text-yellow-500">Post Approvals</span></Link>
-
+      </div>
     </div>
   )
 }

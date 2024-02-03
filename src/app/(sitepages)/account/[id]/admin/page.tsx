@@ -31,5 +31,8 @@ Linking to post form is fine
 
 Activation button for new members
 edit user/post forms
-
+List guest accounts, on approval it will:
+1. Upgrade role to member
+2. Add to all three games as rank: "none"
+3.  
 */

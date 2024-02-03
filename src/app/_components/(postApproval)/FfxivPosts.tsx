@@ -8,7 +8,7 @@ export default async function FfxivPosts() {
         if (!session) return <div>You must be logged in to view this page.</div>
         const id = session.user.id
         const ffxivPerms = await api.post.ffxivPermission.query({ userId: id })
-        if (!ffxivPerms) return <div>You must be a member of the FFXIV Discord to view this page.</div>
+        if (!ffxivPerms) return <div className="text-3xl text-yellow-500">LOCKED: No access to FFXIV-specific posts!</div>
         if (!ffxivPerms.raidlead && !ffxivPerms.mentor && ffxivPerms.rank != "officer") return null
     const unpubPost = await api.post.unpublishedPostsFfxiv.query()
   return (
