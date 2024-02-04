@@ -44,11 +44,9 @@ export default async function RootLayout({
               <StatBar />
               <SideBar />
             </header>
-            <main>
-              <NavBar />
-              {children}
-              <BottomComp />
-            </main>
+            <NavBar />
+            {children}
+            <BottomComp />
           </TRPCReactProvider>
         </Provider>
       </body>

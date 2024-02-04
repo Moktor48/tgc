@@ -31,4 +31,41 @@ export const postRouter = createTRPCRouter({
       });
       return post;
     }),
+
+  //Query Permissions
+  staffPermission: protectedProcedure
+    .input(z.object({ userId: z.string() }))
+    .query(async ({ input }) => {
+      const user = await db.staff.findUnique({
+        where: { userId: input.userId },
+      });
+      return user;
+    }),
+
+  esoPermission: protectedProcedure
+    .input(z.object({ userId: z.string() }))
+    .query(async ({ input }) => {
+      const user = await db.eso.findUnique({
+        where: { userId: input.userId },
+      });
+      return user;
+    }),
+
+  swtorPermission: protectedProcedure
+    .input(z.object({ userId: z.string() }))
+    .query(async ({ input }) => {
+      const user = await db.swtor.findUnique({
+        where: { userId: input.userId },
+      });
+      return user;
+    }),
+
+  ffxivPermission: protectedProcedure
+    .input(z.object({ userId: z.string() }))
+    .query(async ({ input }) => {
+      const user = await db.ffxiv.findUnique({
+        where: { userId: input.userId },
+      });
+      return user;
+    }),
 }); // This is the end, lawlz.

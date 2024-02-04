@@ -3,7 +3,11 @@ import React from "react";
 import { getServerAuthSession } from "~/server/auth";
 import { api } from "~/trpc/server";
 
-export default async function page({ params }: { params: { id: string } }) {
+export default async function page({
+  params,
+}: {
+  params: { game: string; id: string };
+}) {
   const getPost = await api.get.getPost.query({ postId: params.id });
   const id = params.id;
   const session = await getServerAuthSession();

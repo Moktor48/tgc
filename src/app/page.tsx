@@ -19,5 +19,7 @@ export default async function Home() {
 
 /*
 FUTURE NOTES: 
-
+        <Layout navbarType={0}> // will display navbar 1
+          <p>Im page 1</p>
+        </Layout>
 */
