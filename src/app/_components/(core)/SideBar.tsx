@@ -59,7 +59,7 @@ export default function SideBar() {
   // Session is valid, "guest" is the generic role granted to first-time users
   const id = session?.user?.id;
   const role = session?.user?.role;
-  const staff = api.post.staffPermission.useQuery({ userId: id });
+  const staff = api.get.staffPermission.useQuery({ userId: id });
   const admin = staff?.data?.admin;
 
   return (

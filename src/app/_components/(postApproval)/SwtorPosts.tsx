@@ -7,7 +7,7 @@ export default async function SwtorPosts() {
   const session = await getServerAuthSession();
   if (!session) return <div>You must be logged in to view this page.</div>;
   const id = session.user.id;
-  const swtorPerms = await api.post.swtorPermission.query({ userId: id });
+  const swtorPerms = await api.get.swtorPermission.query({ userId: id });
   if (!swtorPerms)
     return (
       <div className="text-3xl text-yellow-500">
@@ -20,7 +20,7 @@ export default async function SwtorPosts() {
     swtorPerms.rank != "officer"
   )
     return null;
-  const unpubPost = await api.post.unpublishedPostsSwtor.query();
+  const unpubPost = await api.get.unpublishedPostsSwtor.query();
   return (
     <div className="text-center">
       <h1 className="text-white">UnPublished Posts for ESO</h1>

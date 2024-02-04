@@ -7,7 +7,6 @@ interface Props {
   postContent: {
     post: string;
     title: string;
-    published: boolean;
     id: string;
     createdBy: {
       name: string;
@@ -18,6 +17,7 @@ interface Props {
       ffxiv: boolean;
       swtor: boolean;
       general: boolean;
+      published: boolean;
     }[];
   };
 }

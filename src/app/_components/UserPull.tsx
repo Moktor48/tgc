@@ -3,7 +3,7 @@ import { api } from "~/trpc/server";
 import Link from "next/link";
 
 export default async function UserPull() {
-  const guest = await api.post.allGuests.query();
+  const guest = await api.get.allGuests.query();
 
   return (
     <div>

@@ -13,7 +13,7 @@ export default async function AccountPage({
   const id = params.id;
   const role = session?.user.role;
   if (!session) return <div>You must be logged in to view this page.</div>;
-  const permission = await api.post.staffPermission.query({
+  const permission = await api.get.staffPermission.query({
     userId: session?.user.id,
   });
   return (

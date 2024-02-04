@@ -8,17 +8,26 @@ export default async function page({
 }: {
   params: { game: string; id: string };
 }) {
-  const getPost = await api.get.getPost.query({ postId: params.id });
-  const id = params.id;
   const session = await getServerAuthSession();
   if (!session) return null;
+  const id = params.id;
+  const game = params.game;
+
+  let gamePubPosts;
+  if (game === "eso") {
+    gamePubPosts = await api.get.publishedPostsEso.query();
+  }
+  if (game === "ffxiv") {
+    gamePubPosts = await api.get.publishedPostsFfxiv.query();
+  }
+  if (game === "swtor") {
+    gamePubPosts = await api.get.publishedPostsSwtor.query();
+  }
+
   return (
     <div>
       <p className="text-white">Hello {session.user.name}!</p>
       <p className="text-3xl text-white">Current published posts</p>
-      <Link href={`/editor?${id}`} className="text-white">
-        Click to run editor
-      </Link>
       {session.user.role === "staff" && (
         <Link href={`/editor?${id}`} className="text-white">
           Click to run editor

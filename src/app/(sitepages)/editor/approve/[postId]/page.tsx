@@ -18,7 +18,7 @@ export default function page({ params }: { params: { postId: string } }) {
   const modPost = { post: "", title: "" };
   const [modTitle, setModTitle] = useState({ title: title });
   const postId = params.postId;
-  const { data: post } = api.post.getPost.useQuery({ postId });
+  const { data: post } = api.get.getPost.useQuery({ postId: postId });
   if (!session ?? !session.data)
     return <div>You must be logged in to view this page.</div>;
   const userId = session.data.user.id;
@@ -38,7 +38,7 @@ export default function page({ params }: { params: { postId: string } }) {
       },
     });
 
-    const update = api.post.updatePost.useMutation({
+    const update = api.put.updatePost.useMutation({
       onSuccess: () => {
         mod.mutate({
           postId: postId,

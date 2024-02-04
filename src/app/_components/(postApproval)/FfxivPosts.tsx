@@ -7,7 +7,7 @@ export default async function FfxivPosts() {
   const session = await getServerAuthSession();
   if (!session) return <div>You must be logged in to view this page.</div>;
   const id = session.user.id;
-  const ffxivPerms = await api.post.ffxivPermission.query({ userId: id });
+  const ffxivPerms = await api.get.ffxivPermission.query({ userId: id });
   if (!ffxivPerms)
     return (
       <div className="text-3xl text-yellow-500">
@@ -20,7 +20,7 @@ export default async function FfxivPosts() {
     ffxivPerms.rank != "officer"
   )
     return null;
-  const unpubPost = await api.post.unpublishedPostsFfxiv.query();
+  const unpubPost = await api.get.unpublishedPostsFfxiv.query();
   return (
     <div className="text-center">
       <h1 className="text-white">UnPublished Posts for ESO</h1>

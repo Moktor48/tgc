@@ -6,7 +6,7 @@ import Link from "next/link";
 export default async function GenPosts() {
   const session = await getServerAuthSession();
   if (!session) return <div>You must be logged in to view this page.</div>;
-  const unpubPost = await api.post.unpublishedPosts.query();
+  const unpubPost = await api.get.unpublishedPosts.query();
   return (
     <div className="text-center">
       <h1 className="text-white">UnPublished Posts for the General Guild</h1>

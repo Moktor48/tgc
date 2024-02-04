@@ -7,7 +7,7 @@ export default async function EsoPosts() {
   const session = await getServerAuthSession();
   if (!session) return <div>You must be logged in to view this page.</div>;
   const id = session.user.id;
-  const esoPerms = await api.post.esoPermission.query({ userId: id });
+  const esoPerms = await api.get.esoPermission.query({ userId: id });
   if (!esoPerms)
     return (
       <div className="text-3xl text-yellow-500">
@@ -16,7 +16,7 @@ export default async function EsoPosts() {
     );
   if (!esoPerms.raidlead && !esoPerms.mentor && esoPerms.rank != "officer")
     return null;
-  const unpubPost = await api.post.unpublishedPostsEso.query();
+  const unpubPost = await api.get.unpublishedPostsEso.query();
   return (
     <div className="text-center">
       <h1 className="text-white">UnPublished Posts for ESO</h1>

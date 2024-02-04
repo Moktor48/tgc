@@ -12,7 +12,7 @@ export default async function PostDisplay({
   const session = await getServerAuthSession();
   if (!session) return <p>You must be logged in to view this page.</p>;
   if (!postId) return <p>No post ID provided.</p>;
-  const postContent = await api.post.getPost.query({ postId });
+  const postContent = await api.get.getPost.query({ postId });
   if (!postContent) return <p>No post found.</p>;
 
   return (

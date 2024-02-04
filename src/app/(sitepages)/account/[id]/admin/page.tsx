@@ -8,7 +8,7 @@ import { api } from "~/trpc/server";
 export default async function page() {
   const session = await getServerAuthSession();
   if (!session) return <div>You must be logged in to view this page.</div>;
-  const permission = await api.post.staffPermission.query({
+  const permission = await api.get.staffPermission.query({
     userId: session?.user.id,
   });
   if (!permission?.admin) return <p>You aren't allowed to be here!</p>;

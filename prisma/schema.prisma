@@ -73,7 +73,6 @@ model post {
     createdAt   DateTime            @default(now())
     updatedAt   DateTime            @updatedAt
     title       String
-    published   Boolean             @default(false)
     createdBy   User                @relation(fields: [createdById], references: [id])
     createdById String
     permissions post_permission[]
@@ -82,7 +81,7 @@ model post {
 
 model post_permission {
     id        String  @id @default(cuid())
-    postId    String
+    postId    String    @unique //FK from post
     general   Boolean @default(false) //Game focus
     eso       Boolean @default(false)
     ffxiv     Boolean @default(false)
