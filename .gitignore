@@ -42,3 +42,6 @@ yarn-error.log*
 *.tsbuildinfo
 notebook.tsx
 prisma/tgc_hold.tsx
+
+# Docker
+.dockerignore
