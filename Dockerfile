@@ -1,7 +1,7 @@
 ##### DEPENDENCIES
 
 FROM --platform=linux/amd64 node:20-alpine AS deps
-RUN apk add --no-cache libc6-compat openssl1.1-compat
+#RUN apk add --no-cache libc6-compat openssl1.1-compat
 WORKDIR /app
 
 # Install Prisma Client - remove if not using Prisma
@@ -56,4 +56,4 @@ COPY --from=builder /app/.next/static ./.next/static
 EXPOSE 3000
 ENV PORT 3000
 
-CMD ["server.js"]
+CMD ["node", "server.js"]
