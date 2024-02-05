@@ -13,8 +13,25 @@ interface NavBarProps {
     highcouncil: boolean | null;
     guildmaster: boolean | null;
   } | null;
+  posts: {
+    id: string;
+    title: string;
+    createdBy: {
+      id: string;
+      name: string;
+    };
+    permissions: {
+      eso: boolean;
+    }[];
+  };
 }
-export default async function NavBarEso({ session, id, perm }: NavBarProps) {
+
+export default async function NavBarEso({
+  session,
+  id,
+  perm,
+  posts,
+}: NavBarProps) {
   return (
     <div className="navbar" id="navbar">
       <div className="dropdown">

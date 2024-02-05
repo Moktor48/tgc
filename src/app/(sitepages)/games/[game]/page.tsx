@@ -10,10 +10,8 @@ export default async function page({ params }: { params: { game: string } }) {
   if (!session?.user.id) return <p>You must log in to view this page.</p>;
   const id = session?.user.id;
   const game = params.game;
-
   const perm = await api.get.staffPermission.query({ userId: id });
   let permission;
-
   if (game === "eso") {
     permission = await api.get.esoPermission.query({ userId: id });
   }

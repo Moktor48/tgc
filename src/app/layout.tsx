@@ -5,7 +5,6 @@ import { Inter } from "next/font/google";
 import { cookies } from "next/headers";
 import Provider from "./context/Provider";
 import { TRPCReactProvider } from "~/trpc/react";
-import NavBar from "./_components/(core)/NavBar";
 import StatBar from "./_components/(core)/StatBar";
 import bg from "./_components/img/body-background-img-rock.png";
 import SideBar from "./_components/(core)/SideBar";
