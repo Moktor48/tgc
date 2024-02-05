@@ -114,7 +114,7 @@ export default function PostSelect({ id, staff, eso, ffxiv, swtor }: Props) {
         onClick={() => {
           // <pathname>?sort=asc
           router.push(
-            `/editor/submit?` +
+            `/editor/${id}/submit?` +
               createQueryString("game", gameSelect.game_select) +
               "&" +
               createQueryString("type", typeSelect.type_select) +

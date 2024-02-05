@@ -4,21 +4,23 @@ import UserPull from "~/app/_components/UserPull";
 import UserSearch from "~/app/_components/(adminComponents)/UserSearch";
 import { getServerAuthSession } from "~/server/auth";
 import { api } from "~/trpc/server";
+import NavBarDB from "~/app/_components/(gameComponents)/(dashboard)/NavBarDB";
 
-export default async function page() {
+export default async function page({ params }: { params: { id: string } }) {
   const session = await getServerAuthSession();
   if (!session) return <div>You must be logged in to view this page.</div>;
-  const permission = await api.get.staffPermission.query({
-    userId: session?.user.id,
+  const id = params.id;
+  const perm = await api.get.staffPermission.query({
+    userId: id,
   });
-  if (!permission?.admin) return <p>You aren't allowed to be here!</p>;
+  if (!perm?.admin) return <p>You aren't allowed to be here!</p>;
 
   return (
     <div>
+      <NavBarDB session={session} id={id} perm={perm} />
       <p>
         If I did this right, you are {session.user.name}, are set as{" "}
-        {session.user.role}, and have access as{" "}
-        {permission.admin && "Administrator"}
+        {session.user.role}, and have access as {perm.admin && "Administrator"}
       </p>
       <UserPull />
       <UserSearch />

@@ -59,8 +59,6 @@ export default function SideBar() {
   // Session is valid, "guest" is the generic role granted to first-time users
   const id = session?.user?.id;
   const role = session?.user?.role;
-  const staff = api.get.staffPermission.useQuery({ userId: id });
-  const admin = staff?.data?.admin;
 
   return (
     <div>
@@ -78,29 +76,9 @@ export default function SideBar() {
           </li>
           {role != "guest" && (
             <li>
-              <Link className="links" href={`/account/${id}`}>
+              <Link className="links" href={`/dashboard/${id}`}>
                 <span className="material-symbols-outlined">Person</span>{" "}
-                Account
-              </Link>
-            </li>
-          )}
-          {role === "staff" && (
-            <li>
-              <Link className="links" href={`/account/${id}/staff`}>
-                <span className="material-symbols-outlined">
-                  Supervisor_Account
-                </span>{" "}
-                Staff
-              </Link>
-            </li>
-          )}
-          {admin && (
-            <li>
-              <Link className="links" href={`/account/${id}/admin`}>
-                <span className="material-symbols-outlined">
-                  Admin_Panel_Settings
-                </span>{" "}
-                Admin
+                Dashboard
               </Link>
             </li>
           )}
@@ -130,4 +108,24 @@ export default function SideBar() {
 FUTURE NOTES: 
 PUBLIC PAGE
 ROLE based authorization
+          {role === "staff" && (
+            <li>
+              <Link className="links" href={`/account/${id}/staff`}>
+                <span className="material-symbols-outlined">
+                  Supervisor_Account
+                </span>{" "}
+                Staff
+              </Link>
+            </li>
+          )}
+          {admin && (
+            <li>
+              <Link className="links" href={`/account/${id}/admin`}>
+                <span className="material-symbols-outlined">
+                  Admin_Panel_Settings
+                </span>{" "}
+                Admin
+              </Link>
+            </li>
+          )}
 */

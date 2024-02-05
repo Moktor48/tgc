@@ -68,6 +68,14 @@ export default function PostSubmit() {
         : typeSelect === "3"
           ? notification
           : report;
+  const typeString =
+    typeSelect === "1"
+      ? "build"
+      : typeSelect === "2"
+        ? "guide"
+        : typeSelect === "3"
+          ? "notification"
+          : "report";
 
   //Function to submit the permission data
   const subPerm = api.post.postPermissions.useMutation();
@@ -339,6 +347,10 @@ export default function PostSubmit() {
 
   return (
     <div className="bg-black">
+      <h1>
+        Template to create: Type: {typeString.toUpperCase()}; Audience:{" "}
+        {roleSelect.toUpperCase()}; Game: {gameSelect.toUpperCase()}{" "}
+      </h1>
       <form>
         <input
           type="text"
