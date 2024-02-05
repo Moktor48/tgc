@@ -19,7 +19,7 @@ export default async function AccountPage({
 
   return (
     <>
-      <NavBarDB session={session} id={id} perm={perm} />
+      <NavBarDB id={id} perm={perm} />
       <div className="flex w-full justify-center">
         <div className="newsletter flex w-1/2">
           <p className="text-center text-5xl text-white">

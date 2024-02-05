@@ -1,8 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
-import type { Session } from "next-auth";
+
 interface NavBarProps {
-  session: Session;
   id: string;
   perm: {
     id: string;
@@ -15,7 +14,7 @@ interface NavBarProps {
   } | null;
 }
 
-export default async function NavBarDB({ session, id, perm }: NavBarProps) {
+export default async function NavBarDB({ id, perm }: NavBarProps) {
   if (!perm) return null;
   const hasPermission = Object.values(perm).some((value) => value === true);
   return (

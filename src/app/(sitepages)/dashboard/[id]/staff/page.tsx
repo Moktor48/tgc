@@ -23,7 +23,7 @@ export default async function StaffPage({
 
   return (
     <>
-      <NavBarDB session={session} id={id} perm={perm} />
+      <NavBarDB id={id} perm={perm} />
       <div className="flex w-full justify-center">
         <div className="newsletter flex w-1/2">
           <p>
@@ -39,7 +39,7 @@ export default async function StaffPage({
           <p>Ability to create and modify events for guild</p>
           <p>Ability to make guild page announcements</p>
 
-          <Link href={`../../../editor/approve`}>
+          <Link href={`../../../editor/${id}/approve`}>
             <span className="text-3xl text-yellow-500">Post Approvals</span>
           </Link>
         </div>

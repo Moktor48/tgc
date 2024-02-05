@@ -17,7 +17,7 @@ export default async function page({ params }: { params: { id: string } }) {
 
   return (
     <div>
-      <NavBarDB session={session} id={id} perm={perm} />
+      <NavBarDB id={id} perm={perm} />
       <p>
         If I did this right, you are {session.user.name}, are set as{" "}
         {session.user.role}, and have access as {perm.admin && "Administrator"}

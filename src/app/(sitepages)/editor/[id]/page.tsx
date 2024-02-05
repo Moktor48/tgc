@@ -12,7 +12,7 @@ export default async function page({ params }: { params: { id: string } }) {
   const perm = await api.get.staffPermission.query({ userId: id });
   return (
     <div>
-      <NavBarDB session={session} id={id} perm={perm} />
+      <NavBarDB id={id} perm={perm} />
       <PostForm userId={id} />
     </div>
   );
