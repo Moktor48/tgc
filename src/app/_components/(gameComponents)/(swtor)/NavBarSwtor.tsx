@@ -2,6 +2,7 @@ import React from "react";
 import type { Session } from "next-auth";
 import Link from "next/link";
 import Image from "next/image";
+import { api } from "~/trpc/server";
 interface NavBarProps {
   session: Session;
   id: string;
@@ -14,19 +15,9 @@ interface NavBarProps {
     highcouncil: boolean | null;
     guildmaster: boolean | null;
   } | null;
-  posts: {
-    id: string;
-    title: string;
-    createdBy: {
-      id: string;
-      name: string;
-    };
-    permissions: {
-      swtor: boolean;
-    }[];
-  };
 }
-export default function NavBarSwtor({ session, id, perm, posts }: NavBarProps) {
+export default async function NavBarSwtor({ session, id, perm }: NavBarProps) {
+  const gamePubPosts = await api.get.publishedPostsSwtor.query();
   return (
     <div className="navbar" id="navbar">
       <div className="dropdown">

@@ -17,37 +17,14 @@ export default async function page({
   const game = params.game;
   const perm = await api.get.staffPermission.query({ userId: id });
 
-  let gamePubPosts;
-  if (game === "eso") {
-    gamePubPosts = await api.get.publishedPostsEso.query();
-  }
-  if (game === "ffxiv") {
-    gamePubPosts = await api.get.publishedPostsFfxiv.query();
-  }
-  if (game === "swtor") {
-    gamePubPosts = await api.get.publishedPostsSwtor.query();
-  }
-  if (!gamePubPosts) return <p>No posts found.</p>;
   return (
     <>
-      {game === "eso" && (
-        <NavBarEso session={session} id={id} perm={perm} posts={gamePubPosts} />
-      )}
+      {game === "eso" && <NavBarEso session={session} id={id} perm={perm} />}
       {game === "ffxiv" && (
-        <NavBarFfxiv
-          session={session}
-          id={id}
-          perm={perm}
-          posts={gamePubPosts}
-        />
+        <NavBarFfxiv session={session} id={id} perm={perm} />
       )}
       {game === "swtor" && (
-        <NavBarSwtor
-          session={session}
-          id={id}
-          perm={perm}
-          posts={gamePubPosts}
-        />
+        <NavBarSwtor session={session} id={id} perm={perm} />
       )}
       <div>
         <p className="text-white">Hello {session.user.name}!</p>

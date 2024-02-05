@@ -90,6 +90,7 @@ model post_permission {
     officer   Boolean @default(false)
     raid      Boolean @default(false) //Staff focused, but applicable to game
     published Boolean @default(false)
+    type      String  @default("article") //article, build, guide, raid, report, 
     post      post    @relation(fields: [postId], references: [id], onDelete: Cascade)
 }
 

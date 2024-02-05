@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import type { Session } from "next-auth";
+import { api } from "~/trpc/server";
 interface NavBarProps {
   session: Session;
   id: string;
@@ -13,25 +14,10 @@ interface NavBarProps {
     highcouncil: boolean | null;
     guildmaster: boolean | null;
   } | null;
-  posts: {
-    id: string;
-    title: string;
-    createdBy: {
-      id: string;
-      name: string;
-    };
-    permissions: {
-      eso: boolean;
-    }[];
-  };
 }
 
-export default async function NavBarEso({
-  session,
-  id,
-  perm,
-  posts,
-}: NavBarProps) {
+export default async function NavBarEso({ session, id, perm }: NavBarProps) {
+  const gamePubPosts = await api.get.publishedPostsEso.query();
   return (
     <div className="navbar" id="navbar">
       <div className="dropdown">
