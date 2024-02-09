@@ -5,7 +5,6 @@ import {
   type NextAuthOptions,
 } from "next-auth";
 import DiscordProvider from "next-auth/providers/discord";
-import type { DiscordProfile } from "next-auth/providers/discord";
 import { env } from "~/env";
 import { db } from "~/server/db";
 
@@ -46,6 +45,7 @@ declare module "next-auth/providers/discord" {
  *
  * @see https://next-auth.js.org/configuration/options
  */
+
 export const authOptions: NextAuthOptions = {
   callbacks: {
     session: ({ session, user }) => {

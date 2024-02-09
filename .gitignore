@@ -45,3 +45,5 @@ prisma/tgc_hold.tsx
 
 # Docker
 .dockerignore
+docker-compose.yml
+Dockerfile
