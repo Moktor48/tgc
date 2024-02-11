@@ -23,7 +23,7 @@ export default async function FfxivPosts() {
   const unpubPost = await api.get.unpublishedPostsFfxiv.query();
   return (
     <div className="text-center">
-      <h1 className="text-white">UnPublished Posts for ESO</h1>
+      <h1 className="text-white">Unpublished Posts for FFXIV</h1>
       {unpubPost.map(
         (post: { id: string; title: string; createdBy: { name: string } }) => {
           return (

@@ -9,7 +9,7 @@ export default async function GenPosts() {
   const unpubPost = await api.get.unpublishedPosts.query();
   return (
     <div className="text-center">
-      <h1 className="text-white">UnPublished Posts for the General Guild</h1>
+      <h1 className="text-white">Unpublished Posts for the General Guild</h1>
       {unpubPost.map(
         (post: { id: string; title: string; createdBy: { name: string } }) => {
           return (

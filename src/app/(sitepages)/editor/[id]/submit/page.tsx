@@ -88,7 +88,8 @@ export default function PostSubmit() {
       const permissionDataX = { ...permissionData, ...pId };
       if (!data.id) return null;
       subPerm.mutate(permissionDataX);
-      location.assign(`/games/${gameSelect}`);
+      alert("Post submitted!");
+      location.assign(`/dashboard/${id}`);
     },
   });
 

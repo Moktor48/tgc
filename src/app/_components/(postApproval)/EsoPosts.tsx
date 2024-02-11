@@ -19,7 +19,7 @@ export default async function EsoPosts() {
   const unpubPost = await api.get.unpublishedPostsEso.query();
   return (
     <div className="text-center">
-      <h1 className="text-white">UnPublished Posts for ESO</h1>
+      <h1 className="text-white">Unpublished Posts for ESO</h1>
       {unpubPost.map(
         (post: { id: string; title: string; createdBy: { name: string } }) => {
           return (

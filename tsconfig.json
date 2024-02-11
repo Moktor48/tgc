@@ -38,7 +38,7 @@
     "**/*.js",
     ".next/types/**/*.ts",
     "prisma/tgc_hold.info",
-    "src/server/(discord.ts)",
+    "src/server/discord.ts",
     "src/app/_components/(discordBot)/(DiscordBot.tsx)"
   ],
   "exclude": ["node_modules"]
