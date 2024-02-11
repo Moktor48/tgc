@@ -6,6 +6,8 @@ import Link from "next/link";
 export default async function SwtorPosts() {
   const session = await getServerAuthSession();
   if (!session) return <div>You must be logged in to view this page.</div>;
+  if (session.user.role != "staff")
+    return <div>You are not authorized to be here.</div>;
   const id = session.user.id;
   const swtorPerms = await api.get.swtorPermission.query({ userId: id });
   if (!swtorPerms)
@@ -14,11 +16,7 @@ export default async function SwtorPosts() {
         LOCKED: No access to SWTOR-specific posts!
       </div>
     );
-  if (
-    !swtorPerms.raidlead &&
-    !swtorPerms.mentor &&
-    swtorPerms.rank != "officer"
-  )
+  if (swtorPerms.raidlead && swtorPerms.mentor && swtorPerms.rank != "officer")
     return null;
   const unpubPost = await api.get.unpublishedPostsSwtor.query();
   return (

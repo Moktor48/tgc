@@ -11,9 +11,13 @@ export default async function page({ params }: { params: { id: string } }) {
   const id = params.id;
   const perm = await api.get.staffPermission.query({ userId: id });
   return (
-    <div>
+    <>
       <NavBarDB id={id} perm={perm} />
-      <PostForm userId={id} />
-    </div>
+      <div className="flex w-full justify-center">
+        <div className="newsletter flex w-1/2">
+          <PostForm userId={id} />
+        </div>
+      </div>
+    </>
   );
 }

@@ -6,6 +6,8 @@ import Link from "next/link";
 export default async function GenPosts() {
   const session = await getServerAuthSession();
   if (!session) return <div>You must be logged in to view this page.</div>;
+  if (session.user.role != "staff")
+    return <div>You are not authorized to be here.</div>;
   const unpubPost = await api.get.unpublishedPosts.query();
   return (
     <div className="text-center">

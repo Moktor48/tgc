@@ -6,6 +6,8 @@ import Link from "next/link";
 export default async function EsoPosts() {
   const session = await getServerAuthSession();
   if (!session) return <div>You must be logged in to view this page.</div>;
+  if (session.user.role != "staff")
+    return <div>You are not authorized to be here.</div>;
   const id = session.user.id;
   const esoPerms = await api.get.esoPermission.query({ userId: id });
   if (!esoPerms)

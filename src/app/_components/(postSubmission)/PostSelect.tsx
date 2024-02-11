@@ -75,8 +75,20 @@ export default function PostSelect({ id, staff, eso, ffxiv, swtor }: Props) {
 
   return (
     <div>
-      <form>
-        <select name="game_select" id="game_select" onChange={handleGS}>
+      <h1>
+        Select the group that you wish to apply your message to, Pick the form
+        template (none are made yet, all are the same for now), then select the
+        audience that should recieve the message. Hit "Submit to Editor" to
+        start.
+      </h1>
+      <br />
+      <form className="flex justify-center space-x-4">
+        <select
+          className="text-yellow-400"
+          name="game_select"
+          id="game_select"
+          onChange={handleGS}
+        >
           {" "}
           {/*Available if you have guild access */}
           <option value="general">General</option>
@@ -90,7 +102,12 @@ export default function PostSelect({ id, staff, eso, ffxiv, swtor }: Props) {
             <option value="swtor">SWTOR</option>
           )}
         </select>
-        <select name="type_select" id="type_select" onChange={handleTS}>
+        <select
+          className="text-yellow-400"
+          name="type_select"
+          id="type_select"
+          onChange={handleTS}
+        >
           {" "}
           {/*Available after selecting game */}
           <option value="default">Choose template type...</option>
@@ -99,7 +116,12 @@ export default function PostSelect({ id, staff, eso, ffxiv, swtor }: Props) {
           <option value="3">Notification</option>
           <option value="4">Report</option>
         </select>
-        <select name="role_select" id="role_select" onChange={handleRS}>
+        <select
+          className="text-yellow-400"
+          name="role_select"
+          id="role_select"
+          onChange={handleRS}
+        >
           {" "}
           {/*Available based on user roles */}
           <option value="default">Choose audience type...</option>
@@ -109,22 +131,25 @@ export default function PostSelect({ id, staff, eso, ffxiv, swtor }: Props) {
           {officer && <option value="officer">Guild Officer</option>}
         </select>
       </form>
-      <button
-        className="text-white"
-        onClick={() => {
-          // <pathname>?sort=asc
-          router.push(
-            `/editor/${id}/submit?` +
-              createQueryString("game", gameSelect.game_select) +
-              "&" +
-              createQueryString("type", typeSelect.type_select) +
-              "&" +
-              createQueryString("role", roleSelect.role_select),
-          );
-        }}
-      >
-        Submit to Editor
-      </button>
+      <br />
+      <div className="flex justify-center ">
+        <button
+          className="button-40 mb-8 text-white"
+          onClick={() => {
+            // <pathname>?sort=asc
+            router.push(
+              `/editor/${id}/submit?` +
+                createQueryString("game", gameSelect.game_select) +
+                "&" +
+                createQueryString("type", typeSelect.type_select) +
+                "&" +
+                createQueryString("role", roleSelect.role_select),
+            );
+          }}
+        >
+          Submit to Editor
+        </button>
+      </div>
     </div>
   );
 }
