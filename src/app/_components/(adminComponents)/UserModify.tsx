@@ -1,8 +1,9 @@
 "use client";
 import Image from "next/image";
 import React, { useState } from "react";
-
+import { api } from "~/trpc/react";
 interface Profile {
+  searchUserId: string;
   officer: {
     eso: string | undefined;
     ffxiv: string | undefined;
@@ -67,35 +68,129 @@ export default function UserModify({
   userFfxiv,
   userSwtor,
   userStaff,
+  searchUserId,
 }: Profile) {
   const [esoState, setEsoState] = useState({
-    rank: userEso?.rank ?? "",
+    id: userEso?.id ?? "",
+    userId: userEso?.userId ?? searchUserId,
+    rank: userEso?.rank ?? "none",
     raid: userEso?.raid ?? false,
     raidlead: userEso?.raidlead ?? false,
     mentor: userEso?.mentor ?? false,
   });
   const [ffxivState, setFfxivState] = useState({
-    rank: userFfxiv?.rank ?? "",
+    id: userFfxiv?.id ?? "",
+    userId: userFfxiv?.userId ?? searchUserId,
+    rank: userFfxiv?.rank ?? "none",
     raid: userFfxiv?.raid ?? false,
     raidlead: userFfxiv?.raidlead ?? false,
     mentor: userFfxiv?.mentor ?? false,
   });
   const [swtorState, setSwtorState] = useState({
-    rank: userSwtor?.rank ?? "",
+    id: userSwtor?.id ?? "",
+    userId: userSwtor?.userId ?? searchUserId,
+    rank: userSwtor?.rank ?? "none",
     raid: userSwtor?.raid ?? false,
     raidlead: userSwtor?.raidlead ?? false,
     mentor: userSwtor?.mentor ?? false,
   });
   const [staffState, setStaffState] = useState({
+    id: userStaff?.id ?? "",
+    userId: userStaff?.userId ?? searchUserId,
     admin: userStaff?.admin ?? false,
     specialist: userStaff?.specialist ?? false,
     representative: userStaff?.representative ?? false,
     highcouncil: userStaff?.highcouncil ?? false,
     guildmaster: userStaff?.guildmaster ?? false,
   });
+  const [sucStateEso, setSucStateEso] = useState("text-red-500");
+  const [sucStateFfxiv, setSucStateFfxiv] = useState("text-red-500");
+  const [sucStateSwtor, setSucStateSwtor] = useState("text-red-500");
+  const [sucStateStaff, setSucStateStaff] = useState("text-red-500");
+  const hasGuildmasterPermissions = Boolean(perm?.guildmaster);
+  const hasHighCouncilPermissions = Boolean(perm?.highcouncil);
+  const isOfficer = officer.eso === "officer";
+  const isFFXIVOfficer = officer.ffxiv === "officer";
+  const isSWTOROfficer = officer.swtor === "officer";
   const showPermissions =
-    perm?.guildmaster ?? perm?.highcouncil ?? officer.eso === "officer";
+    hasGuildmasterPermissions || hasHighCouncilPermissions || isOfficer;
+  const showFFXIVPermissions =
+    hasGuildmasterPermissions || hasHighCouncilPermissions || isFFXIVOfficer;
+  const showSWTORPermissions =
+    hasGuildmasterPermissions || hasHighCouncilPermissions || isSWTOROfficer;
+  const showStaffPermissions =
+    hasGuildmasterPermissions || hasHighCouncilPermissions;
+  const updEso = api.put.updateUserEso.useMutation({
+    onSuccess(data) {
+      if (!data) return null;
+      setSucStateEso("text-green-500");
+    },
+  });
+  const updFfxiv = api.put.updateUserFfxiv.useMutation({
+    onSuccess(data) {
+      if (!data) return null;
+      setSucStateFfxiv("text-green-500");
+    },
+  });
+  const updSwtor = api.put.updateUserSwtor.useMutation({
+    onSuccess(data) {
+      if (!data) return null;
+      setSucStateSwtor("text-green-500");
+    },
+  });
+  const updStaff = api.put.updateUserStaff.useMutation({
+    onSuccess(data) {
+      if (!data) return null;
+      setSucStateStaff("text-green-500");
+    },
+  });
+  const createEso = api.post.createEsoPermission.useMutation({
+    onSuccess(data) {
+      if (!data) return null;
+      setSucStateEso("text-green-500");
+    },
+  });
+  const createFfxiv = api.post.createFfxivPermission.useMutation({
+    onSuccess(data) {
+      if (!data) return null;
+      setSucStateFfxiv("text-green-500");
+    },
+  });
+  const createSwtor = api.post.createSwtorPermission.useMutation({
+    onSuccess(data) {
+      if (!data) return null;
+      setSucStateSwtor("text-green-500");
+    },
+  });
+  const createStaff = api.post.createStaffPermission.useMutation({
+    onSuccess(data) {
+      if (!data) return null;
+      setSucStateStaff("text-green-500");
+    },
+  });
 
+  const submitForms = async () => {
+    if (esoState.id === "") {
+      createEso.mutate(esoState);
+    } else {
+      updEso.mutate(esoState);
+    }
+    if (ffxivState.id === "") {
+      createFfxiv.mutate(ffxivState);
+    } else {
+      updFfxiv.mutate(ffxivState);
+    }
+    if (swtorState.id === "") {
+      createSwtor.mutate(swtorState);
+    } else {
+      updSwtor.mutate(swtorState);
+    }
+    if (staffState.id === "") {
+      createStaff.mutate(staffState);
+    } else {
+      updStaff.mutate(staffState);
+    }
+  };
   return (
     <div>
       <h1>User Modifications</h1>
@@ -108,9 +203,7 @@ export default function UserModify({
       <div>
         {showPermissions && <h2>ESO Permissions</h2>}
         <form>
-          {(perm?.guildmaster ??
-            perm?.highcouncil ??
-            officer.eso === "officer") && (
+          {showPermissions && (
             <label>
               Rank:
               <select
@@ -126,9 +219,7 @@ export default function UserModify({
             </label>
           )}
 
-          {(perm?.guildmaster ??
-            perm?.highcouncil ??
-            officer.eso === "officer") && (
+          {showPermissions && (
             <label>
               Raid:
               <input
@@ -141,9 +232,7 @@ export default function UserModify({
             </label>
           )}
 
-          {(perm?.guildmaster ??
-            perm?.highcouncil ??
-            officer.eso === "officer") && (
+          {showPermissions && (
             <label>
               Raidlead:
               <input
@@ -156,9 +245,7 @@ export default function UserModify({
             </label>
           )}
 
-          {(perm?.guildmaster ??
-            perm?.highcouncil ??
-            officer.eso === "officer") && (
+          {showPermissions && (
             <label>
               Mentor:
               <input
@@ -173,13 +260,9 @@ export default function UserModify({
         </form>
       </div>
       <div>
-        {(perm?.guildmaster ??
-          perm?.highcouncil ??
-          officer.ffxiv === "officer") && <h2>FFXIV Permissions</h2>}
+        {showFFXIVPermissions && <h2>FFXIV Permissions</h2>}
         <form>
-          {(perm?.guildmaster ??
-            perm?.highcouncil ??
-            officer.ffxiv === "officer") && (
+          {showFFXIVPermissions && (
             <label>
               Rank:
               <select
@@ -195,9 +278,7 @@ export default function UserModify({
             </label>
           )}
 
-          {(perm?.guildmaster ??
-            perm?.highcouncil ??
-            officer.ffxiv === "officer") && (
+          {showFFXIVPermissions && (
             <label>
               Raid:
               <input
@@ -210,9 +291,7 @@ export default function UserModify({
             </label>
           )}
 
-          {(perm?.guildmaster ??
-            perm?.highcouncil ??
-            officer.ffxiv === "officer") && (
+          {showFFXIVPermissions && (
             <label>
               Raidlead:
               <input
@@ -225,9 +304,7 @@ export default function UserModify({
             </label>
           )}
 
-          {(perm?.guildmaster ??
-            perm?.highcouncil ??
-            officer.ffxiv === "officer") && (
+          {showFFXIVPermissions && (
             <label>
               Mentor:
               <input
@@ -242,13 +319,9 @@ export default function UserModify({
         </form>
       </div>
       <div>
-        {(perm?.guildmaster ??
-          perm?.highcouncil ??
-          officer.swtor === "officer") && <h2>SWTOR Permissions</h2>}
+        {showSWTORPermissions && <h2>SWTOR Permissions</h2>}
         <form>
-          {(perm?.guildmaster ??
-            perm?.highcouncil ??
-            officer.swtor === "officer") && (
+          {showSWTORPermissions && (
             <label>
               Rank:
               <select
@@ -264,9 +337,7 @@ export default function UserModify({
             </label>
           )}
 
-          {(perm?.guildmaster ??
-            perm?.highcouncil ??
-            officer.swtor === "officer") && (
+          {showSWTORPermissions && (
             <label>
               Raid:
               <input
@@ -279,9 +350,7 @@ export default function UserModify({
             </label>
           )}
 
-          {(perm?.guildmaster ??
-            perm?.highcouncil ??
-            officer.swtor === "officer") && (
+          {showSWTORPermissions && (
             <label>
               Raidlead:
               <input
@@ -294,9 +363,7 @@ export default function UserModify({
             </label>
           )}
 
-          {(perm?.guildmaster ??
-            perm?.highcouncil ??
-            officer.swtor === "officer") && (
+          {showSWTORPermissions && (
             <label>
               Mentor:
               <input
@@ -311,9 +378,9 @@ export default function UserModify({
         </form>
       </div>
       <div>
-        {(perm?.guildmaster ?? perm?.highcouncil) && <h2>Staff Permissions</h2>}
+        {showStaffPermissions && <h2>Staff Permissions</h2>}
         <form>
-          {(perm?.guildmaster ?? perm?.highcouncil) && (
+          {showStaffPermissions && (
             <label>
               Admin:
               <input
@@ -326,7 +393,7 @@ export default function UserModify({
             </label>
           )}
 
-          {(perm?.guildmaster ?? perm?.highcouncil) && (
+          {showStaffPermissions && (
             <label>
               Specialist:
               <input
@@ -339,7 +406,7 @@ export default function UserModify({
             </label>
           )}
 
-          {(perm?.guildmaster ?? perm?.highcouncil) && (
+          {showStaffPermissions && (
             <label>
               Representative:
               <input
@@ -387,6 +454,15 @@ export default function UserModify({
             </label>
           )}
         </form>
+        <button onClick={submitForms} className="button-40">
+          SAVE CHANGES
+        </button>
+        <div>
+          <p className={sucStateEso}>ESO Changes</p>
+          <p className={sucStateFfxiv}>FFXIV Changes</p>
+          <p className={sucStateSwtor}>SWTOR Changes</p>
+          <p className={sucStateStaff}>Staff Changes</p>
+        </div>
       </div>
     </div>
   );

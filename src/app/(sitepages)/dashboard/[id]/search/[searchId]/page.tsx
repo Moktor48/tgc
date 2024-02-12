@@ -37,6 +37,7 @@ export default async function UserManage({
       <NavBarDB id={userId} perm={perm} />
       <UserModify
         user={user}
+        searchUserId={searchId}
         userEso={userEso}
         userFfxiv={userFfxiv}
         userSwtor={userSwtor}
