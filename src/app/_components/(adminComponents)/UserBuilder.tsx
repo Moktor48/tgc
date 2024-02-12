@@ -87,196 +87,217 @@ export default function UserBuilder() {
   }
 
   return (
-    <div>
-      <form onSubmit={handleSubmit}>
-        <label className="text-white">Username</label>
-        <input
-          name="name"
-          value={userData.name}
-          onChange={(e) => setUserData({ ...userData, name: e.target.value })}
-        />
-        <br />
-        <label className="text-white">Email</label>
-        <input
-          name="email"
-          value={userData.email}
-          onChange={(e) => setUserData({ ...userData, email: e.target.value })}
-        />
-        <br />
-        <label className="text-white">Image</label>
-        <input
-          name="image"
-          value={userData.image}
-          onChange={(e) => setUserData({ ...userData, image: e.target.value })}
-        />
-        <br />
-        <label className="text-white">Role</label>
-        <input
-          name="role"
-          value={userData.role}
-          onChange={(e) => setUserData({ ...userData, role: e.target.value })}
-        />
-        <br />
-        <label className="text-white">Staff - Admin</label>
-        <input
-          type="checkbox"
-          checked={staffData.admin}
-          name="admin"
-          onChange={() =>
-            setStaffData({ ...staffData, admin: !staffData.admin })
-          }
-        />
-        <br />
-        <label className="text-white">Staff - Specialist</label>
-        <input
-          type="checkbox"
-          name="specialist"
-          checked={staffData.specialist}
-          onChange={() =>
-            setStaffData({ ...staffData, specialist: !staffData.specialist })
-          }
-        />
-        <br />
-        <label className="text-white">Staff - Representative</label>
-        <input
-          type="checkbox"
-          name="representative"
-          checked={staffData.representative}
-          onChange={() =>
-            setStaffData({
-              ...staffData,
-              representative: !staffData.representative,
-            })
-          }
-        />
-        <br />
-        <label className="text-white">Staff - High Council</label>
-        <input
-          type="checkbox"
-          name="highcouncil"
-          checked={staffData.highcouncil}
-          onChange={() =>
-            setStaffData({ ...staffData, highcouncil: !staffData.highcouncil })
-          }
-        />
-        <br />
-        <label className="text-white">Staff - Guild Master</label>
-        <input
-          type="checkbox"
-          name="guildmaster"
-          checked={staffData.guildmaster}
-          onChange={() =>
-            setStaffData({ ...staffData, guildmaster: !staffData.guildmaster })
-          }
-        />
-        <br />
-        <label className="text-white">ESO - Rank</label>
-        <input
-          name="rank"
-          value={esoData.rank}
-          onChange={(e) => setEsoData({ ...esoData, rank: e.target.value })}
-        />
-        <br />
-        <label className="text-white">ESO - Raid</label>
-        <input
-          type="checkbox"
-          name="raid"
-          checked={esoData.raid}
-          onChange={() => setEsoData({ ...esoData, raid: !esoData.raid })}
-        />
-        <br />
-        <label className="text-white">ESO - Raid Lead</label>
-        <input
-          type="checkbox"
-          name="raidlead"
-          checked={esoData.raidlead}
-          onChange={() =>
-            setEsoData({ ...esoData, raidlead: !esoData.raidlead })
-          }
-        />
-        <br />
-        <label className="text-white">ESO - Mentor</label>
-        <input
-          type="checkbox"
-          name="mentor"
-          checked={esoData.mentor}
-          onChange={() => setEsoData({ ...esoData, mentor: !esoData.mentor })}
-        />
-        <br />
-        <label className="text-white">FFXIV - Rank</label>
-        <input
-          name="rankF"
-          value={ffxivData.rank}
-          onChange={(e) => setFfxivData({ ...ffxivData, rank: e.target.value })}
-        />
-        <br />
-        <label className="text-white">FFXIV - Raid</label>
-        <input
-          type="checkbox"
-          name="raidF"
-          checked={ffxivData.raid}
-          onChange={() => setFfxivData({ ...ffxivData, raid: !ffxivData.raid })}
-        />
-        <br />
-        <label className="text-white">FFXIV - Raid Lead</label>
-        <input
-          type="checkbox"
-          name="raidleadF"
-          checked={ffxivData.raidlead}
-          onChange={() =>
-            setFfxivData({ ...ffxivData, raidlead: !ffxivData.raidlead })
-          }
-        />
-        <br />
-        <label className="text-white">FFXIV - Mentor</label>
-        <input
-          type="checkbox"
-          name="mentorF"
-          checked={ffxivData.mentor}
-          onChange={() =>
-            setFfxivData({ ...ffxivData, mentor: !ffxivData.mentor })
-          }
-        />
-        <br />
-        <label className="text-white">SWTOR - Rank</label>
-        <input
-          name="rankS"
-          value={swtorData.rank}
-          onChange={(e) => setSwtorData({ ...swtorData, rank: e.target.value })}
-        />
-        <br />
-        <label className="text-white">SWTOR - Raid</label>
-        <input
-          type="checkbox"
-          name="raidS"
-          checked={swtorData.raid}
-          onChange={() => setSwtorData({ ...swtorData, raid: !swtorData.raid })}
-        />
-        <br />
-        <label className="text-white">SWTOR - Raid Lead</label>
-        <input
-          type="checkbox"
-          name="raidleadS"
-          checked={swtorData.raidlead}
-          onChange={() =>
-            setSwtorData({ ...swtorData, raidlead: !swtorData.raidlead })
-          }
-        />
-        <br />
-        <label className="text-white">SWTOR - Mentor</label>
-        <input
-          type="checkbox"
-          name="mentorS"
-          checked={swtorData.mentor}
-          onChange={() =>
-            setSwtorData({ ...swtorData, mentor: !swtorData.mentor })
-          }
-        />
-        <br />
-        <button className="button-40" type="submit">
-          MAGIC BUTTON
-        </button>
-      </form>
+    <div className="">
+      <div className="flex w-full flex-col">
+        <h1 className="bg-black text-center">Create-a-User!</h1>
+        <form className="mx-auto" onSubmit={handleSubmit}>
+          <label className="text-white">Username</label>
+          <input
+            name="name"
+            value={userData.name}
+            onChange={(e) => setUserData({ ...userData, name: e.target.value })}
+          />
+          <br />
+          <label className="text-white">Email</label>
+          <input
+            name="email"
+            value={userData.email}
+            onChange={(e) =>
+              setUserData({ ...userData, email: e.target.value })
+            }
+          />
+          <br />
+          <label className="text-white">Image</label>
+          <input
+            name="image"
+            value={userData.image}
+            onChange={(e) =>
+              setUserData({ ...userData, image: e.target.value })
+            }
+          />
+          <br />
+          <label className="text-white">Role</label>
+          <input
+            name="role"
+            value={userData.role}
+            onChange={(e) => setUserData({ ...userData, role: e.target.value })}
+          />
+          <br />
+          <label className="text-white">Staff - Admin</label>
+          <input
+            type="checkbox"
+            checked={staffData.admin}
+            name="admin"
+            onChange={() =>
+              setStaffData({ ...staffData, admin: !staffData.admin })
+            }
+          />
+          <br />
+          <label className="text-white">Staff - Specialist</label>
+          <input
+            type="checkbox"
+            name="specialist"
+            checked={staffData.specialist}
+            onChange={() =>
+              setStaffData({ ...staffData, specialist: !staffData.specialist })
+            }
+          />
+          <br />
+          <label className="text-white">Staff - Representative</label>
+          <input
+            type="checkbox"
+            name="representative"
+            checked={staffData.representative}
+            onChange={() =>
+              setStaffData({
+                ...staffData,
+                representative: !staffData.representative,
+              })
+            }
+          />
+          <br />
+          <label className="text-white">Staff - High Council</label>
+          <input
+            type="checkbox"
+            name="highcouncil"
+            checked={staffData.highcouncil}
+            onChange={() =>
+              setStaffData({
+                ...staffData,
+                highcouncil: !staffData.highcouncil,
+              })
+            }
+          />
+          <br />
+          <label className="text-white">Staff - Guild Master</label>
+          <input
+            type="checkbox"
+            name="guildmaster"
+            checked={staffData.guildmaster}
+            onChange={() =>
+              setStaffData({
+                ...staffData,
+                guildmaster: !staffData.guildmaster,
+              })
+            }
+          />
+          <br />
+          <label className="text-white">ESO - Rank</label>
+          <input
+            name="rank"
+            value={esoData.rank}
+            onChange={(e) => setEsoData({ ...esoData, rank: e.target.value })}
+          />
+          <br />
+          <label className="text-white">ESO - Raid</label>
+          <input
+            type="checkbox"
+            name="raid"
+            checked={esoData.raid}
+            onChange={() => setEsoData({ ...esoData, raid: !esoData.raid })}
+          />
+          <br />
+          <label className="text-white">ESO - Raid Lead</label>
+          <input
+            type="checkbox"
+            name="raidlead"
+            checked={esoData.raidlead}
+            onChange={() =>
+              setEsoData({ ...esoData, raidlead: !esoData.raidlead })
+            }
+          />
+          <br />
+          <label className="text-white">ESO - Mentor</label>
+          <input
+            type="checkbox"
+            name="mentor"
+            checked={esoData.mentor}
+            onChange={() => setEsoData({ ...esoData, mentor: !esoData.mentor })}
+          />
+          <br />
+          <label className="text-white">FFXIV - Rank</label>
+          <input
+            name="rankF"
+            value={ffxivData.rank}
+            onChange={(e) =>
+              setFfxivData({ ...ffxivData, rank: e.target.value })
+            }
+          />
+          <br />
+          <label className="text-white">FFXIV - Raid</label>
+          <input
+            type="checkbox"
+            name="raidF"
+            checked={ffxivData.raid}
+            onChange={() =>
+              setFfxivData({ ...ffxivData, raid: !ffxivData.raid })
+            }
+          />
+          <br />
+          <label className="text-white">FFXIV - Raid Lead</label>
+          <input
+            type="checkbox"
+            name="raidleadF"
+            checked={ffxivData.raidlead}
+            onChange={() =>
+              setFfxivData({ ...ffxivData, raidlead: !ffxivData.raidlead })
+            }
+          />
+          <br />
+          <label className="text-white">FFXIV - Mentor</label>
+          <input
+            type="checkbox"
+            name="mentorF"
+            checked={ffxivData.mentor}
+            onChange={() =>
+              setFfxivData({ ...ffxivData, mentor: !ffxivData.mentor })
+            }
+          />
+          <br />
+          <label className="text-white">SWTOR - Rank</label>
+          <input
+            name="rankS"
+            value={swtorData.rank}
+            onChange={(e) =>
+              setSwtorData({ ...swtorData, rank: e.target.value })
+            }
+          />
+          <br />
+          <label className="text-white">SWTOR - Raid</label>
+          <input
+            type="checkbox"
+            name="raidS"
+            checked={swtorData.raid}
+            onChange={() =>
+              setSwtorData({ ...swtorData, raid: !swtorData.raid })
+            }
+          />
+          <br />
+          <label className="text-white">SWTOR - Raid Lead</label>
+          <input
+            type="checkbox"
+            name="raidleadS"
+            checked={swtorData.raidlead}
+            onChange={() =>
+              setSwtorData({ ...swtorData, raidlead: !swtorData.raidlead })
+            }
+          />
+          <br />
+          <label className="text-white">SWTOR - Mentor</label>
+          <input
+            type="checkbox"
+            name="mentorS"
+            checked={swtorData.mentor}
+            onChange={() =>
+              setSwtorData({ ...swtorData, mentor: !swtorData.mentor })
+            }
+          />
+          <br />
+          <button className="button-40" type="submit">
+            MAGIC BUTTON
+          </button>
+        </form>
+      </div>
     </div>
   );
 }

@@ -82,6 +82,11 @@ export default function PostSelect({ id, staff, eso, ffxiv, swtor }: Props) {
         start.
       </h1>
       <br />
+      <p>
+        To send web development suggestions to Moktor, choose
+        General/SUGGESTIONS/General
+      </p>
+      <br />
       <form className="flex justify-center space-x-4">
         <select
           className="text-yellow-400"
@@ -115,6 +120,7 @@ export default function PostSelect({ id, staff, eso, ffxiv, swtor }: Props) {
           <option value="2">Guide</option>
           <option value="3">Notification</option>
           <option value="4">Report</option>
+          <option value="5">SUGGESTIONS</option>
         </select>
         <select
           className="text-yellow-400"

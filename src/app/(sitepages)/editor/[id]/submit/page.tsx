@@ -19,12 +19,14 @@ type FormData = {
   staff: boolean;
   raid: boolean;
   officer: boolean;
+  type: string;
 };
 
 const build = `<p><strong>Test Template BUILD!!!</strong></p><p>Setting a template up for builds...</p><p></p><p>So, a table here, and some links there...</p><h2></h2>`;
 const guide = `<p><strong>Test Template GUIDE!!!</strong></p><p>Setting a template up for builds...</p><p></p><p>So, a table here, and some links there...</p><h2></h2>`;
 const notification = `<p><strong>Test Template NOTIFICATION!!!</strong></p><p>Setting a template up for builds...</p><p></p><p>So, a table here, and some links there...</p><h2></h2>`;
 const report = `<p><strong>Test Template REPORT!!!</strong></p><p>Setting a template up for builds...</p><p></p><p>So, a table here, and some links there...</p><h2></h2>`;
+const suggest = `<p><strong>SUGGESTIONS!!!</strong></p><p>Add information for functionality, bugs, or general suggestions</p><p></p><p>I also need templates made for the types, so a build template, article template, etc.</p><h2></h2>`;
 
 export default function PostSubmit() {
   const { data } = useSession();
@@ -50,6 +52,31 @@ export default function PostSubmit() {
   const roleSelect = searchParams.get("role")!;
   const [title, setTitle] = useState({ title: "==> SET TITLE <==" });
 
+  const postTemplate =
+    typeSelect === "1"
+      ? build
+      : typeSelect === "2"
+        ? guide
+        : typeSelect === "3"
+          ? notification
+          : typeSelect === "4"
+            ? report
+            : typeSelect === "5"
+              ? suggest
+              : "Not Found";
+  const typeString =
+    typeSelect === "1"
+      ? "build"
+      : typeSelect === "2"
+        ? "guide"
+        : typeSelect === "3"
+          ? "notification"
+          : typeSelect === "4"
+            ? "report"
+            : typeSelect === "5"
+              ? "suggestion"
+              : "article";
+
   //Permission data is set through the previous page set-up
   const [permissionData, setPermissionData] = useState<FormData>({
     eso: false,
@@ -59,24 +86,8 @@ export default function PostSubmit() {
     staff: false,
     raid: false,
     officer: false,
+    type: typeString,
   });
-  const postTemplate =
-    typeSelect === "1"
-      ? build
-      : typeSelect === "2"
-        ? guide
-        : typeSelect === "3"
-          ? notification
-          : report;
-  const typeString =
-    typeSelect === "1"
-      ? "build"
-      : typeSelect === "2"
-        ? "guide"
-        : typeSelect === "3"
-          ? "notification"
-          : "report";
-
   //Function to submit the permission data
   const subPerm = api.post.postPermissions.useMutation();
 
@@ -112,9 +123,10 @@ export default function PostSubmit() {
         [roleSelect]: true,
       });
       if (!editor) return null;
-      if (title.title === "==> SET TITLE <==") return null;
+      if (title.title === "==> SET TITLE <==") return alert("set title");
       console.log(title);
       const content = editor.getHTML();
+      if (content === postTemplate) return alert("Fill out the content!");
       subData.mutate({
         createdById: userId,
         post: content,

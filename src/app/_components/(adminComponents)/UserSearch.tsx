@@ -1,22 +1,24 @@
 "use client";
-import React, { useState } from "react";
-
+import { api } from "~/trpc/react";
+import { useRouter } from "next/navigation";
 export default function UserSearch() {
-  const [formData, setFormData] = useState("");
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData(e.target.value);
-  };
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    console.log(formData);
+  const router = useRouter();
+  const users = api.get.allUsers.useQuery();
+  const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    router.push(`./search/${e.target.value}`);
   };
   return (
     <div>
       <section className="formPlate">
-        <form onSubmit={handleSubmit}>
-          <label className="">Search for users</label>
-          <input type="text" name="search" onChange={handleChange} />
-          <button className="button-40">Search</button>
+        <form>
+          <select onChange={handleChange}>
+            <option value="">Select a user</option>
+            {users.data?.map((user) => (
+              <option key={user.id} value={user.id}>
+                {user.name}
+              </option>
+            ))}
+          </select>
         </form>
       </section>
     </div>

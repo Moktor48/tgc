@@ -1,6 +1,7 @@
 //Page for staff members, will include portals to staff related pages.
 import Link from "next/link";
 import React from "react";
+import UserSearch from "~/app/_components/(adminComponents)/UserSearch";
 import NavBarDB from "~/app/_components/(gameComponents)/(dashboard)/NavBarDB";
 import { getServerAuthSession } from "~/server/auth";
 import { api } from "~/trpc/server";
@@ -38,7 +39,7 @@ export default async function StaffPage({
           <p>Ability to adjust ranks for players in same guild</p>
           <p>Ability to create and modify events for guild</p>
           <p>Ability to make guild page announcements</p>
-
+          <UserSearch />
           <Link href={`../../../editor/${id}/approve`}>
             <span className="text-3xl text-yellow-500">Post Approvals</span>
           </Link>

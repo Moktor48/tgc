@@ -6,17 +6,26 @@ export default async function UserPull() {
   const guest = await api.get.allGuests.query();
 
   return (
-    <div>
-      {guest.map((user: { id: string; name: string; email: string }) => {
-        return (
-          <Link
-            href={`/userManage?id=${user.id}&name=${user.name}&email=${user.email}`}
-          >
-            <p>Username: {user.name}</p>
-            <p>Email: {user.email}</p>
-          </Link>
-        );
-      })}
+    <div className="flex flex-col justify-items-center">
+      <h1>Guests found in the database for approvals</h1>
+      {guest.map(
+        (user: {
+          id: string;
+          name: string;
+          email: string;
+          role: string;
+          image: string;
+        }) => {
+          return (
+            <Link
+              href={`/userManage/${user.id}?name=${user.name}&email=${user.email}&role=${user.role}&image=${user.image}`}
+            >
+              <p>Username: {user.name}</p>
+              <br />
+            </Link>
+          );
+        },
+      )}
     </div>
   );
 }

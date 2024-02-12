@@ -17,6 +17,23 @@ export const getRouter = createTRPCRouter({
       });
       return user;
     }),
+
+  userProfile: protectedProcedure
+    .input(z.object({ userId: z.string() }))
+    .query(async ({ input }) => {
+      const user = await db.user.findUnique({
+        where: { id: input.userId },
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          image: true,
+          role: true,
+        },
+      });
+      return user;
+    }),
+
   // Pulling users
   allUsers: protectedProcedure.query(async () => {
     const users = await db.user.findMany({});

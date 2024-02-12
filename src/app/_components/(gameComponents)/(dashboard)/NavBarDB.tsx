@@ -58,6 +58,9 @@ export default async function NavBarDB({ id, perm }: NavBarProps) {
           </button>
           <div className="nav-dropdown-content">
             <Link href={`/dashboard/${id}/admin`}>Admin</Link>
+            <Link href={`/dashboard/${id}/admin/userBuilder`}>
+              User Creator
+            </Link>
           </div>
         </div>
       )}
