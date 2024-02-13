@@ -95,7 +95,7 @@ header {
   position: fixed;
   top: 0;
   right: 0;
-  color: yellow;
+  color: lightgray;
 }
 
 .nav-button:hover {
@@ -108,7 +108,7 @@ header {
   text-transform: capitalize;
   padding: 1rem;
   transition: all 0.3s linear;
-  color: yellow;
+  color: lightgray;
 }
 .header-container {
   display: grid;
