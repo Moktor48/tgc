@@ -30,16 +30,18 @@ export default async function RootLayout({
   return (
     <html
       lang="en"
-      style={{
-        backgroundImage: `url(${bg.src})`,
-        width: "100%",
-        height: "100%",
-      }}
+      // style={{
+      //   backgroundImage: `url(${bg.src})`,
+      //   width: "100%",
+      //   height: "100%",
+      // }}
+      
     >
       <body className={`font-sans ${inter.variable}`}>
         <Provider session={session}>
           <TRPCReactProvider cookies={cookies().toString()}>
             <header>
+              <div className="header-img"></div>
               <StatBar />
               <SideBar />
             </header>
