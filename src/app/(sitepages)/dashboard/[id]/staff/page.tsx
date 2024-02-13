@@ -13,6 +13,7 @@ export default async function StaffPage({
 }) {
   const session = await getServerAuthSession();
   if (!session) return <div>You must be logged in to view this page.</div>;
+  console.log(session);
   const id = params.id;
   const perm = await api.get.staffPermission.query({ userId: id });
   if (session.user.role != "staff")
@@ -39,6 +40,7 @@ export default async function StaffPage({
           <p>Ability to adjust ranks for players in same guild</p>
           <p>Ability to create and modify events for guild</p>
           <p>Ability to make guild page announcements</p>
+
           <UserSearch />
           <Link href={`../../../editor/${id}/approve`}>
             <span className="text-3xl text-yellow-500">Post Approvals</span>
