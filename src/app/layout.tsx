@@ -9,7 +9,7 @@ import StatBar from "./_components/(core)/StatBar";
 import bg from "./_components/img/body-background-img-rock.png";
 import SideBar from "./_components/(core)/SideBar";
 import BottomComp from "./_components/(core)/BottomComp";
-import NavBar from "~/app/_components/(core)/NavBar";
+import NavBar from "./_components/(core)/NavBar";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -27,26 +27,28 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   const session = await getServerAuthSession();
-
+  if (!session) return null;
+  const role = session.user.role;
+  const id = session.user.id;
   return (
     <html
       lang="en"
-
+      style={{
+        backgroundImage: `url(${bg.src})`,
+        width: "100%",
+        height: "100%",
+      }}
     >
       <body className={`font-sans ${inter.variable}`}>
         <Provider session={session}>
           <TRPCReactProvider cookies={cookies().toString()}>
             <header>
-              <div className="header-img"></div>
               <StatBar />
               <SideBar />
-              
             </header>
-            {/* This would make the NavBar appear across every page:  */}
-            {/* <NavBar /> */}
+            <NavBar role={role} id={id} />
             {children}
             <BottomComp />
-            
           </TRPCReactProvider>
         </Provider>
       </body>

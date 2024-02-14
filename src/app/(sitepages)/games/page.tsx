@@ -1,11 +1,16 @@
 import Link from "next/link";
 import React from "react";
 import NavBar from "~/app/_components/(core)/NavBar";
+import { getServerAuthSession } from "~/server/auth";
 
-export default function GamePage() {
+export default async function GamePage() {
+  const session = await getServerAuthSession();
+  if (!session) return <div>You must be logged in to view this page.</div>;
+  const role = session.user.role;
+  const id = session.user.id;
   return (
     <div>
-      <NavBar />
+      <NavBar role={role} id={id} />
       <p className="text-white">Game listing</p>
       <Link className="text-white" href="/games/eso">
         Go to ESO

@@ -1,6 +1,5 @@
 import React from "react";
 import UserModify from "~/app/_components/(adminComponents)/UserModify";
-import NavBarDB from "~/app/_components/(gameComponents)/(dashboard)/NavBarDB";
 import { getServerAuthSession } from "~/server/auth";
 import { api } from "~/trpc/server";
 
@@ -34,7 +33,6 @@ export default async function UserManage({
   const userStaff = await api.get.staffPermission.query({ userId: searchId });
   return (
     <div>
-      <NavBarDB id={userId} perm={perm} />
       <UserModify
         user={user}
         searchUserId={searchId}
