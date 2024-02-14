@@ -9,6 +9,7 @@ import StatBar from "./_components/(core)/StatBar";
 import bg from "./_components/img/body-background-img-rock.png";
 import SideBar from "./_components/(core)/SideBar";
 import BottomComp from "./_components/(core)/BottomComp";
+import NavBar from "./_components/(core)/NavBar";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -26,7 +27,9 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   const session = await getServerAuthSession();
-
+  if (!session) return null;
+  const role = session.user.role;
+  const id = session.user.id;
   return (
     <html
       lang="en"
@@ -43,7 +46,7 @@ export default async function RootLayout({
               <StatBar />
               <SideBar />
             </header>
-
+            <NavBar role={role} id={id} />
             {children}
             <BottomComp />
           </TRPCReactProvider>

@@ -6,6 +6,8 @@ export default function WarningBanner() {
       <p className="text-yellow-500">Latest update: 2/14/24@0630MST</p>
       <h1>Current Operations</h1>
 
+      <p className="text-color-green-500">NavBars homogenized</p>
+
       <p className="text-5xl text-yellow-500">REMOVED YELLOW FOR CHANCE!!!!</p>
 
       <p className="text-5xl text-yellow-500">

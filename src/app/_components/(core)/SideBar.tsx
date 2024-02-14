@@ -2,7 +2,6 @@
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
-import { api } from "~/trpc/react";
 
 export default function SideBar() {
   const { data: session } = useSession();

@@ -1,7 +1,6 @@
 //Personal account page for all members, should display notifications based on permissions and links to pages such as admin or staff when relevant
 
 import React from "react";
-import NavBarDB from "~/app/_components/(gameComponents)/(dashboard)/NavBarDB";
 import { getServerAuthSession } from "~/server/auth";
 import { api } from "~/trpc/server";
 

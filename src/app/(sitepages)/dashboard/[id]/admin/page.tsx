@@ -3,7 +3,6 @@ import UserPull from "~/app/_components/(adminComponents)/UserPull";
 import UserSearch from "~/app/_components/(adminComponents)/UserSearch";
 import { getServerAuthSession } from "~/server/auth";
 import { api } from "~/trpc/server";
-import NavBarDB from "~/app/_components/(gameComponents)/(dashboard)/NavBarDB";
 
 export default async function page({ params }: { params: { id: string } }) {
   const session = await getServerAuthSession();
@@ -16,7 +15,6 @@ export default async function page({ params }: { params: { id: string } }) {
 
   return (
     <>
-      <NavBarDB id={id} perm={perm} />
       <div className="flex w-full justify-center">
         <div className="newsletter flex w-1/2 justify-center">
           <p className="w-full bg-black text-center">
