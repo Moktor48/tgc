@@ -19,12 +19,14 @@ declare module "next-auth" {
     user: {
       id: string;
       role: string;
+      guild: boolean;
     } & DefaultSession["user"];
   }
 
   interface User {
     id: string;
     role?: string;
+    guild: boolean;
   }
 
   interface AdapterUser {
@@ -48,7 +50,7 @@ declare module "next-auth/providers/discord" {
 
 export const authOptions: NextAuthOptions = {
   callbacks: {
-    session: ({ session, user }) => {
+    session: async ({ session, user }) => {
       return {
         ...session,
         user: {
@@ -56,6 +58,7 @@ export const authOptions: NextAuthOptions = {
           id: user.id,
           image: user.image,
           role: user.role,
+          guild: user.guild,
         },
       };
     },
@@ -67,6 +70,8 @@ export const authOptions: NextAuthOptions = {
     DiscordProvider({
       clientId: env.DISCORD_CLIENT_ID,
       clientSecret: env.DISCORD_CLIENT_SECRET,
+      authorization:
+        "https://discord.com/api/oauth2/authorize?scope=identify+email+guilds",
     }),
 
     /**

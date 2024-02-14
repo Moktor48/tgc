@@ -47,3 +47,4 @@ prisma/tgc_hold.tsx
 .dockerignore
 docker-compose.yml
 Dockerfile
+notebook.txt

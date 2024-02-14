@@ -3,8 +3,15 @@ import React from "react";
 export default function WarningBanner() {
   return (
     <div className="bg-black text-center text-3xl text-red-500">
-      <p className="text-yellow-500">Latest update: 2/14/24@0630MST</p>
-      <h1>Current Operations</h1>
+      <p className="text-yellow-500">
+        Latest update: <span className="test-green-500">2/14/24@1230MST</span>
+      </p>
+      <h1>Latest updates</h1>
+
+      <p className="text-green-500">
+        Log-in automatically checks Discord channel to verify membership, then
+        updates the user record. Styling is not final, just function.
+      </p>
 
       <p className="text-green-500">NavBars homogenized</p>
 
