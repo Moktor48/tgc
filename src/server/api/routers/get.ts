@@ -3,6 +3,18 @@ import { db } from "~/server/db";
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 
 export const getRouter = createTRPCRouter({
+  pullAccess: protectedProcedure
+    .input(z.object({ userId: z.string() }))
+    .query(async ({ input }) => {
+      const account = await db.account.findUnique({
+        where: { userId: input.userId },
+        select: {
+          access_token: true,
+        },
+      });
+      return account;
+    }),
+
   //pulls relations for a userId, can be used to determine access and profiles
   fullProfile: protectedProcedure
     .input(z.object({ userId: z.string() }))
