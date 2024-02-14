@@ -5,8 +5,8 @@ export default async function NavBar({
   role,
   id,
 }: {
-  role: string;
-  id: string;
+  role: string | undefined;
+  id: string | undefined;
 }) {
   return (
     <div className="navbar" id="navbar">

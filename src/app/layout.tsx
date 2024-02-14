@@ -27,9 +27,8 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   const session = await getServerAuthSession();
-  if (!session) return null;
-  const role = session.user.role;
-  const id = session.user.id;
+  const role = session?.user.role;
+  const id = session?.user.id;
   return (
     <html
       lang="en"

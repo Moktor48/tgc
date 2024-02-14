@@ -5,7 +5,6 @@ import WarningBanner from "./_components/(core)/WarningBanner";
 export default async function Home() {
   return (
     <main>
-      <WarningBanner />
       <div className="header-container">
         <div className="header">
           <h3>TGC Community Updates</h3>
@@ -15,6 +14,7 @@ export default async function Home() {
         </div>
       </div>
       <FrontContent />
+      <WarningBanner />
     </main>
   );
 }
