@@ -3,8 +3,14 @@ import React from "react";
 export default function WarningBanner() {
   return (
     <div className="bg-black text-center text-3xl text-red-500">
-      <p className="text-yellow-500">Latest update: 2/12/24@1115MST</p>
+      <p className="text-yellow-500">Latest update: 2/14/24@0630MST</p>
       <h1>Current Operations</h1>
+
+      <p className="text-5xl text-yellow-500">REMOVED YELLOW FOR CHANCE!!!!</p>
+
+      <p className="text-5xl text-yellow-500">
+        Rolled back a bit to fix the build
+      </p>
 
       <p className="text-red-500">
         Dashboard allows for staff to make certain changes for users, so guild
