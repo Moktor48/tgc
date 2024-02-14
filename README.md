@@ -28,18 +28,17 @@ You can check out the [create-t3-app GitHub repository](https://github.com/t3-os
 Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
 
 
-# Install NPM package:
+## Install NPM package:
 sudo apt-get install npm -y
 
-# Install NVM package:
+## Install NVM package:
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
 
-# Update NPM to the required verison:
+## Update NPM to the required verison:
 nvm install 18.17.0
 
-# Install NPM project from project root:
+## Install NPM project from project root:
 npm install
 
-# run NPM project from project root:
+## run NPM project from project root:
 npm run dev
-

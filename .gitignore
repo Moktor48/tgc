@@ -47,3 +47,7 @@ prisma/tgc_hold.tsx
 .dockerignore
 docker-compose.yml
 Dockerfile
+
+# Testing:
+/dev
+.vscode/settings.json

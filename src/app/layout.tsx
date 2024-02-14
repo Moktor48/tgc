@@ -9,6 +9,7 @@ import StatBar from "./_components/(core)/StatBar";
 import bg from "./_components/img/body-background-img-rock.png";
 import SideBar from "./_components/(core)/SideBar";
 import BottomComp from "./_components/(core)/BottomComp";
+import NavBar from "~/app/_components/(core)/NavBar";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -30,12 +31,7 @@ export default async function RootLayout({
   return (
     <html
       lang="en"
-      // style={{
-      //   backgroundImage: `url(${bg.src})`,
-      //   width: "100%",
-      //   height: "100%",
-      // }}
-      
+
     >
       <body className={`font-sans ${inter.variable}`}>
         <Provider session={session}>
@@ -44,10 +40,13 @@ export default async function RootLayout({
               <div className="header-img"></div>
               <StatBar />
               <SideBar />
+              
             </header>
-
+            {/* This would make the NavBar appear across every page:  */}
+            {/* <NavBar /> */}
             {children}
             <BottomComp />
+            
           </TRPCReactProvider>
         </Provider>
       </body>
