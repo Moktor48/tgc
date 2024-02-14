@@ -10,15 +10,10 @@ export default async function AccountPage({
   params: { id: string };
 }) {
   const session = await getServerAuthSession();
-  const id = params.id;
   if (!session) return <div>You must be logged in to view this page.</div>;
-  const perm = await api.get.staffPermission.query({
-    userId: session?.user.id,
-  });
 
   return (
     <>
-      <NavBarDB id={id} perm={perm} />
       <div className="flex w-full justify-center">
         <div className="newsletter flex w-1/2">
           <p className="text-center text-5xl text-white">
