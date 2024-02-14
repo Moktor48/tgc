@@ -1,8 +1,6 @@
 import Link from "next/link";
 import React from "react";
-import NavBarEso from "~/app/_components/(gameComponents)/(eso)/NavBarEso";
-import NavBarFfxiv from "~/app/_components/(gameComponents)/(ffxiv)/NavBarFfxiv";
-import NavBarSwtor from "~/app/_components/(gameComponents)/(swtor)/NavBarSwtor";
+
 import { getServerAuthSession } from "~/server/auth";
 import { api } from "~/trpc/server";
 export default async function page({ params }: { params: { game: string } }) {
@@ -10,7 +8,6 @@ export default async function page({ params }: { params: { game: string } }) {
   if (!session?.user.id) return <p>You must log in to view this page.</p>;
   const id = session?.user.id;
   const game = params.game;
-  const perm = await api.get.staffPermission.query({ userId: id });
   let permission;
   if (game === "eso") {
     permission = await api.get.esoPermission.query({ userId: id });
@@ -27,14 +24,6 @@ export default async function page({ params }: { params: { game: string } }) {
 
   return (
     <>
-      {game === "eso" && <NavBarEso session={session} id={id} perm={perm} />}
-      {game === "ffxiv" && (
-        <NavBarFfxiv session={session} id={id} perm={perm} />
-      )}
-      {game === "swtor" && (
-        <NavBarSwtor session={session} id={id} perm={perm} />
-      )}
-
       <div>
         <Link href={`/games/${game}/${id}`} className="text-white">
           Member Page!
