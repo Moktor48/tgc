@@ -116,11 +116,16 @@ export default function PostSelect({ id, staff, eso, ffxiv, swtor }: Props) {
           {" "}
           {/*Available after selecting game */}
           <option value="default">Choose template type...</option>
-          <option value="1">Build</option>
-          <option value="2">Guide</option>
+          {gameSelect.game_select != "general" && (
+            <option value="1">Build</option>
+          )}
+          {gameSelect.game_select != "general" && (
+            <option value="2">Guide</option>
+          )}
           <option value="3">Notification</option>
           <option value="4">Report</option>
           <option value="5">SUGGESTIONS</option>
+          {/*This will change to "articles" when live */}
         </select>
         <select
           className="text-yellow-400"
@@ -132,9 +137,16 @@ export default function PostSelect({ id, staff, eso, ffxiv, swtor }: Props) {
           {/*Available based on user roles */}
           <option value="default">Choose audience type...</option>
           <option value="0">General</option>
-          {staffP && <option value="staff">Staff</option>}
-          {raid && <option value="raid">Raid</option>}
-          {officer && <option value="officer">Guild Officer</option>}
+          {typeSelect.type_select != "1" &&
+            typeSelect.type_select != "2" &&
+            staffP && <option value="staff">Staff</option>}
+          {gameSelect.game_select != "general" && raid && (
+            <option value="raid">Raid</option>
+          )}
+          {typeSelect.type_select != "1" &&
+            typeSelect.type_select != "2" &&
+            gameSelect.game_select != "general" &&
+            officer && <option value="officer">Guild Officer</option>}
         </select>
       </form>
       <br />
@@ -143,6 +155,14 @@ export default function PostSelect({ id, staff, eso, ffxiv, swtor }: Props) {
           className="button-40 mb-8 text-white"
           onClick={() => {
             // <pathname>?sort=asc
+            if (
+              gameSelect.game_select === "" ||
+              typeSelect.type_select === "default" ||
+              roleSelect.role_select === "default"
+            ) {
+              alert("Please select a game, type, and audience");
+              return null;
+            }
             router.push(
               `/editor/${id}/submit?` +
                 createQueryString("game", gameSelect.game_select) +

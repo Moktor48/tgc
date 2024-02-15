@@ -4,11 +4,32 @@ export default function WarningBanner() {
   return (
     <div className="bg-black text-center text-3xl text-red-500">
       <p className="text-yellow-500">
-        Latest update: <span className="test-green-500">2/14/24@1230MST</span>
+        Latest update: <span className="test-green-500">2/15/24@1015MST</span>
       </p>
 
       <h1>Latest updates</h1>
       <ul>
+        <div className="text-green-500">
+          <p>
+            Articles/builds/guides are now routing properly to be read. Test
+            things out, but the EXPECTED outcome is:
+          </p>
+          <p>1. Staff - Create Post </p>
+          <p>2.Post Setup, choose the parameters </p>
+          <p>3. Create your post, and submit </p>
+          <p>
+            4. Staff member reviews (you should be able to review your own at
+            the moment){" "}
+          </p>
+          <p>5. Post should be published in the proper location.</p>
+          <p className="text-yellow-500">
+            Styling is crap at the moment, you were warned! I wanted to get the
+            functionality up, make sure the logic is working. Then I will make
+            it so your eyes don't bleed anymore!
+          </p>
+          <p className="text-red-500">WATCH for bugs, report them!</p>
+        </div>
+
         <li className="text-green-500">
           Log-in automatically checks Discord channel to verify membership, then
           updates the user record. Styling is not final, just function.

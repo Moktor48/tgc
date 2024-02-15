@@ -28,8 +28,8 @@ export default async function NavBar({
         </button>
         <div className="nav-dropdown-content">
           <Link href={`/games/eso/${id}/build`}>ESO</Link>
-          <Link href={`/games/eso/${id}/build`}>SWTOR</Link>
-          <Link href={`/games/eso/${id}/build`}>FFXIV</Link>
+          <Link href={`/games/swtor/${id}/build`}>SWTOR</Link>
+          <Link href={`/games/ffxiv/${id}/build`}>FFXIV</Link>
         </div>
       </div>
 
@@ -41,8 +41,8 @@ export default async function NavBar({
         </button>
         <div className="nav-dropdown-content">
           <Link href={`/games/eso/${id}/guide`}>ESO</Link>
-          <Link href={`/games/eso/${id}/guide`}>SWTOR</Link>
-          <Link href={`/games/eso/${id}/guide`}>FFXIV</Link>
+          <Link href={`/games/swtor/${id}/guide`}>SWTOR</Link>
+          <Link href={`/games/ffxiv/${id}/guide`}>FFXIV</Link>
         </div>
       </div>
 
@@ -54,8 +54,11 @@ export default async function NavBar({
         </button>
         <div className="nav-dropdown-content">
           <Link href={`/games/eso/${id}/article`}>ESO</Link>
-          <Link href={`/games/eso/${id}/article`}>SWTOR</Link>
-          <Link href={`/games/eso/${id}/article`}>FFXIV</Link>
+          <Link href={`/games/swtor/${id}/article`}>SWTOR</Link>
+          <Link href={`/games/ffxiv/${id}/article`}>FFXIV</Link>
+          <Link href={`/games/general/${id}/article`}>
+            General Guild Articles
+          </Link>
         </div>
       </div>
 

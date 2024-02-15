@@ -9,7 +9,6 @@ interface Props {
 }
 
 export default async function PostForm({ userId }: Props) {
-  if (!userId) return <p>This is broken</p>;
   const session = await getServerAuthSession();
   const STAFF = await api.get.staffPermission.query({ userId });
   const ESO = await api.get.esoPermission.query({ userId });
@@ -29,3 +28,6 @@ export default async function PostForm({ userId }: Props) {
     </div>
   );
 }
+/*
+Make this a mass query somewhere, reduce this shit
+*/

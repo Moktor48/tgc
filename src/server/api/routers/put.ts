@@ -48,7 +48,7 @@ export const putRouter = createTRPCRouter({
           email: input.email,
           image: input.image,
           role: input.role,
-          guild: input.guild,
+          tgc_guild_member: input.guild,
         },
       });
       return putUser;
