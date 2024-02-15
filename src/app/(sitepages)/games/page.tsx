@@ -1,11 +1,10 @@
+//Portal to game guilds
 import Link from "next/link";
 import React from "react";
-import NavBar from "~/app/_components/(core)/NavBar";
 
 export default function GamePage() {
   return (
     <div>
-      <NavBar />
       <p className="text-white">Game listing</p>
       <Link className="text-white" href="/games/eso">
         Go to ESO

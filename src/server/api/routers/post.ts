@@ -35,6 +35,8 @@ export const postRouter = createTRPCRouter({
         staff: z.boolean(),
         raid: z.boolean(),
         officer: z.boolean(),
+        type: z.string(),
+        guild_public: z.boolean(),
       }),
     )
     .mutation(async ({ input }) => {
@@ -48,6 +50,8 @@ export const postRouter = createTRPCRouter({
           staff: input.staff,
           raid: input.raid,
           officer: input.officer,
+          type: input.type,
+          guild_public: input.guild_public,
         },
       });
       return post;

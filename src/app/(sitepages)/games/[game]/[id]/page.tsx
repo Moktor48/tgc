@@ -1,39 +1,38 @@
+//MEMBER ONLY page for each game-guild
 import Link from "next/link";
 import React from "react";
-import NavBarEso from "~/app/_components/(gameComponents)/(eso)/NavBarEso";
-import NavBarFfxiv from "~/app/_components/(gameComponents)/(ffxiv)/NavBarFfxiv";
-import NavBarSwtor from "~/app/_components/(gameComponents)/(swtor)/NavBarSwtor";
 import { getServerAuthSession } from "~/server/auth";
 import { api } from "~/trpc/server";
-
-export default async function page({
-  params,
-}: {
-  params: { game: string; id: string };
-}) {
+export default async function page({ params }: { params: { game: string } }) {
   const session = await getServerAuthSession();
-  if (!session) return null;
-  const id = params.id;
+  if (!session?.user.id) return <p>You must log in to view this page.</p>;
+  const id = session?.user.id;
   const game = params.game;
-  const perm = await api.get.staffPermission.query({ userId: id });
+  let permission;
+  if (game === "eso") {
+    permission = await api.get.esoPermission.query({ userId: id });
+  }
+  if (game === "ffxiv") {
+    permission = await api.get.ffxivPermission.query({ userId: id });
+  }
+  if (game === "swtor") {
+    permission = await api.get.swtorPermission.query({ userId: id });
+  }
+  if (!permission || permission.rank === "none")
+    return <p>You do not seem to belong to this guild.</p>;
 
   return (
     <>
-      {game === "eso" && <NavBarEso session={session} id={id} perm={perm} />}
-      {game === "ffxiv" && (
-        <NavBarFfxiv session={session} id={id} perm={perm} />
-      )}
-      {game === "swtor" && (
-        <NavBarSwtor session={session} id={id} perm={perm} />
-      )}
       <div>
         <p className="text-white">Hello {session.user.name}!</p>
-        <p className="text-3xl text-white">Current published posts</p>
-        {session.user.role === "staff" && (
-          <Link href={`/editor?${id}`} className="text-white">
-            Click to run editor
-          </Link>
-        )}
+        <p className="text-3xl text-white">
+          Current published guild announcements for {game} will be here
+        </p>
+        <div>
+          <h1>Article Selection</h1>
+          <Link href={`/games/${game}/${id}/guide`}>Guides</Link>
+          <Link href={`/games/${game}/${id}/build`}>Builds</Link>
+        </div>
       </div>
     </>
   );

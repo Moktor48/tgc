@@ -2,7 +2,6 @@
 import Link from "next/link";
 import React from "react";
 import UserSearch from "~/app/_components/(adminComponents)/UserSearch";
-import NavBarDB from "~/app/_components/(gameComponents)/(dashboard)/NavBarDB";
 import { getServerAuthSession } from "~/server/auth";
 import { api } from "~/trpc/server";
 
@@ -25,7 +24,6 @@ export default async function StaffPage({
 
   return (
     <>
-      <NavBarDB id={id} perm={perm} />
       <div className="flex w-full justify-center">
         <div className="newsletter flex w-1/2">
           <p>

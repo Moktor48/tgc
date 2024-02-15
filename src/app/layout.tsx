@@ -9,7 +9,8 @@ import StatBar from "./_components/(core)/StatBar";
 import bg from "./_components/img/body-background-img-rock.png";
 import SideBar from "./_components/(core)/SideBar";
 import BottomComp from "./_components/(core)/BottomComp";
-import NavBar from "~/app/_components/(core)/NavBar";
+import NavBar from "./_components/(core)/NavBar";
+import NavBarPublic from "./_components/(core)/NavBarPublic";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -27,7 +28,8 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   const session = await getServerAuthSession();
-
+  const role = session?.user.role;
+  const id = session?.user.id;
   return (
     <html
       lang="en"
@@ -42,8 +44,8 @@ export default async function RootLayout({
               <SideBar />
               
             </header>
-            {/* This would make the NavBar appear across every page:  */}
-            {/* <NavBar /> */}
+            {!session && <NavBarPublic />}
+            {session && <NavBar role={role} id={id} />}
             {children}
             <BottomComp />
             

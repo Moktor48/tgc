@@ -19,7 +19,7 @@ datasource db {
 // Necessary for auth.js, don't change anything here!!!
 model Account {
     id                String  @id @default(cuid())
-    userId            String
+    userId            String    @unique
     type              String
     provider          String
     providerAccountId String
@@ -50,7 +50,7 @@ model User {
     emailVerified DateTime?
     image         String
     role          String              @default("guest") //guest, member, staff
-    
+    tgc_guild_member         Boolean             @default(false)
     accounts      Account[]
     sessions      Session[]
     posts         post[]
@@ -93,7 +93,8 @@ model post_permission {
     officer   Boolean @default(false)
     raid      Boolean @default(false) //Staff focused, but applicable to game
     published Boolean @default(false)
-    type      String  @default("article") //article, build, guide, raid, report, 
+    guild_public Boolean @default(false)
+    type      String                   //article, build, guide, raid, report, 
     post      post    @relation(fields: [postId], references: [id], onDelete: Cascade)
 }
 

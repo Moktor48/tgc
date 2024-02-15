@@ -37,6 +37,7 @@ export const putRouter = createTRPCRouter({
         email: z.string().optional(),
         image: z.string().optional(),
         role: z.string().optional(),
+        guild: z.boolean().optional(),
       }),
     )
     .mutation(async ({ input }) => {
@@ -47,6 +48,7 @@ export const putRouter = createTRPCRouter({
           email: input.email,
           image: input.image,
           role: input.role,
+          tgc_guild_member: input.guild,
         },
       });
       return putUser;

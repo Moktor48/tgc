@@ -1,8 +1,24 @@
 import { z } from "zod";
 import { db } from "~/server/db";
-import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
+import {
+  createTRPCRouter,
+  protectedProcedure,
+  publicProcedure,
+} from "~/server/api/trpc";
 
 export const getRouter = createTRPCRouter({
+  pullAccess: protectedProcedure
+    .input(z.object({ userId: z.string() }))
+    .query(async ({ input }) => {
+      const account = await db.account.findUnique({
+        where: { userId: input.userId },
+        select: {
+          access_token: true,
+        },
+      });
+      return account;
+    }),
+
   //pulls relations for a userId, can be used to determine access and profiles
   fullProfile: protectedProcedure
     .input(z.object({ userId: z.string() }))
@@ -70,6 +86,7 @@ export const getRouter = createTRPCRouter({
               swtor: true,
               general: true,
               published: true,
+              guild_public: true,
             },
           },
         },
@@ -267,11 +284,6 @@ export const getRouter = createTRPCRouter({
             name: true,
           },
         },
-        permissions: {
-          select: {
-            eso: true,
-          },
-        },
       },
     });
     return posts;
@@ -334,6 +346,93 @@ export const getRouter = createTRPCRouter({
     });
     return posts;
   }),
+
+  publishedPostsMod: protectedProcedure
+    .input(
+      z.object({
+        eso: z.boolean(),
+        ffxiv: z.boolean(),
+        swtor: z.boolean(),
+        type: z.string(),
+      }),
+    )
+    .query(async ({ input }) => {
+      const posts = await db.post.findMany({
+        where: {
+          permissions: {
+            some: {
+              published: true,
+              eso: input.eso,
+              ffxiv: input.ffxiv,
+              swtor: input.swtor,
+              type: input.type,
+            },
+          },
+        },
+        select: {
+          id: true,
+          title: true,
+          createdBy: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+          permissions: {
+            select: {
+              eso: input.eso,
+              ffxiv: input.ffxiv,
+              swtor: input.swtor,
+            },
+          },
+        },
+      });
+      return posts;
+    }),
+
+  publishedPostsModPub: publicProcedure
+    .input(
+      z.object({
+        eso: z.boolean(),
+        ffxiv: z.boolean(),
+        swtor: z.boolean(),
+        type: z.string(),
+      }),
+    )
+    .query(async ({ input }) => {
+      const posts = await db.post.findMany({
+        where: {
+          permissions: {
+            some: {
+              published: true,
+              guild_public: true,
+              eso: input.eso,
+              ffxiv: input.ffxiv,
+              swtor: input.swtor,
+              type: input.type,
+            },
+          },
+        },
+        select: {
+          id: true,
+          title: true,
+          createdBy: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+          permissions: {
+            select: {
+              eso: input.eso,
+              ffxiv: input.ffxiv,
+              swtor: input.swtor,
+            },
+          },
+        },
+      });
+      return posts;
+    }),
 
   //Query Permissions
   staffPermission: protectedProcedure

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 
-export default async function NavBar() {
+export default async function NavBarPublic() {
   return (
     <div className="navbar" id="navbar">
       <div className="dropdown">
@@ -21,9 +21,9 @@ export default async function NavBar() {
           </h2>
         </button>
         <div className="nav-dropdown-content">
-          <Link href="#">ESO</Link>
-          <Link href="#">SWTOR</Link>
-          <Link href="#">FFXIV</Link>
+          <Link href={`/games/eso/public/build`}>ESO</Link>
+          <Link href={`/games/swtor/public/build`}>SWTOR</Link>
+          <Link href={`/games/ffxiv/public/build`}>FFXIV</Link>
         </div>
       </div>
 
@@ -34,9 +34,9 @@ export default async function NavBar() {
           </h2>
         </button>
         <div className="nav-dropdown-content">
-          <Link href="#">ESO</Link>
-          <Link href="#">SWTOR</Link>
-          <Link href="#">FFXIV</Link>
+          <Link href={`/games/eso/public/guide`}>ESO</Link>
+          <Link href={`/games/swtor/public/guide`}>SWTOR</Link>
+          <Link href={`/games/ffxiv/public/guide`}>FFXIV</Link>
         </div>
       </div>
 
@@ -47,9 +47,12 @@ export default async function NavBar() {
           </h2>
         </button>
         <div className="nav-dropdown-content">
-          <Link href="/article/eso">ESO</Link>
-          <Link href="/article/swtor">SWTOR</Link>
-          <Link href="/article/ffxiv">FFXIV</Link>
+          <Link href={`/games/eso/public/article`}>ESO</Link>
+          <Link href={`/games/swtor/public/article`}>SWTOR</Link>
+          <Link href={`/games/ffxiv/public/article`}>FFXIV</Link>
+          <Link href={`/games/general/public/article`}>
+            General Guild Articles
+          </Link>
         </div>
       </div>
 

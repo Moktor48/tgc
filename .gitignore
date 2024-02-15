@@ -47,7 +47,11 @@ prisma/tgc_hold.tsx
 .dockerignore
 docker-compose.yml
 Dockerfile
+<<<<<<< HEAD
 
 # Testing:
 /dev
 .vscode/settings.json
+=======
+notebook.txt
+>>>>>>> main
