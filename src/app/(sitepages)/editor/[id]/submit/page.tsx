@@ -98,11 +98,13 @@ export default function PostSubmit() {
     onSuccess(data) {
       const id = data.id;
       const pId = { postId: id };
+      console.log(permissionData.type);
       const permissionDataX = { ...permissionData, ...pId };
       if (!data.id) return null;
+      console.log(permissionDataX.type);
       subPerm.mutate(permissionDataX);
       alert("Post submitted!");
-      location.assign(`/dashboard/${id}`);
+      location.assign(`/editor/${userId}`);
     },
   });
 

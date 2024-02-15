@@ -279,11 +279,6 @@ export const getRouter = createTRPCRouter({
             name: true,
           },
         },
-        permissions: {
-          select: {
-            eso: true,
-          },
-        },
       },
     });
     return posts;
@@ -346,6 +341,50 @@ export const getRouter = createTRPCRouter({
     });
     return posts;
   }),
+
+  publishedPostsMod: protectedProcedure
+    .input(
+      z.object({
+        eso: z.boolean(),
+        ffxiv: z.boolean(),
+        swtor: z.boolean(),
+        type: z.string(),
+      }),
+    )
+    .query(async ({ input }) => {
+      const posts = await db.post.findMany({
+        where: {
+          permissions: {
+            some: {
+              published: true,
+              eso: input.eso,
+              ffxiv: input.ffxiv,
+              swtor: input.swtor,
+              type: input.type,
+            },
+          },
+        },
+        select: {
+          id: true,
+          title: true,
+          createdBy: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+          permissions: {
+            select: {
+              eso: input.eso,
+              ffxiv: input.ffxiv,
+              swtor: input.swtor,
+              type: true,
+            },
+          },
+        },
+      });
+      return posts;
+    }),
 
   //Query Permissions
   staffPermission: protectedProcedure

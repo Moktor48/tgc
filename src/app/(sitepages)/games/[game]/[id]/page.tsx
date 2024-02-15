@@ -1,4 +1,5 @@
 //MEMBER ONLY page for each game-guild
+import Link from "next/link";
 import React from "react";
 import { getServerAuthSession } from "~/server/auth";
 import { api } from "~/trpc/server";
@@ -27,6 +28,11 @@ export default async function page({ params }: { params: { game: string } }) {
         <p className="text-3xl text-white">
           Current published guild announcements for {game} will be here
         </p>
+        <div>
+          <h1>Article Selection</h1>
+          <Link href={`/games/${game}/${id}/guide`}>Guides</Link>
+          <Link href={`/games/${game}/${id}/build`}>Builds</Link>
+        </div>
       </div>
     </>
   );
