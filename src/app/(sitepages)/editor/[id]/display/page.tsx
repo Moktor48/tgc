@@ -1,3 +1,5 @@
+//This page will simply display the post linked from anywhere else on site
+
 import { api } from "~/trpc/server";
 import { getServerAuthSession } from "~/server/auth";
 import DisplayPost from "~/app/_components/(postDisplay)/DisplayPost";

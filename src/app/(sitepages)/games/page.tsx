@@ -1,3 +1,4 @@
+//Portal to game guilds
 import Link from "next/link";
 import React from "react";
 

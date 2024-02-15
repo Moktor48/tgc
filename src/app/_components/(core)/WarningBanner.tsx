@@ -6,21 +6,25 @@ export default function WarningBanner() {
       <p className="text-yellow-500">
         Latest update: <span className="test-green-500">2/14/24@1230MST</span>
       </p>
+
       <h1>Latest updates</h1>
+      <ul>
+        <li className="text-green-500">
+          Log-in automatically checks Discord channel to verify membership, then
+          updates the user record. Styling is not final, just function.
+        </li>
 
-      <p className="text-green-500">
-        Log-in automatically checks Discord channel to verify membership, then
-        updates the user record. Styling is not final, just function.
-      </p>
+        <li className="text-green-500">NavBars homogenized</li>
 
-      <p className="text-green-500">NavBars homogenized</p>
+        <li className="text-5xl text-yellow-500">
+          REMOVED YELLOW FOR CHANCE!!!!
+        </li>
 
-      <p className="text-5xl text-yellow-500">REMOVED YELLOW FOR CHANCE!!!!</p>
-
-      <p className="text-5xl text-yellow-500">
-        Rolled back a bit to fix the build
-      </p>
-
+        <li className="text-5xl text-yellow-500">
+          Rolled back a bit to fix the build
+        </li>
+      </ul>
+      <h1>Dashboard/Editor Directions</h1>
       <p className="text-red-500">
         Dashboard allows for staff to make certain changes for users, so guild
         officers can promote their own members, etc. Much of this functionality

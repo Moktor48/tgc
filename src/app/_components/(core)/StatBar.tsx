@@ -29,9 +29,10 @@ export default async function StatBar() {
         <span className="inline-flex">
           {session.user.image != null && (
             <Image
+              id="user_image"
               src={session.user.image}
-              width={30}
-              height={30}
+              width={50}
+              height={50}
               alt="avatar"
             />
           )}
