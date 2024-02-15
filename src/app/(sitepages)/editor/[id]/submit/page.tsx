@@ -21,7 +21,7 @@ type FormData = {
   officer: boolean;
   type: string;
 };
-
+const article = `<p><strong>Test Template ARTICLE!!!</strong></p><p>Setting a template up for builds...</p><p></p><p>So, a table here, and some links there...</p><h2></h2>`;
 const build = `<p><strong>Test Template BUILD!!!</strong></p><p>Setting a template up for builds...</p><p></p><p>So, a table here, and some links there...</p><h2></h2>`;
 const guide = `<p><strong>Test Template GUIDE!!!</strong></p><p>Setting a template up for builds...</p><p></p><p>So, a table here, and some links there...</p><h2></h2>`;
 const notification = `<p><strong>Test Template NOTIFICATION!!!</strong></p><p>Setting a template up for builds...</p><p></p><p>So, a table here, and some links there...</p><h2></h2>`;
@@ -63,7 +63,9 @@ export default function PostSubmit() {
             ? report
             : typeSelect === "5"
               ? suggest
-              : "Not Found";
+              : typeSelect === "6"
+                ? article
+                : "Not a valid type";
   const typeString =
     typeSelect === "1"
       ? "build"
@@ -136,6 +138,7 @@ export default function PostSubmit() {
 
     return (
       <div className="menu-bar">
+        {/*Bubble Menu components */}
         {editor && (
           <BubbleMenu editor={editor} tippyOptions={{ duration: 100 }}>
             <input
@@ -210,6 +213,7 @@ export default function PostSubmit() {
         >
           paragraph
         </button>
+        {/*Floating Menu components */}
         {editor && (
           <FloatingMenu editor={editor} tippyOptions={{ duration: 100 }}>
             <button
@@ -248,24 +252,6 @@ export default function PostSubmit() {
             >
               h3
             </button>
-            {/*      <button
-        onClick={() => editor.chain().focus().toggleHeading({ level: 4 }).run()}
-        className={`${editor.isActive('heading', { level: 4 }) ? 'is-active border-yellow-500' : ''} text-gray-100 text-xs min-w-30 justify-center transition duration-200 ease-in-out transform px-2 py-1 border-b-4 border-gray-500 hover:border-b-2 bg-gradient-to-t from-gray-400  via-gray-600 to-gray-200 rounded-2xl hover:translate-y-px `}
-      >
-        h4
-      </button>
-      <button
-        onClick={() => editor.chain().focus().toggleHeading({ level: 5 }).run()}
-        className={`${editor.isActive('heading', { level: 5 }) ? 'is-active border-yellow-500' : ''} text-gray-100 text-xs min-w-30 justify-center transition duration-200 ease-in-out transform px-2 py-1 border-b-4 border-gray-500 hover:border-b-2 bg-gradient-to-t from-gray-400  via-gray-600 to-gray-200 rounded-2xl hover:translate-y-px `}
-      >
-        h5
-      </button>
-      <button
-        onClick={() => editor.chain().focus().toggleHeading({ level: 6 }).run()}
-        className={`${editor.isActive('heading', { level: 6 }) ? 'is-active border-yellow-500' : ''} text-gray-100 text-xs min-w-30 justify-center transition duration-200 ease-in-out transform px-2 py-1 border-b-4 border-gray-500 hover:border-b-2 bg-gradient-to-t from-gray-400  via-gray-600 to-gray-200 rounded-2xl hover:translate-y-px `}
-      >
-        h6
-      </button> */}
             <button
               onClick={() => editor.chain().focus().toggleBulletList().run()}
               className={`${
