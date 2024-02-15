@@ -10,6 +10,7 @@ import bg from "./_components/img/body-background-img-rock.png";
 import SideBar from "./_components/(core)/SideBar";
 import BottomComp from "./_components/(core)/BottomComp";
 import NavBar from "./_components/(core)/NavBar";
+import NavBarPublic from "./_components/(core)/NavBarPublic";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -45,7 +46,8 @@ export default async function RootLayout({
               <StatBar />
               <SideBar />
             </header>
-            <NavBar role={role} id={id} />
+            {!session && <NavBarPublic />}
+            {session && <NavBar role={role} id={id} />}
             {children}
             <BottomComp />
           </TRPCReactProvider>

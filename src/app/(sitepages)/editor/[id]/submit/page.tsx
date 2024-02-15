@@ -21,6 +21,7 @@ type FormData = {
   officer: boolean;
   type: string;
 };
+
 const article = `<p><strong>Test Template ARTICLE!!!</strong></p><p>Setting a template up for builds...</p><p></p><p>So, a table here, and some links there...</p><h2></h2>`;
 const build = `<p><strong>Test Template BUILD!!!</strong></p><p>Setting a template up for builds...</p><p></p><p>So, a table here, and some links there...</p><h2></h2>`;
 const guide = `<p><strong>Test Template GUIDE!!!</strong></p><p>Setting a template up for builds...</p><p></p><p>So, a table here, and some links there...</p><h2></h2>`;
@@ -47,6 +48,7 @@ export default function PostSubmit() {
   const searchParams = useSearchParams();
 
   //These will set GAME, TYPE of document, and ROLE the document is intended for.
+  const [publicPost, setPublicPost] = useState(false);
   const gameSelect = searchParams.get("game")!;
   const typeSelect = searchParams.get("type")!;
   const roleSelect = searchParams.get("role")!;
@@ -98,15 +100,24 @@ export default function PostSubmit() {
     onSuccess(data) {
       const id = data.id;
       const pId = { postId: id };
-      console.log(permissionData.type);
-      const permissionDataX = { ...permissionData, ...pId };
+      const publik = { guild_public: publicPost };
+      console.log(publik);
+      const permissionDataX = {
+        ...permissionData,
+        ...pId,
+        ...publik,
+      };
+      console.log(permissionDataX);
       if (!data.id) return null;
-      console.log(permissionDataX.type);
       subPerm.mutate(permissionDataX);
       alert("Post submitted!");
       location.assign(`/editor/${userId}`);
     },
   });
+  const handleChange = () => {
+    setPublicPost(!publicPost);
+    console.log(publicPost);
+  };
 
   function handleChangeT(e: React.ChangeEvent<HTMLInputElement>) {
     setTitle((prev) => {
@@ -360,6 +371,14 @@ export default function PostSubmit() {
           value={title.title}
           onChange={handleChangeT}
         />
+        <input
+          type="checkbox"
+          checked={publicPost}
+          onChange={handleChange}
+          name="publicSelect"
+          id="publicSelect"
+        />
+        <label htmlFor="publicSelect">Make this post public?</label>
       </form>
       <EditorProvider
         slotBefore={<MenuBar />}
