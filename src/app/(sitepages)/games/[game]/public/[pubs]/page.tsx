@@ -7,10 +7,10 @@ import { api } from "~/trpc/server";
 export default async function page({
   params,
 }: {
-  params: { game: string; id: string; pubs: string };
+  params: { game: string; pubs: string };
 }) {
   //Logic to pull specified type of post for the game, based on params then we will fill out boxes/grid with some photos? Clicking brings you to actual post
-  const id = params.id;
+
   const game = params.game;
   const type = params.pubs;
   const selGame = { eso: false, swtor: false, ffxiv: false, type: type };
@@ -22,23 +22,16 @@ export default async function page({
       : game === "ffxiv"
         ? (selGame.ffxiv = true)
         : null;
-  const post = await api.get.publishedPostsMod.query(selGame);
-  console.log(post);
+  const post = await api.get.publishedPostsModPub.query(selGame);
+
   return (
     <div>
       <h1>
         This is where you will find links to every {type} for {game}/
         {post.map((post) => (
           <p key={post.id}>
-            <Link href={`/editor/${id}/display?postId=${post.id}`}>
-              {post.title}
-            </Link>{" "}
-            by{" "}
-            <Link
-              href={`/dashboard/${id}/staff/${post.createdBy.id}/userManager`}
-            >
-              {post.createdBy.name}
-            </Link>
+            <Link href={`/editor/display?postId=${post.id}`}>{post.title}</Link>{" "}
+            by {post.createdBy.name}
           </p>
         ))}
       </h1>

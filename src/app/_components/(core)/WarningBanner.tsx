@@ -4,12 +4,18 @@ export default function WarningBanner() {
   return (
     <div className="bg-black text-center text-3xl text-red-500">
       <p className="text-yellow-500">
-        Latest update: <span className="test-green-500">2/15/24@1015MST</span>
+        Latest update: <span className="test-green-500">2/15/24@1230MST</span>
       </p>
 
       <h1>Latest updates</h1>
       <ul>
         <div className="text-green-500">
+          <p>
+            I added a bunch of code to make the NavBar public/private, and added
+            in public-facing posts. These are posts that can be viewed by people
+            OUTSIDE the guild, or rather, not logged in. Feel free to pressure
+            test these things.
+          </p>
           <p>
             Articles/builds/guides are now routing properly to be read. Test
             things out, but the EXPECTED outcome is:
