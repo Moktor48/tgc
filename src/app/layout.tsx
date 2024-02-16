@@ -41,6 +41,7 @@ export default async function RootLayout({
             <header>
               <StatBar />
               <SideBar />
+              <div className="header-img"></div>
               
             </header>
             {!session && <NavBarPublic />}
