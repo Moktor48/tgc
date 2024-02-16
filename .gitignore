@@ -51,6 +51,9 @@ Dockerfile
 # misc:
 notebook.txt
 
+.npmrc
+
+
 # Testing:
 /dev
 

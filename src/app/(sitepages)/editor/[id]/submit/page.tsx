@@ -1,6 +1,6 @@
 //Page for actual editor, editor will submit post data to include the game and audience.
 "use client";
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { Color } from "@tiptap/extension-color";
 import ListItem from "@tiptap/extension-list-item";
 import TextStyle from "@tiptap/extension-text-style";
@@ -11,6 +11,8 @@ import { useSearchParams } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { BubbleMenu } from "@tiptap/react";
 import { FloatingMenu } from "@tiptap/react";
+import Image from "@tiptap/extension-image";
+import FileHandler from "@tiptap-pro/extension-file-handler";
 type FormData = {
   eso: boolean;
   ffxiv: boolean;
@@ -46,14 +48,14 @@ export default function PostSubmit() {
     );
   const userId = session.user.id;
   const searchParams = useSearchParams();
-
+  const [findUrl, setFindUrl] = useState("");
   //These will set GAME, TYPE of document, and ROLE the document is intended for.
   const [publicPost, setPublicPost] = useState(false);
   const gameSelect = searchParams.get("game")!;
   const typeSelect = searchParams.get("type")!;
   const roleSelect = searchParams.get("role")!;
   const [title, setTitle] = useState({ title: "==> SET TITLE <==" });
-
+  const [dataUrl, setDataUrl] = useState<string | ArrayBuffer | null>(null);
   const postTemplate =
     typeSelect === "1"
       ? build
@@ -101,12 +103,13 @@ export default function PostSubmit() {
       const id = data.id;
       const pId = { postId: id };
       const publik = { guild_public: publicPost };
-      console.log(publik);
+      console.log("Here is the URL:", findUrl);
       const permissionDataX = {
         ...permissionData,
         ...pId,
         ...publik,
       };
+
       console.log(permissionDataX);
       if (!data.id) return null;
       subPerm.mutate(permissionDataX);
@@ -128,15 +131,25 @@ export default function PostSubmit() {
   // MenuBar START =====================> Watch placement of elements!!!
   const MenuBar = () => {
     const { editor } = useCurrentEditor();
-
     if (!editor) return null;
+    const addImage = useCallback(() => {
+      const url = window.prompt("URL");
 
+      if (url) {
+        editor.chain().focus().setImage({ src: url }).run();
+      }
+    }, [editor]);
+
+    if (!editor) {
+      return null;
+    }
     async function submit() {
       setPermissionData({
         ...permissionData,
         [gameSelect]: true,
         [roleSelect]: true,
       });
+
       if (!editor) return null;
       if (title.title === "==> SET TITLE <==") return alert("set title");
       console.log(title);
@@ -151,6 +164,9 @@ export default function PostSubmit() {
 
     return (
       <div className="menu-bar">
+        <div>
+          <button onClick={addImage}>setImage</button>
+        </div>
         {/*Bubble Menu components */}
         {editor && (
           <BubbleMenu editor={editor} tippyOptions={{ duration: 100 }}>
@@ -343,6 +359,57 @@ export default function PostSubmit() {
   // MenuBar END =====================> Watch placement of elements!!!
 
   const extensions = [
+    FileHandler.configure({
+      allowedMimeTypes: ["image/png", "image/jpeg", "image/gif", "image/webp"],
+      onDrop: (currentEditor, files, pos) => {
+        files.forEach((file) => {
+          const fileReader = new FileReader();
+
+          fileReader.readAsDataURL(file);
+          setDataUrl(fileReader.result);
+          fileReader.onload = () => {
+            currentEditor
+              .chain()
+              .insertContentAt(pos, {
+                type: "image",
+                attrs: {
+                  src: fileReader.result,
+                },
+              })
+              .focus()
+              .run();
+          };
+        });
+      },
+      onPaste: (currentEditor, files, htmlContent) => {
+        files.forEach((file) => {
+          if (htmlContent) {
+            // if there is htmlContent, stop manual insertion & let other extensions handle insertion via inputRule
+            // you could extract the pasted file from this url string and upload it to a server for example
+            console.log(htmlContent); // eslint-disable-line no-console
+            return false;
+          }
+
+          const fileReader = new FileReader();
+
+          fileReader.readAsDataURL(file);
+
+          fileReader.onload = () => {
+            currentEditor
+              .chain()
+              .insertContentAt(currentEditor.state.selection.anchor, {
+                type: "image",
+                attrs: {
+                  src: fileReader.result,
+                },
+              })
+              .focus()
+              .run();
+          };
+        });
+      },
+    }),
+
     Color.configure({ types: [TextStyle.name, ListItem.name] }),
     TextStyle,
     StarterKit.configure({
@@ -354,6 +421,9 @@ export default function PostSubmit() {
         keepMarks: true,
         keepAttributes: false, // TODO : Making this as `false` becase marks are not preserved when I try to preserve attrs, awaiting a bit of help
       },
+    }),
+    Image.configure({
+      allowBase64: true,
     }),
   ];
 
@@ -380,6 +450,7 @@ export default function PostSubmit() {
         />
         <label htmlFor="publicSelect">Make this post public?</label>
       </form>
+
       <EditorProvider
         slotBefore={<MenuBar />}
         extensions={extensions}
