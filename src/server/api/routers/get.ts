@@ -473,4 +473,17 @@ export const getRouter = createTRPCRouter({
       });
       return user;
     }),
+
+  // Testing:
+  // esoLeaderboard: protectedProcedure
+  //   .input(z.object({ userId: z.string() }))
+  //   .query(async ({ input }) => {
+  //     const user = await db.eso.findUnique({
+  //       where: { userId: input.userId },
+  //     });
+  //     return user;
+  //   }),
+
+
+
 }); // This is the end, lawlz.
