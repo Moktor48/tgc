@@ -27,5 +27,10 @@ export default async function Home() {
     name: 'The Gaming Council',
     icon: 'a_d204c19b3e5a0d98342a145c0f6934fb',
 
-
+  const dataUrl = "iVBOR…FEchpSuXLkIAAAAASUVORK5CYII=";
+  const base64Data = dataUrl.replace(/^data:image\/[a-z]+;base64,/, "");
+  const buffer = Buffer.from(base64Data, "base64");
+  const image = await new Response(buffer).blob();
+  const imageURL = URL.createObjectURL(image);
+  console.log(imageURL);
 */

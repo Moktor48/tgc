@@ -2,7 +2,7 @@
 import React, { useEffect } from "react";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
-
+import Image from "@tiptap/extension-image";
 interface Props {
   postContent: {
     post: string;
@@ -27,7 +27,12 @@ export default function DisplayPost({ postContent }: Props) {
   const editor = useEditor({
     editable,
     content: postContent.post,
-    extensions: [StarterKit],
+    extensions: [
+      StarterKit,
+      Image.configure({
+        allowBase64: true,
+      }),
+    ],
   });
   useEffect(() => {
     if (!editor) {

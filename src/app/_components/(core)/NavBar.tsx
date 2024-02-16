@@ -56,7 +56,7 @@ export default async function NavBar({
           <Link href={`/games/eso/${id}/article`}>ESO</Link>
           <Link href={`/games/swtor/${id}/article`}>SWTOR</Link>
           <Link href={`/games/ffxiv/${id}/article`}>FFXIV</Link>
-          <Link href={`/games/general/${id}/article`}>
+          <Link href={`/games/general/public/article`}>
             General Guild Articles
           </Link>
         </div>

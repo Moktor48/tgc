@@ -1,16 +1,17 @@
 //Page for posts to be read, edited, and approved
 
 "use client";
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { useSession } from "next-auth/react";
 import { api } from "~/trpc/react";
 import { Color } from "@tiptap/extension-color";
 import ListItem from "@tiptap/extension-list-item";
 import TextStyle from "@tiptap/extension-text-style";
-import { useCurrentEditor, EditorProvider } from "@tiptap/react";
+import { useCurrentEditor, EditorProvider, BubbleMenu } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { useSearchParams } from "next/navigation";
-
+import Image from "@tiptap/extension-image";
+import { FloatingMenu } from "@tiptap/react";
 export default function page({ params }: { params: { postId: string } }) {
   const session = useSession();
   const searchParams = useSearchParams();
@@ -65,35 +66,64 @@ export default function page({ params }: { params: { postId: string } }) {
         published: true,
       });
     }
+    const addImage = useCallback(() => {
+      const url = window.prompt("URL");
+
+      if (url) {
+        editor.chain().focus().setImage({ src: url }).run();
+      }
+    }, [editor]);
     return (
       <div className="menu-bar">
-        <button
-          onClick={() => editor.chain().focus().toggleBold().run()}
-          disabled={!editor.can().chain().focus().toggleBold().run()}
-          className={`${
-            editor.isActive("bold") ? "is-active border-yellow-500" : ""
-          } min-w-30 transform justify-center rounded-2xl border-b-4 border-gray-500 bg-gradient-to-t from-gray-400 via-gray-600 to-gray-200 px-2 py-1 text-xs text-gray-100 transition  duration-200 ease-in-out hover:translate-y-px hover:border-b-2 `}
-        >
-          bold
-        </button>
-        <button
-          onClick={() => editor.chain().focus().toggleItalic().run()}
-          disabled={!editor.can().chain().focus().toggleItalic().run()}
-          className={`${
-            editor.isActive("italic") ? "is-active border-yellow-500" : ""
-          } min-w-30 transform justify-center rounded-2xl border-b-4 border-gray-500 bg-gradient-to-t from-gray-400 via-gray-600 to-gray-200 px-2 py-1 text-xs text-gray-100 transition  duration-200 ease-in-out hover:translate-y-px hover:border-b-2 `}
-        >
-          italic
-        </button>
-        <button
-          onClick={() => editor.chain().focus().toggleStrike().run()}
-          disabled={!editor.can().chain().focus().toggleStrike().run()}
-          className={`${
-            editor.isActive("strike") ? "is-active border-yellow-500" : ""
-          } min-w-30 transform justify-center rounded-2xl border-b-4 border-gray-500 bg-gradient-to-t from-gray-400 via-gray-600 to-gray-200 px-2 py-1 text-xs text-gray-100 transition  duration-200 ease-in-out hover:translate-y-px hover:border-b-2 `}
-        >
-          strike
-        </button>
+        <div>
+          <button onClick={addImage}>setImage</button>
+        </div>
+        {/*Bubble Menu components */}
+        {editor && (
+          <BubbleMenu editor={editor} tippyOptions={{ duration: 100 }}>
+            <input
+              type="color"
+              // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+              onInput={(event) =>
+                editor
+                  .chain()
+                  .focus()
+                  .setColor((event.target as HTMLButtonElement).value)
+                  .run()
+              }
+              // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+              value={editor.getAttributes("textStyle").color}
+              data-testid="setColor"
+            />
+            <button
+              onClick={() => editor.chain().focus().toggleBold().run()}
+              disabled={!editor.can().chain().focus().toggleBold().run()}
+              className={`${
+                editor.isActive("bold") ? "is-active border-yellow-500" : ""
+              } min-w-30 transform justify-center rounded-2xl border-b-4 border-gray-500 bg-gradient-to-t from-gray-400 via-gray-600 to-gray-200 px-2 py-1 text-xs text-gray-100 transition  duration-200 ease-in-out hover:translate-y-px hover:border-b-2 `}
+            >
+              bold
+            </button>
+            <button
+              onClick={() => editor.chain().focus().toggleItalic().run()}
+              disabled={!editor.can().chain().focus().toggleItalic().run()}
+              className={`${
+                editor.isActive("italic") ? "is-active border-yellow-500" : ""
+              } min-w-30 transform justify-center rounded-2xl border-b-4 border-gray-500 bg-gradient-to-t from-gray-400 via-gray-600 to-gray-200 px-2 py-1 text-xs text-gray-100 transition  duration-200 ease-in-out hover:translate-y-px hover:border-b-2 `}
+            >
+              italic
+            </button>
+            <button
+              onClick={() => editor.chain().focus().toggleStrike().run()}
+              disabled={!editor.can().chain().focus().toggleStrike().run()}
+              className={`${
+                editor.isActive("strike") ? "is-active border-yellow-500" : ""
+              } min-w-30 transform justify-center rounded-2xl border-b-4 border-gray-500 bg-gradient-to-t from-gray-400 via-gray-600 to-gray-200 px-2 py-1 text-xs text-gray-100 transition  duration-200 ease-in-out hover:translate-y-px hover:border-b-2 `}
+            >
+              strike
+            </button>
+          </BubbleMenu>
+        )}
         <button
           onClick={() => editor.chain().focus().toggleCode().run()}
           disabled={!editor.can().chain().focus().toggleCode().run()}
@@ -123,76 +153,67 @@ export default function page({ params }: { params: { postId: string } }) {
         >
           paragraph
         </button>
-        <button
-          onClick={() =>
-            editor.chain().focus().toggleHeading({ level: 1 }).run()
-          }
-          className={`${
-            editor.isActive("heading", { level: 1 })
-              ? "is-active border-yellow-500"
-              : ""
-          } min-w-30 transform justify-center rounded-2xl border-b-4 border-gray-500 bg-gradient-to-t from-gray-400 via-gray-600 to-gray-200 px-2 py-1 text-xs text-gray-100 transition  duration-200 ease-in-out hover:translate-y-px hover:border-b-2 `}
-        >
-          h1
-        </button>
-        <button
-          onClick={() =>
-            editor.chain().focus().toggleHeading({ level: 2 }).run()
-          }
-          className={`${
-            editor.isActive("heading", { level: 2 })
-              ? "is-active border-yellow-500"
-              : ""
-          } min-w-30 transform justify-center rounded-2xl border-b-4 border-gray-500 bg-gradient-to-t from-gray-400 via-gray-600 to-gray-200 px-2 py-1 text-xs text-gray-100 transition  duration-200 ease-in-out hover:translate-y-px hover:border-b-2 `}
-        >
-          h2
-        </button>
-        <button
-          onClick={() =>
-            editor.chain().focus().toggleHeading({ level: 3 }).run()
-          }
-          className={`${
-            editor.isActive("heading", { level: 3 })
-              ? "is-active border-yellow-500"
-              : ""
-          } min-w-30 transform justify-center rounded-2xl border-b-4 border-gray-500 bg-gradient-to-t from-gray-400 via-gray-600 to-gray-200 px-2 py-1 text-xs text-gray-100 transition  duration-200 ease-in-out hover:translate-y-px hover:border-b-2 `}
-        >
-          h3
-        </button>
-        {/*      <button
-        onClick={() => editor.chain().focus().toggleHeading({ level: 4 }).run()}
-        className={`${editor.isActive('heading', { level: 4 }) ? 'is-active border-yellow-500' : ''} text-gray-100 text-xs min-w-30 justify-center transition duration-200 ease-in-out transform px-2 py-1 border-b-4 border-gray-500 hover:border-b-2 bg-gradient-to-t from-gray-400  via-gray-600 to-gray-200 rounded-2xl hover:translate-y-px `}
-      >
-        h4
-      </button>
-      <button
-        onClick={() => editor.chain().focus().toggleHeading({ level: 5 }).run()}
-        className={`${editor.isActive('heading', { level: 5 }) ? 'is-active border-yellow-500' : ''} text-gray-100 text-xs min-w-30 justify-center transition duration-200 ease-in-out transform px-2 py-1 border-b-4 border-gray-500 hover:border-b-2 bg-gradient-to-t from-gray-400  via-gray-600 to-gray-200 rounded-2xl hover:translate-y-px `}
-      >
-        h5
-      </button>
-      <button
-        onClick={() => editor.chain().focus().toggleHeading({ level: 6 }).run()}
-        className={`${editor.isActive('heading', { level: 6 }) ? 'is-active border-yellow-500' : ''} text-gray-100 text-xs min-w-30 justify-center transition duration-200 ease-in-out transform px-2 py-1 border-b-4 border-gray-500 hover:border-b-2 bg-gradient-to-t from-gray-400  via-gray-600 to-gray-200 rounded-2xl hover:translate-y-px `}
-      >
-        h6
-      </button> */}
-        <button
-          onClick={() => editor.chain().focus().toggleBulletList().run()}
-          className={`${
-            editor.isActive("bulletList") ? "is-active border-yellow-500" : ""
-          } min-w-30 transform justify-center rounded-2xl border-b-4 border-gray-500 bg-gradient-to-t from-gray-400 via-gray-600 to-gray-200 px-2 py-1 text-xs text-gray-100 transition  duration-200 ease-in-out hover:translate-y-px hover:border-b-2 `}
-        >
-          bullet list
-        </button>
-        <button
-          onClick={() => editor.chain().focus().toggleOrderedList().run()}
-          className={`${
-            editor.isActive("orderedList") ? "is-active border-yellow-500" : ""
-          } min-w-30 transform justify-center rounded-2xl border-b-4 border-gray-500 bg-gradient-to-t from-gray-400 via-gray-600 to-gray-200 px-2 py-1 text-xs text-gray-100 transition  duration-200 ease-in-out hover:translate-y-px hover:border-b-2 `}
-        >
-          ordered list
-        </button>
+        {/*Floating Menu components */}
+        {editor && (
+          <FloatingMenu editor={editor} tippyOptions={{ duration: 100 }}>
+            <button
+              onClick={() =>
+                editor.chain().focus().toggleHeading({ level: 1 }).run()
+              }
+              className={`${
+                editor.isActive("heading", { level: 1 })
+                  ? "is-active border-yellow-500"
+                  : ""
+              } min-w-30 transform justify-center rounded-2xl border-b-4 border-gray-500 bg-gradient-to-t from-gray-400 via-gray-600 to-gray-200 px-2 py-1 text-xs text-gray-100 transition  duration-200 ease-in-out hover:translate-y-px hover:border-b-2 `}
+            >
+              h1
+            </button>
+            <button
+              onClick={() =>
+                editor.chain().focus().toggleHeading({ level: 2 }).run()
+              }
+              className={`${
+                editor.isActive("heading", { level: 2 })
+                  ? "is-active border-yellow-500"
+                  : ""
+              } min-w-30 transform justify-center rounded-2xl border-b-4 border-gray-500 bg-gradient-to-t from-gray-400 via-gray-600 to-gray-200 px-2 py-1 text-xs text-gray-100 transition  duration-200 ease-in-out hover:translate-y-px hover:border-b-2 `}
+            >
+              h2
+            </button>
+            <button
+              onClick={() =>
+                editor.chain().focus().toggleHeading({ level: 3 }).run()
+              }
+              className={`${
+                editor.isActive("heading", { level: 3 })
+                  ? "is-active border-yellow-500"
+                  : ""
+              } min-w-30 transform justify-center rounded-2xl border-b-4 border-gray-500 bg-gradient-to-t from-gray-400 via-gray-600 to-gray-200 px-2 py-1 text-xs text-gray-100 transition  duration-200 ease-in-out hover:translate-y-px hover:border-b-2 `}
+            >
+              h3
+            </button>
+            <button
+              onClick={() => editor.chain().focus().toggleBulletList().run()}
+              className={`${
+                editor.isActive("bulletList")
+                  ? "is-active border-yellow-500"
+                  : ""
+              } min-w-30 transform justify-center rounded-2xl border-b-4 border-gray-500 bg-gradient-to-t from-gray-400 via-gray-600 to-gray-200 px-2 py-1 text-xs text-gray-100 transition  duration-200 ease-in-out hover:translate-y-px hover:border-b-2 `}
+            >
+              bullet list
+            </button>
+            <button
+              onClick={() => editor.chain().focus().toggleOrderedList().run()}
+              className={`${
+                editor.isActive("orderedList")
+                  ? "is-active border-yellow-500"
+                  : ""
+              } min-w-30 transform justify-center rounded-2xl border-b-4 border-gray-500 bg-gradient-to-t from-gray-400 via-gray-600 to-gray-200 px-2 py-1 text-xs text-gray-100 transition  duration-200 ease-in-out hover:translate-y-px hover:border-b-2 `}
+            >
+              ordered list
+            </button>
+          </FloatingMenu>
+        )}
         <button
           onClick={() => editor.chain().focus().toggleCodeBlock().run()}
           className={`${
@@ -260,6 +281,9 @@ export default function page({ params }: { params: { postId: string } }) {
         keepMarks: true,
         keepAttributes: false, // TODO : Making this as `false` becase marks are not preserved when I try to preserve attrs, awaiting a bit of help
       },
+    }),
+    Image.configure({
+      allowBase64: true,
     }),
   ];
 

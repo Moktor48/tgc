@@ -4,12 +4,18 @@ export default function WarningBanner() {
   return (
     <div className="bg-black text-center text-3xl text-red-500">
       <p className="text-yellow-500">
-        Latest update: <span className="test-green-500">2/15/24@1230MST</span>
+        Latest update: <span className="test-green-500">2/15/24@2300MST</span>
       </p>
 
       <h1>Latest updates</h1>
       <ul>
         <div className="text-green-500">
+          <p>
+            {" "}
+            Images added, can be added to, saved with, and retrieved. There are
+            some routing bugs, especially with "general" posts. Stick with
+            ESO/SWTOR/FFXIV for best results.{" "}
+          </p>
           <p>
             I added a bunch of code to make the NavBar public/private, and added
             in public-facing posts. These are posts that can be viewed by people

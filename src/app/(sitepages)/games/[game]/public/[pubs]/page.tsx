@@ -13,7 +13,13 @@ export default async function page({
 
   const game = params.game;
   const type = params.pubs;
-  const selGame = { eso: false, swtor: false, ffxiv: false, type: type };
+  const selGame = {
+    general: false,
+    eso: false,
+    swtor: false,
+    ffxiv: false,
+    type: type,
+  };
 
   game === "eso"
     ? (selGame.eso = true)
@@ -21,7 +27,7 @@ export default async function page({
       ? (selGame.swtor = true)
       : game === "ffxiv"
         ? (selGame.ffxiv = true)
-        : null;
+        : (selGame.general = true);
   const post = await api.get.publishedPostsModPub.query(selGame);
 
   return (

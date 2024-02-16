@@ -196,3 +196,13 @@ export const postRouter = createTRPCRouter({
       return post;
     }),
 }); // This is the end, lawlz.
+/*
+  uploadImage: protectedProcedure
+  .input(
+    z.object({
+      dataUrl: z.string(),
+      filename: z.string(),
+    }))
+    .mutation(async ({ input }) => {
+
+*/

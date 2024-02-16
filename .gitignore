@@ -48,3 +48,4 @@ prisma/tgc_hold.tsx
 docker-compose.yml
 Dockerfile
 notebook.txt
+.npmrc

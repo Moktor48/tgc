@@ -393,6 +393,7 @@ export const getRouter = createTRPCRouter({
   publishedPostsModPub: publicProcedure
     .input(
       z.object({
+        general: z.boolean(),
         eso: z.boolean(),
         ffxiv: z.boolean(),
         swtor: z.boolean(),
@@ -406,6 +407,7 @@ export const getRouter = createTRPCRouter({
             some: {
               published: true,
               guild_public: true,
+              general: input.general,
               eso: input.eso,
               ffxiv: input.ffxiv,
               swtor: input.swtor,
@@ -424,6 +426,7 @@ export const getRouter = createTRPCRouter({
           },
           permissions: {
             select: {
+              general: input.general,
               eso: input.eso,
               ffxiv: input.ffxiv,
               swtor: input.swtor,

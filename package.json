@@ -17,6 +17,7 @@
     "@prisma/client": "^5.9.1",
     "@t3-oss/env-nextjs": "^0.8.0",
     "@tanstack/react-query": "^4.35.3",
+    "@tiptap-pro/extension-file-handler": "^2.7.0",
     "@tiptap/extension-code-block-lowlight": "^2.2.1",
     "@tiptap/extension-collaboration": "^2.2.1",
     "@tiptap/extension-collaboration-cursor": "^2.2.1",
