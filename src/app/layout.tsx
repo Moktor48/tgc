@@ -39,7 +39,6 @@ export default async function RootLayout({
         <Provider session={session}>
           <TRPCReactProvider cookies={cookies().toString()}>
             <header>
-              <div className="header-img"></div>
               <StatBar />
               <SideBar />
               
