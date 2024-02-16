@@ -47,4 +47,13 @@ prisma/tgc_hold.tsx
 .dockerignore
 docker-compose.yml
 Dockerfile
+
+# misc:
 notebook.txt
+
+# Testing:
+/dev
+
+# Vscode:
+.vscode/
+
