@@ -23,7 +23,7 @@ export default async function page({ params }: { params: { id: string } }) {
             {perm.admin && "Administrator"}
           </p>
           <UserPull />
-          <UserSearch />
+          <UserSearch id={id} />
         </div>
       </div>
     </>

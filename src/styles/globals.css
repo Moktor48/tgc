@@ -80,10 +80,11 @@ header {
   display: flex;
   flex-direction: column;
   z-index: 5;
+  text-align: left;
 }
 
 .nav-open {
-  right: 0px;
+  right: -100px;
 }
 
 .nav-closed {
@@ -164,7 +165,7 @@ header {
   height: 50px;
   padding-top: 0.5%;
   padding-bottom: 0.5%;
-  z-index: 2;
+  z-index: 6;
 }
 
 .stats-item {
@@ -202,7 +203,7 @@ header {
   grid-template-columns: repeat(6, 1fr);
   grid-gap: 10px;
   position: sticky;
-  top: 50px;
+  top: 49px;
   padding-top: 0%;
   padding-bottom: 0%;
   max-height: 65px;

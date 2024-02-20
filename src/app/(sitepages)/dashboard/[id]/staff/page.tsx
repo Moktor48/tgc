@@ -39,7 +39,7 @@ export default async function StaffPage({
           <p>Ability to create and modify events for guild</p>
           <p>Ability to make guild page announcements</p>
 
-          <UserSearch />
+          <UserSearch id={id} />
           <Link href={`../../../editor/${id}/approve`}>
             <span className="text-3xl text-yellow-500">Post Approvals</span>
           </Link>

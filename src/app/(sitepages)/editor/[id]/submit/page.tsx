@@ -1,6 +1,6 @@
 //Page for actual editor, editor will submit post data to include the game and audience.
 "use client";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useRef, useState } from "react";
 import { Color } from "@tiptap/extension-color";
 import ListItem from "@tiptap/extension-list-item";
 import TextStyle from "@tiptap/extension-text-style";
@@ -13,6 +13,18 @@ import { BubbleMenu } from "@tiptap/react";
 import { FloatingMenu } from "@tiptap/react";
 import Image from "@tiptap/extension-image";
 import FileHandler from "@tiptap-pro/extension-file-handler";
+import FontFamily from "@tiptap/extension-font-family";
+import Link from "@tiptap/extension-link";
+import Subscript from "@tiptap/extension-subscript";
+import Superscript from "@tiptap/extension-superscript";
+import Table from "@tiptap/extension-table";
+import TableCell from "@tiptap/extension-table-cell";
+import TableHeader from "@tiptap/extension-table-header";
+import TableRow from "@tiptap/extension-table-row";
+import TextAlign from "@tiptap/extension-text-align";
+import Typography from "@tiptap/extension-typography";
+import Youtube from "@tiptap/extension-youtube";
+import Underline from "@tiptap/extension-underline";
 type FormData = {
   eso: boolean;
   ffxiv: boolean;
@@ -132,17 +144,41 @@ export default function PostSubmit() {
   const MenuBar = () => {
     const { editor } = useCurrentEditor();
     if (!editor) return null;
+
     const addImage = useCallback(() => {
       const url = window.prompt("URL");
-
       if (url) {
         editor.chain().focus().setImage({ src: url }).run();
       }
     }, [editor]);
 
-    if (!editor) {
-      return null;
-    }
+    //LINK SETTING CODE
+
+    const setLink = useCallback(() => {
+      const previousUrl = editor.getAttributes("link").href as string;
+      const url = window.prompt("URL", previousUrl);
+
+      // cancelled
+      if (url === null) {
+        return;
+      }
+      // empty
+      if (url === "") {
+        editor.chain().focus().extendMarkRange("link").unsetLink().run();
+        return;
+      }
+      // update link
+      editor
+        .chain()
+        .focus()
+        .extendMarkRange("link")
+        .setLink({ href: url ?? "" })
+        .setColor("#323FFB")
+        .setUnderline()
+        .run();
+    }, [editor]);
+
+    //SUBMIT FUNCTION
     async function submit() {
       setPermissionData({
         ...permissionData,
@@ -161,12 +197,37 @@ export default function PostSubmit() {
         title: title.title,
       });
     }
+    const [barState, setBarState] = useState("default");
 
     return (
       <div className="menu-bar">
         <div>
-          <button onClick={addImage}>setImage</button>
+          <button
+            className={`min-w-30 transform justify-center rounded-2xl border-b-4 border-gray-500 bg-gradient-to-t from-gray-400 via-gray-600 to-gray-200 px-2 py-1 text-xs text-gray-100 transition  duration-200 ease-in-out hover:translate-y-px hover:border-b-2 `}
+            onClick={addImage}
+          >
+            Set Image
+          </button>
+          <button
+            className={`${barState === "default" ? "is-active border-yellow-500" : ""} min-w-30 transform justify-center rounded-2xl border-b-4 border-gray-500 bg-gradient-to-t from-gray-400 via-gray-600 to-gray-200 px-2 py-1 text-xs text-gray-100 transition  duration-200 ease-in-out hover:translate-y-px hover:border-b-2 `}
+            onClick={() => setBarState("default")}
+          >
+            Basic Format
+          </button>
+          <button
+            className={`${barState === "color" ? "is-active border-yellow-500" : ""} min-w-30 transform justify-center rounded-2xl border-b-4 border-gray-500 bg-gradient-to-t from-gray-400 via-gray-600 to-gray-200 px-2 py-1 text-xs text-gray-100 transition  duration-200 ease-in-out hover:translate-y-px hover:border-b-2 `}
+            onClick={() => setBarState("color")}
+          >
+            Colors
+          </button>
+          <button
+            className={`${barState === "table" ? "is-active border-yellow-500" : ""} min-w-30 transform justify-center rounded-2xl border-b-4 border-gray-500 bg-gradient-to-t from-gray-400 via-gray-600 to-gray-200 px-2 py-1 text-xs text-gray-100 transition  duration-200 ease-in-out hover:translate-y-px hover:border-b-2 `}
+            onClick={() => setBarState("table")}
+          >
+            Table
+          </button>
         </div>
+
         {/*Bubble Menu components */}
         {editor && (
           <BubbleMenu editor={editor} tippyOptions={{ duration: 100 }}>
@@ -211,37 +272,30 @@ export default function PostSubmit() {
             >
               strike
             </button>
+            <button
+              onClick={() => editor.chain().focus().toggleUnderline().run()}
+              className={`${editor.isActive("underline") ? "is-active" : ""} min-w-30 transform justify-center rounded-2xl border-b-4 border-gray-500 bg-gradient-to-t from-gray-400 via-gray-600 to-gray-200 px-2 py-1 text-xs text-gray-100 transition  duration-200 ease-in-out hover:translate-y-px hover:border-b-2 `}
+            >
+              toggleUnderline
+            </button>
+            <button
+              onClick={setLink}
+              className={`${
+                editor.isActive("link") ? "is-active border-yellow-500" : ""
+              } min-w-30 transform justify-center rounded-2xl border-b-4 border-gray-500 bg-gradient-to-t from-gray-400 via-gray-600 to-gray-200 px-2 py-1 text-xs text-gray-100 transition  duration-200 ease-in-out hover:translate-y-px hover:border-b-2 `}
+            >
+              setLink
+            </button>
+            <button
+              className="min-w-30 transform justify-center rounded-2xl border-b-4 border-gray-500 bg-gradient-to-t from-gray-400 via-gray-600 to-gray-200 px-2 py-1 text-xs text-gray-100 transition  duration-200 ease-in-out hover:translate-y-px hover:border-b-2"
+              onClick={() => editor.chain().focus().unsetLink().run()}
+              disabled={!editor.isActive("link")}
+            >
+              unsetLink
+            </button>
           </BubbleMenu>
         )}
-        <button
-          onClick={() => editor.chain().focus().toggleCode().run()}
-          disabled={!editor.can().chain().focus().toggleCode().run()}
-          className={`${
-            editor.isActive("code") ? "is-active border-yellow-500" : ""
-          } min-w-30 transform justify-center rounded-2xl border-b-4 border-gray-500 bg-gradient-to-t from-gray-400 via-gray-600 to-gray-200 px-2 py-1 text-xs text-gray-100 transition  duration-200 ease-in-out hover:translate-y-px hover:border-b-2 `}
-        >
-          code
-        </button>
-        <button
-          onClick={() => editor.chain().focus().unsetAllMarks().run()}
-          className="min-w-30 transform justify-center rounded-2xl border-b-4 border-gray-500 bg-gradient-to-t from-gray-400 via-gray-600 to-gray-200 px-2 py-1 text-xs text-gray-100 transition  duration-200 ease-in-out hover:translate-y-px hover:border-b-2 "
-        >
-          clear marks
-        </button>
-        <button
-          onClick={() => editor.chain().focus().clearNodes().run()}
-          className="min-w-30 transform justify-center rounded-2xl border-b-4 border-gray-500 bg-gradient-to-t from-gray-400 via-gray-600 to-gray-200 px-2 py-1 text-xs text-gray-100 transition  duration-200 ease-in-out hover:translate-y-px hover:border-b-2 "
-        >
-          clear nodes
-        </button>
-        <button
-          onClick={() => editor.chain().focus().setParagraph().run()}
-          className={`${
-            editor.isActive("paragraph") ? "is-active border-yellow-500" : ""
-          } min-w-30 transform justify-center rounded-2xl border-b-4 border-gray-500 bg-gradient-to-t from-gray-400 via-gray-600 to-gray-200 px-2 py-1 text-xs text-gray-100 transition  duration-200 ease-in-out hover:translate-y-px hover:border-b-2 `}
-        >
-          paragraph
-        </button>
+
         {/*Floating Menu components */}
         {editor && (
           <FloatingMenu editor={editor} tippyOptions={{ duration: 100 }}>
@@ -303,47 +357,318 @@ export default function PostSubmit() {
             </button>
           </FloatingMenu>
         )}
-        <button
-          onClick={() => editor.chain().focus().toggleCodeBlock().run()}
-          className={`${
-            editor.isActive("codeBlock") ? "is-active border-yellow-500" : ""
-          } min-w-30 transform justify-center rounded-2xl border-b-4 border-gray-500 bg-gradient-to-t from-gray-400 via-gray-600 to-gray-200 px-2 py-1 text-xs text-gray-100 transition  duration-200 ease-in-out hover:translate-y-px hover:border-b-2 `}
-        >
-          code block
-        </button>
-        <button
-          onClick={() => editor.chain().focus().toggleBlockquote().run()}
-          className={`${
-            editor.isActive("blockquote") ? "is-active border-yellow-500" : ""
-          } min-w-30 transform justify-center rounded-2xl border-b-4 border-gray-500 bg-gradient-to-t from-gray-400 via-gray-600 to-gray-200 px-2 py-1 text-xs text-gray-100 transition  duration-200 ease-in-out hover:translate-y-px hover:border-b-2 `}
-        >
-          blockquote
-        </button>
-        <button
-          onClick={() => editor.chain().focus().setHorizontalRule().run()}
-          className="min-w-30 transform justify-center rounded-2xl border-b-4 border-gray-500 bg-gradient-to-t from-gray-400 via-gray-600 to-gray-200 px-2 py-1 text-xs text-gray-100 transition  duration-200 ease-in-out hover:translate-y-px hover:border-b-2 "
-        >
-          horizontal rule
-        </button>
-        <button
-          onClick={() => editor.chain().focus().setHardBreak().run()}
-          className="min-w-30 transform justify-center rounded-2xl border-b-4 border-gray-500 bg-gradient-to-t from-gray-400 via-gray-600 to-gray-200 px-2 py-1 text-xs text-gray-100 transition  duration-200 ease-in-out hover:translate-y-px hover:border-b-2 "
-        >
-          hard break
-        </button>
+
+        {barState === "default" && (
+          <div>
+            <button
+              onClick={() => editor.chain().focus().setParagraph().run()}
+              className={`${
+                editor.isActive("paragraph")
+                  ? "is-active border-yellow-500"
+                  : ""
+              } min-w-30 transform justify-center rounded-2xl border-b-4 border-gray-500 bg-gradient-to-t from-gray-400 via-gray-600 to-gray-200 px-2 py-1 text-xs text-gray-100 transition  duration-200 ease-in-out hover:translate-y-px hover:border-b-2 `}
+            >
+              paragraph
+            </button>
+            <button
+              onClick={() => editor.chain().focus().toggleBlockquote().run()}
+              className={`${
+                editor.isActive("blockquote")
+                  ? "is-active border-yellow-500"
+                  : ""
+              } min-w-30 transform justify-center rounded-2xl border-b-4 border-gray-500 bg-gradient-to-t from-gray-400 via-gray-600 to-gray-200 px-2 py-1 text-xs text-gray-100 transition  duration-200 ease-in-out hover:translate-y-px hover:border-b-2 `}
+            >
+              blockquote
+            </button>
+            <button
+              onClick={() => editor.chain().focus().toggleCode().run()}
+              disabled={!editor.can().chain().focus().toggleCode().run()}
+              className={`${
+                editor.isActive("code") ? "is-active border-yellow-500" : ""
+              } min-w-30 transform justify-center rounded-2xl border-b-4 border-gray-500 bg-gradient-to-t from-gray-400 via-gray-600 to-gray-200 px-2 py-1 text-xs text-gray-100 transition  duration-200 ease-in-out hover:translate-y-px hover:border-b-2 `}
+            >
+              code
+            </button>
+            <button
+              onClick={() => editor.chain().focus().toggleCodeBlock().run()}
+              className={`${
+                editor.isActive("codeBlock")
+                  ? "is-active border-yellow-500"
+                  : ""
+              } min-w-30 transform justify-center rounded-2xl border-b-4 border-gray-500 bg-gradient-to-t from-gray-400 via-gray-600 to-gray-200 px-2 py-1 text-xs text-gray-100 transition  duration-200 ease-in-out hover:translate-y-px hover:border-b-2 `}
+            >
+              code block
+            </button>
+            <button
+              onClick={() => editor.chain().focus().unsetAllMarks().run()}
+              className="min-w-30 transform justify-center rounded-2xl border-b-4 border-gray-500 bg-gradient-to-t from-gray-400 via-gray-600 to-gray-200 px-2 py-1 text-xs text-gray-100 transition  duration-200 ease-in-out hover:translate-y-px hover:border-b-2 "
+            >
+              clear marks
+            </button>
+            <button
+              onClick={() => editor.chain().focus().clearNodes().run()}
+              className="min-w-30 transform justify-center rounded-2xl border-b-4 border-gray-500 bg-gradient-to-t from-gray-400 via-gray-600 to-gray-200 px-2 py-1 text-xs text-gray-100 transition  duration-200 ease-in-out hover:translate-y-px hover:border-b-2 "
+            >
+              clear nodes
+            </button>
+            <button
+              onClick={() => editor.chain().focus().setHorizontalRule().run()}
+              className="min-w-30 transform justify-center rounded-2xl border-b-4 border-gray-500 bg-gradient-to-t from-gray-400 via-gray-600 to-gray-200 px-2 py-1 text-xs text-gray-100 transition  duration-200 ease-in-out hover:translate-y-px hover:border-b-2 "
+            >
+              horizontal rule
+            </button>
+            <button
+              onClick={() => editor.chain().focus().setHardBreak().run()}
+              className="min-w-30 transform justify-center rounded-2xl border-b-4 border-gray-500 bg-gradient-to-t from-gray-400 via-gray-600 to-gray-200 px-2 py-1 text-xs text-gray-100 transition  duration-200 ease-in-out hover:translate-y-px hover:border-b-2 "
+            >
+              hard break
+            </button>
+          </div>
+        )}
+
+        {/* TABLE TOOLS */}
+        {barState === "table" && (
+          <div>
+            <button
+              className="min-w-30 transform justify-center rounded-2xl border-b-4 border-gray-500 bg-gradient-to-t from-gray-400 via-gray-600 to-gray-200 px-2 py-1 text-xs text-gray-100 transition  duration-200 ease-in-out hover:translate-y-px hover:border-b-2 "
+              onClick={() =>
+                editor
+                  .chain()
+                  .focus()
+                  .insertTable({ rows: 3, cols: 3, withHeaderRow: true })
+                  .run()
+              }
+            >
+              insertTable
+            </button>
+            <button
+              className="min-w-30 transform justify-center rounded-2xl border-b-4 border-gray-500 bg-gradient-to-t from-gray-400 via-gray-600 to-gray-200 px-2 py-1 text-xs text-gray-100 transition  duration-200 ease-in-out hover:translate-y-px hover:border-b-2 "
+              onClick={() => editor.chain().focus().addColumnBefore().run()}
+            >
+              addColumnBefore
+            </button>
+            <button
+              className="min-w-30 transform justify-center rounded-2xl border-b-4 border-gray-500 bg-gradient-to-t from-gray-400 via-gray-600 to-gray-200 px-2 py-1 text-xs text-gray-100 transition  duration-200 ease-in-out hover:translate-y-px hover:border-b-2 "
+              onClick={() => editor.chain().focus().addColumnAfter().run()}
+            >
+              addColumnAfter
+            </button>
+            <button
+              className="min-w-30 transform justify-center rounded-2xl border-b-4 border-gray-500 bg-gradient-to-t from-gray-400 via-gray-600 to-gray-200 px-2 py-1 text-xs text-gray-100 transition  duration-200 ease-in-out hover:translate-y-px hover:border-b-2 "
+              onClick={() => editor.chain().focus().deleteColumn().run()}
+            >
+              deleteColumn
+            </button>
+            <button
+              className="min-w-30 transform justify-center rounded-2xl border-b-4 border-gray-500 bg-gradient-to-t from-gray-400 via-gray-600 to-gray-200 px-2 py-1 text-xs text-gray-100 transition  duration-200 ease-in-out hover:translate-y-px hover:border-b-2 "
+              onClick={() => editor.chain().focus().addRowBefore().run()}
+            >
+              addRowBefore
+            </button>
+            <button
+              className="min-w-30 transform justify-center rounded-2xl border-b-4 border-gray-500 bg-gradient-to-t from-gray-400 via-gray-600 to-gray-200 px-2 py-1 text-xs text-gray-100 transition  duration-200 ease-in-out hover:translate-y-px hover:border-b-2 "
+              onClick={() => editor.chain().focus().addRowAfter().run()}
+            >
+              addRowAfter
+            </button>
+            <button
+              className="min-w-30 transform justify-center rounded-2xl border-b-4 border-gray-500 bg-gradient-to-t from-gray-400 via-gray-600 to-gray-200 px-2 py-1 text-xs text-gray-100 transition  duration-200 ease-in-out hover:translate-y-px hover:border-b-2 "
+              onClick={() => editor.chain().focus().deleteRow().run()}
+            >
+              deleteRow
+            </button>
+            <button
+              className="min-w-30 transform justify-center rounded-2xl border-b-4 border-gray-500 bg-gradient-to-t from-gray-400 via-gray-600 to-gray-200 px-2 py-1 text-xs text-gray-100 transition  duration-200 ease-in-out hover:translate-y-px hover:border-b-2 "
+              onClick={() => editor.chain().focus().deleteTable().run()}
+            >
+              deleteTable
+            </button>
+            <button
+              className="min-w-30 transform justify-center rounded-2xl border-b-4 border-gray-500 bg-gradient-to-t from-gray-400 via-gray-600 to-gray-200 px-2 py-1 text-xs text-gray-100 transition  duration-200 ease-in-out hover:translate-y-px hover:border-b-2 "
+              onClick={() => editor.chain().focus().mergeCells().run()}
+            >
+              mergeCells
+            </button>
+            <button
+              className="min-w-30 transform justify-center rounded-2xl border-b-4 border-gray-500 bg-gradient-to-t from-gray-400 via-gray-600 to-gray-200 px-2 py-1 text-xs text-gray-100 transition  duration-200 ease-in-out hover:translate-y-px hover:border-b-2 "
+              onClick={() => editor.chain().focus().splitCell().run()}
+            >
+              splitCell
+            </button>
+            <button
+              className="min-w-30 transform justify-center rounded-2xl border-b-4 border-gray-500 bg-gradient-to-t from-gray-400 via-gray-600 to-gray-200 px-2 py-1 text-xs text-gray-100 transition  duration-200 ease-in-out hover:translate-y-px hover:border-b-2 "
+              onClick={() => editor.chain().focus().toggleHeaderColumn().run()}
+            >
+              toggleHeaderColumn
+            </button>
+            <button
+              className="min-w-30 transform justify-center rounded-2xl border-b-4 border-gray-500 bg-gradient-to-t from-gray-400 via-gray-600 to-gray-200 px-2 py-1 text-xs text-gray-100 transition  duration-200 ease-in-out hover:translate-y-px hover:border-b-2 "
+              onClick={() => editor.chain().focus().toggleHeaderRow().run()}
+            >
+              toggleHeaderRow
+            </button>
+            <button
+              className="min-w-30 transform justify-center rounded-2xl border-b-4 border-gray-500 bg-gradient-to-t from-gray-400 via-gray-600 to-gray-200 px-2 py-1 text-xs text-gray-100 transition  duration-200 ease-in-out hover:translate-y-px hover:border-b-2 "
+              onClick={() => editor.chain().focus().toggleHeaderCell().run()}
+            >
+              toggleHeaderCell
+            </button>
+            <button
+              className="min-w-30 transform justify-center rounded-2xl border-b-4 border-gray-500 bg-gradient-to-t from-gray-400 via-gray-600 to-gray-200 px-2 py-1 text-xs text-gray-100 transition  duration-200 ease-in-out hover:translate-y-px hover:border-b-2 "
+              onClick={() => editor.chain().focus().mergeOrSplit().run()}
+            >
+              mergeOrSplit
+            </button>
+            <button
+              className="min-w-30 transform justify-center rounded-2xl border-b-4 border-gray-500 bg-gradient-to-t from-gray-400 via-gray-600 to-gray-200 px-2 py-1 text-xs text-gray-100 transition  duration-200 ease-in-out hover:translate-y-px hover:border-b-2 "
+              onClick={() =>
+                editor.chain().focus().setCellAttribute("colspan", 2).run()
+              }
+            >
+              setCellAttribute
+            </button>
+            <button
+              className="min-w-30 transform justify-center rounded-2xl border-b-4 border-gray-500 bg-gradient-to-t from-gray-400 via-gray-600 to-gray-200 px-2 py-1 text-xs text-gray-100 transition  duration-200 ease-in-out hover:translate-y-px hover:border-b-2 "
+              onClick={() => editor.chain().focus().fixTables().run()}
+            >
+              fixTables
+            </button>
+            <button
+              className="min-w-30 transform justify-center rounded-2xl border-b-4 border-gray-500 bg-gradient-to-t from-gray-400 via-gray-600 to-gray-200 px-2 py-1 text-xs text-gray-100 transition  duration-200 ease-in-out hover:translate-y-px hover:border-b-2 "
+              onClick={() => editor.chain().focus().goToNextCell().run()}
+            >
+              goToNextCell
+            </button>
+            <button
+              className="min-w-30 transform justify-center rounded-2xl border-b-4 border-gray-500 bg-gradient-to-t from-gray-400 via-gray-600 to-gray-200 px-2 py-1 text-xs text-gray-100 transition  duration-200 ease-in-out hover:translate-y-px hover:border-b-2 "
+              onClick={() => editor.chain().focus().goToPreviousCell().run()}
+            >
+              goToPreviousCell
+            </button>
+          </div>
+        )}
+
+        {barState === "color" && (
+          <div>
+            <button
+              onClick={() => editor.chain().focus().setColor("#958DF1").run()}
+              className={`${
+                editor.isActive("textStyle", { color: "#958DF1" })
+                  ? "is-active border-yellow-500"
+                  : ""
+              }
+                  min-w-30 transform justify-center rounded-2xl border-b-4 border-gray-500 bg-gradient-to-t from-gray-400 via-gray-600 to-gray-200 px-2 py-1 text-xs text-gray-100 transition  duration-200 ease-in-out hover:translate-y-px hover:border-b-2`}
+              data-testid="setPurple"
+            >
+              Purple
+            </button>
+
+            <button
+              onClick={() => editor.chain().focus().setColor("#F98181").run()}
+              className={`${
+                editor.isActive("textStyle", { color: "#F98181" })
+                  ? "is-active border-yellow-500"
+                  : ""
+              } min-w-30 transform justify-center rounded-2xl border-b-4 border-gray-500 bg-gradient-to-t from-gray-400 via-gray-600 to-gray-200 px-2 py-1 text-xs text-gray-100 transition  duration-200 ease-in-out hover:translate-y-px hover:border-b-2`}
+              data-testid="setRed"
+            >
+              Red
+            </button>
+
+            <button
+              onClick={() => editor.chain().focus().setColor("#FBBC88").run()}
+              className={`${
+                editor.isActive("textStyle", { color: "#FBBC88" })
+                  ? "is-active border-yellow-500"
+                  : ""
+              }
+                min-w-30 transform justify-center rounded-2xl border-b-4 border-gray-500 bg-gradient-to-t from-gray-400 via-gray-600 to-gray-200 px-2 py-1 text-xs text-gray-100 transition  duration-200 ease-in-out hover:translate-y-px hover:border-b-2`}
+              data-testid="setOrange"
+            >
+              Orange
+            </button>
+
+            <button
+              onClick={() => editor.chain().focus().setColor("#FAF594").run()}
+              className={`${
+                editor.isActive("textStyle", { color: "#FAF594" })
+                  ? "is-active border-yellow-500"
+                  : ""
+              }
+                min-w-30 transform justify-center rounded-2xl border-b-4 border-gray-500 bg-gradient-to-t from-gray-400 via-gray-600 to-gray-200 px-2 py-1 text-xs text-gray-100 transition  duration-200 ease-in-out hover:translate-y-px hover:border-b-2`}
+              data-testid="setYellow"
+            >
+              Yellow
+            </button>
+
+            <button
+              onClick={() => editor.chain().focus().setColor("#70CFF8").run()}
+              className={`${
+                editor.isActive("textStyle", { color: "#70CFF8" })
+                  ? "is-active border-yellow-500"
+                  : ""
+              }
+                min-w-30 transform justify-center rounded-2xl border-b-4 border-gray-500 bg-gradient-to-t from-gray-400 via-gray-600 to-gray-200 px-2 py-1 text-xs text-gray-100 transition  duration-200 ease-in-out hover:translate-y-px hover:border-b-2`}
+              data-testid="setBlue"
+            >
+              Blue
+            </button>
+
+            <button
+              onClick={() => editor.chain().focus().setColor("#94FADB").run()}
+              className={`${
+                editor.isActive("textStyle", { color: "#94FADB" })
+                  ? "is-active border-yellow-500"
+                  : ""
+              }
+                min-w-30 transform justify-center rounded-2xl border-b-4 border-gray-500 bg-gradient-to-t from-gray-400 via-gray-600 to-gray-200 px-2 py-1 text-xs text-gray-100 transition  duration-200 ease-in-out hover:translate-y-px hover:border-b-2`}
+              data-testid="setTeal"
+            >
+              Teal
+            </button>
+
+            <button
+              onClick={() => editor.chain().focus().setColor("#B9F18D").run()}
+              className={`${
+                editor.isActive("textStyle", { color: "#B9F18D" })
+                  ? "is-active border-yellow-500"
+                  : ""
+              }
+                min-w-30 transform justify-center rounded-2xl border-b-4 border-gray-500 bg-gradient-to-t from-gray-400 via-gray-600 to-gray-200 px-2 py-1 text-xs text-gray-100 transition  duration-200 ease-in-out hover:translate-y-px hover:border-b-2`}
+              data-testid="setGreen"
+            >
+              Green
+            </button>
+
+            <button
+              onClick={() => editor.chain().focus().unsetColor().run()}
+              className={`${
+                editor.isActive("unsetColor")
+                  ? "is-active border-yellow-500"
+                  : ""
+              }
+                min-w-30 transform justify-center rounded-2xl border-b-4 border-gray-500 bg-gradient-to-t from-gray-400 via-gray-600 to-gray-200 px-2 py-1 text-xs text-gray-100 transition  duration-200 ease-in-out hover:translate-y-px hover:border-b-2`}
+              data-testid="unsetColor"
+            >
+              Remove Color
+            </button>
+          </div>
+        )}
+
+        {/* Un-do Re-do Submit TOOLS */}
         <button
           onClick={() => editor.chain().focus().undo().run()}
           disabled={!editor.can().chain().focus().undo().run()}
           className="min-w-30 transform justify-center rounded-2xl border-b-4 border-gray-500 bg-gradient-to-t from-gray-400 via-gray-600 to-gray-200 px-2 py-1 text-xs text-gray-100 transition  duration-200 ease-in-out hover:translate-y-px hover:border-b-2 "
         >
-          undo
+          UNDO
         </button>
         <button
           onClick={() => editor.chain().focus().redo().run()}
           className="min-w-30 transform justify-center rounded-2xl border-b-4 border-gray-500 bg-gradient-to-t from-gray-400 via-gray-600 to-gray-200 px-2 py-1 text-xs text-gray-100 transition  duration-200 ease-in-out hover:translate-y-px hover:border-b-2 "
           disabled={!editor.can().chain().focus().redo().run()}
         >
-          redo
+          REDO
         </button>
 
         <button
@@ -425,6 +750,17 @@ export default function PostSubmit() {
     Image.configure({
       allowBase64: true,
     }),
+    Table.configure({
+      resizable: true,
+    }),
+    TableRow,
+    TableHeader,
+    TableCell,
+    Link.configure({
+      openOnClick: false,
+      autolink: true,
+    }),
+    Underline,
   ];
 
   return (

@@ -1,11 +1,11 @@
 "use client";
 import { api } from "~/trpc/react";
 import { useRouter } from "next/navigation";
-export default function UserSearch() {
+export default function UserSearch({ id }: { id: string }) {
   const router = useRouter();
   const users = api.get.allUsers.useQuery();
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    router.push(`./search/${e.target.value}`);
+    router.push(`/dashboard/${id}/staff/search/${e.target.value}`);
   };
   return (
     <div>
