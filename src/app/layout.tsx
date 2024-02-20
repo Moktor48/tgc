@@ -45,6 +45,7 @@ export default async function RootLayout({
             <header>
               <StatBar />
               <SideBar />
+
             </header>
             {!session && <NavBarPublic />}
             {session && <NavBar role={role} id={id} />}
