@@ -12,7 +12,6 @@ export default async function StaffPage({
 }) {
   const session = await getServerAuthSession();
   if (!session) return <div>You must be logged in to view this page.</div>;
-  console.log(session);
   const id = params.id;
   const perm = await api.get.staffPermission.query({ userId: id });
   if (session.user.role != "staff")

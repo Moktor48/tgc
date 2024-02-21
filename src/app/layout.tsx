@@ -27,9 +27,11 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  // pull ALL the things here, permissions, etc, and add to sessionStorage?
   const session = await getServerAuthSession();
+  const userId = session?.user.id;
   const role = session?.user.role;
-  const id = session?.user.id;
+
   return (
     <html
       lang="en"
@@ -47,7 +49,7 @@ export default async function RootLayout({
               <SideBar />
             </header>
             {!session && <NavBarPublic />}
-            {session && <NavBar role={role} id={id} />}
+            {session && <NavBar role={role} id={userId} />}
             {children}
             <BottomComp />
           </TRPCReactProvider>

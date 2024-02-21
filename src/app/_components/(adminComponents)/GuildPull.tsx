@@ -24,9 +24,7 @@ export async function GuildPull() {
       },
     });
     const guilds: Guild[] = (await guildRes.json()) as [];
-    console.log(guilds);
     const tgc = guilds.find((g) => g.id === "314436945792991232");
-    console.log(tgc);
     if (tgc?.id != "314436945792991232") {
       return (
         <div className="text-red-500">

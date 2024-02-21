@@ -38,7 +38,9 @@ body {
 }
 
 .game-logo-button:hover img {
-  /* transform: scale(1.05); /* subtle zoom effect on hover 
+  transform: scale(
+    1.05
+  ); /* subtle zoom effect on hover 
     box-shadow: 0 0px 20px 10px rgb(0, 0, 0); deeper shadow on hover */
 }
 

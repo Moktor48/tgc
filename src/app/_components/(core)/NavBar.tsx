@@ -89,8 +89,3 @@ export default async function NavBar({
     </div>
   );
 }
-
-/*
-FUTURE NOTES: 
-PUBLIC PAGE
-*/
