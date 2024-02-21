@@ -1,3 +1,4 @@
+//This is a dev tool only, will not be live
 "use client";
 import React from "react";
 import { api } from "~/trpc/react";
@@ -78,11 +79,6 @@ export default function UserBuilder() {
   const createFFXIV = api.post.createFfxivPermission.useMutation();
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    console.log(userData);
-    console.log(staffData);
-    console.log(esoData);
-    console.log(swtorData);
-    console.log(ffxivData);
     createUser.mutate(userData);
   }
 

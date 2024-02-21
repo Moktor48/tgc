@@ -95,7 +95,7 @@ export default function PostSelect({ id, staff, eso, ffxiv, swtor }: Props) {
           onChange={handleGS}
         >
           {" "}
-          {/*Available if you have guild access */}
+          {/*Specific guilds available if you have guild access */}
           <option value="general">General</option>
           {eso?.rank != "none" && eso?.rank != null && (
             <option value="eso">ESO</option>
@@ -117,14 +117,14 @@ export default function PostSelect({ id, staff, eso, ffxiv, swtor }: Props) {
           {/*Available after selecting game */}
           <option value="default">Choose template type...</option>
           {gameSelect.game_select != "general" && (
-            <option value="1">Build</option>
+            <option value="build">Build</option>
           )}
           {gameSelect.game_select != "general" && (
-            <option value="2">Guide</option>
+            <option value="guide">Guide</option>
           )}
-          <option value="3">Notification</option>
-          <option value="4">Report</option>
-          <option value="5">SUGGESTIONS</option>
+          <option value="notification">Notification</option>
+          <option value="report">Report</option>
+          <option value="article">Article</option>
           {/*This will change to "articles" when live */}
         </select>
         <select
@@ -136,15 +136,18 @@ export default function PostSelect({ id, staff, eso, ffxiv, swtor }: Props) {
           {" "}
           {/*Available based on user roles */}
           <option value="default">Choose audience type...</option>
-          <option value="0">General</option>
-          {typeSelect.type_select != "1" &&
-            typeSelect.type_select != "2" &&
-            staffP && <option value="staff">Staff</option>}
-          {gameSelect.game_select != "general" && raid && (
-            <option value="raid">Raid</option>
+          {typeSelect.type_select != "report" && (
+            <option value="general">General</option>
           )}
-          {typeSelect.type_select != "1" &&
-            typeSelect.type_select != "2" &&
+          {typeSelect.type_select != "build" &&
+            typeSelect.type_select != "guide" &&
+            gameSelect.game_select == "general" &&
+            staffP && <option value="staff">Staff</option>}
+          {typeSelect.type_select != "report" &&
+            gameSelect.game_select != "general" &&
+            raid && <option value="raid">Raid</option>}
+          {typeSelect.type_select != "build" &&
+            typeSelect.type_select != "guide" &&
             gameSelect.game_select != "general" &&
             officer && <option value="officer">Guild Officer</option>}
         </select>

@@ -13,8 +13,5 @@ export default async function page({ params }: { params: { game: string } }) {
   const sPerm = await api.get.swtorPermission.query({ userId: id });
   if (!ePerm ?? !fPerm ?? !sPerm)
     return <p>You do not seem to belong to this guild.</p>;
-  const perm = await api.get.staffPermission.query({ userId: id });
-  const test = await api.get.esoPermission.query({ userId: id });
-
-  return <div>Future officer poage for {game}</div>;
+  return <div>Future officer page for {game}</div>;
 }

@@ -1,6 +1,6 @@
 //Page for actual editor, editor will submit post data to include the game and audience.
 "use client";
-import React, { useCallback, useRef, useState } from "react";
+import React, { useCallback, useState } from "react";
 import { Color } from "@tiptap/extension-color";
 import ListItem from "@tiptap/extension-list-item";
 import TextStyle from "@tiptap/extension-text-style";
@@ -41,7 +41,6 @@ const build = `<p><strong>Test Template BUILD!!!</strong></p><p>Setting a templa
 const guide = `<p><strong>Test Template GUIDE!!!</strong></p><p>Setting a template up for builds...</p><p></p><p>So, a table here, and some links there...</p><h2></h2>`;
 const notification = `<p><strong>Test Template NOTIFICATION!!!</strong></p><p>Setting a template up for builds...</p><p></p><p>So, a table here, and some links there...</p><h2></h2>`;
 const report = `<p><strong>Test Template REPORT!!!</strong></p><p>Setting a template up for builds...</p><p></p><p>So, a table here, and some links there...</p><h2></h2>`;
-const suggest = `<p><strong>SUGGESTIONS!!!</strong></p><p>Add information for functionality, bugs, or general suggestions</p><p></p><p>I also need templates made for the types, so a build template, article template, etc.</p><h2></h2>`;
 
 export default function PostSubmit() {
   const { data } = useSession();
@@ -60,40 +59,24 @@ export default function PostSubmit() {
     );
   const userId = session.user.id;
   const searchParams = useSearchParams();
-  const [findUrl, setFindUrl] = useState("");
   //These will set GAME, TYPE of document, and ROLE the document is intended for.
   const [publicPost, setPublicPost] = useState(false);
   const gameSelect = searchParams.get("game")!;
   const typeSelect = searchParams.get("type")!;
   const roleSelect = searchParams.get("role")!;
   const [title, setTitle] = useState({ title: "==> SET TITLE <==" });
-  const [dataUrl, setDataUrl] = useState<string | ArrayBuffer | null>(null);
   const postTemplate =
-    typeSelect === "1"
+    typeSelect === "build"
       ? build
-      : typeSelect === "2"
+      : typeSelect === "guide"
         ? guide
-        : typeSelect === "3"
+        : typeSelect === "notification"
           ? notification
-          : typeSelect === "4"
+          : typeSelect === "report"
             ? report
-            : typeSelect === "5"
-              ? suggest
-              : typeSelect === "6"
-                ? article
-                : "Not a valid type";
-  const typeString =
-    typeSelect === "1"
-      ? "build"
-      : typeSelect === "2"
-        ? "guide"
-        : typeSelect === "3"
-          ? "notification"
-          : typeSelect === "4"
-            ? "report"
-            : typeSelect === "5"
-              ? "suggestion"
-              : "article";
+            : typeSelect === "article"
+              ? article
+              : "Not a valid type";
 
   //Permission data is set through the previous page set-up
   const [permissionData, setPermissionData] = useState<FormData>({
@@ -104,7 +87,7 @@ export default function PostSubmit() {
     staff: false,
     raid: false,
     officer: false,
-    type: typeString,
+    type: typeSelect,
   });
   //Function to submit the permission data
   const subPerm = api.post.postPermissions.useMutation();
@@ -115,14 +98,12 @@ export default function PostSubmit() {
       const id = data.id;
       const pId = { postId: id };
       const publik = { guild_public: publicPost };
-      console.log("Here is the URL:", findUrl);
       const permissionDataX = {
         ...permissionData,
         ...pId,
         ...publik,
       };
 
-      console.log(permissionDataX);
       if (!data.id) return null;
       subPerm.mutate(permissionDataX);
       alert("Post submitted!");
@@ -131,7 +112,6 @@ export default function PostSubmit() {
   });
   const handleChange = () => {
     setPublicPost(!publicPost);
-    console.log(publicPost);
   };
 
   function handleChangeT(e: React.ChangeEvent<HTMLInputElement>) {
@@ -188,7 +168,6 @@ export default function PostSubmit() {
 
       if (!editor) return null;
       if (title.title === "==> SET TITLE <==") return alert("set title");
-      console.log(title);
       const content = editor.getHTML();
       if (content === postTemplate) return alert("Fill out the content!");
       subData.mutate({
@@ -691,7 +670,6 @@ export default function PostSubmit() {
           const fileReader = new FileReader();
 
           fileReader.readAsDataURL(file);
-          setDataUrl(fileReader.result);
           fileReader.onload = () => {
             currentEditor
               .chain()
@@ -711,7 +689,7 @@ export default function PostSubmit() {
           if (htmlContent) {
             // if there is htmlContent, stop manual insertion & let other extensions handle insertion via inputRule
             // you could extract the pasted file from this url string and upload it to a server for example
-            console.log(htmlContent); // eslint-disable-line no-console
+            // eslint-disable-line no-console
             return false;
           }
 
@@ -759,14 +737,21 @@ export default function PostSubmit() {
     Link.configure({
       openOnClick: false,
       autolink: true,
+      validate: (href) => /^https?:\/\//.test(href),
     }),
     Underline,
+    FontFamily,
+    TextAlign,
+    Subscript,
+    Superscript,
+    Youtube,
+    Typography,
   ];
 
   return (
     <div className="bg-black">
       <h1>
-        Template to create: Type: {typeString.toUpperCase()}; Audience:{" "}
+        Template to create: Type: {typeSelect.toUpperCase()}; Audience:{" "}
         {roleSelect.toUpperCase()}; Game: {gameSelect.toUpperCase()}{" "}
       </h1>
       <form>

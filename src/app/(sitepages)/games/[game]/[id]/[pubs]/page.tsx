@@ -23,7 +23,6 @@ export default async function page({
         ? (selGame.ffxiv = true)
         : null;
   const post = await api.get.publishedPostsMod.query(selGame);
-  console.log(post);
   return (
     <div>
       <h1>
