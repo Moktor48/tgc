@@ -437,6 +437,52 @@ export const getRouter = createTRPCRouter({
       return posts;
     }),
 
+  motherOfAllPosts: protectedProcedure
+    .input(
+      z.object({
+        general: z.boolean(),
+        eso: z.boolean(),
+        ffxiv: z.boolean(),
+        swtor: z.boolean(),
+        type: z.string(),
+        public: z.boolean(),
+        staff: z.boolean(),
+        raid: z.boolean(),
+        officer: z.boolean(),
+      }),
+    )
+    .query(async ({ input }) => {
+      const posts = await db.post.findMany({
+        where: {
+          permissions: {
+            some: {
+              published: true,
+              guild_public: input.public,
+              general: input.general,
+              eso: input.eso,
+              ffxiv: input.ffxiv,
+              swtor: input.swtor,
+              type: input.type,
+              staff: input.staff,
+              raid: input.raid,
+              officer: input.officer,
+            },
+          },
+        },
+        select: {
+          id: true,
+          title: true,
+          createdBy: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+        },
+      });
+      return posts;
+    }),
+
   //Query Permissions
   staffPermission: protectedProcedure
     .input(z.object({ userId: z.string() }))
