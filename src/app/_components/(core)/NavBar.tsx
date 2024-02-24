@@ -27,9 +27,15 @@ export default async function NavBar({
           </h2>
         </button>
         <div className="nav-dropdown-content">
-          <Link href={`/games/eso/${id}/build`}>ESO</Link>
-          <Link href={`/games/swtor/${id}/build`}>SWTOR</Link>
-          <Link href={`/games/ffxiv/${id}/build`}>FFXIV</Link>
+          <Link href={`/editor/${id}/display/private/eso/general/build`}>
+            ESO
+          </Link>
+          <Link href={`/editor/${id}/display/private/ffxiv/general/build`}>
+            FFXIV
+          </Link>
+          <Link href={`/editor/${id}/display/private/swtor/general/build`}>
+            SWTOR
+          </Link>
         </div>
       </div>
 
@@ -40,9 +46,15 @@ export default async function NavBar({
           </h2>
         </button>
         <div className="nav-dropdown-content">
-          <Link href={`/games/eso/${id}/guide`}>ESO</Link>
-          <Link href={`/games/swtor/${id}/guide`}>SWTOR</Link>
-          <Link href={`/games/ffxiv/${id}/guide`}>FFXIV</Link>
+          <Link href={`/editor/${id}/display/private/eso/general/guide`}>
+            ESO
+          </Link>
+          <Link href={`/editor/${id}/display/private/ffxiv/general/guide`}>
+            FFXIV
+          </Link>
+          <Link href={`/editor/${id}/display/private/swtor/general/guide`}>
+            SWTOR
+          </Link>
         </div>
       </div>
 
@@ -53,9 +65,15 @@ export default async function NavBar({
           </h2>
         </button>
         <div className="nav-dropdown-content">
-          <Link href={`/games/eso/${id}/article`}>ESO</Link>
-          <Link href={`/games/swtor/${id}/article`}>SWTOR</Link>
-          <Link href={`/games/ffxiv/${id}/article`}>FFXIV</Link>
+          <Link href={`/editor/${id}/display/private/eso/general/article`}>
+            ESO
+          </Link>
+          <Link href={`/editor/${id}/display/private/ffxiv/general/article`}>
+            FFXIV
+          </Link>
+          <Link href={`/editor/${id}/display/private/swtor/general/article`}>
+            SWTOR
+          </Link>
           <Link href={`/games/general/public/article`}>
             General Guild Articles
           </Link>
