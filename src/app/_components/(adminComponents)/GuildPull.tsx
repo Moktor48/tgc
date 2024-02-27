@@ -10,6 +10,7 @@ export async function GuildPull() {
     return <div className="text-red-500">You are not logged in.</div>;
 
   const guild = session.user.guild;
+  console.log(guild);
 
   if (!guild) {
     const token = await api.get.pullAccess.query({
