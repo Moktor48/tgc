@@ -50,7 +50,7 @@ model User {
     emailVerified DateTime?
     image         String
     role          String              @default("guest") //guest, member, staff
-    tgc_guild_member         Boolean             @default(false)
+    tgc_guild_member Boolean          @default(false)
     accounts      Account[]
     sessions      Session[]
     posts         post[]
@@ -151,6 +151,7 @@ model post_modification {
     modBy     User   @relation(fields: [modById], references: [id])
     modById   String
 }
+
 // TGC models
 // BUILD(build_id, title, content, cover_image_path, gmember_id, game_type, summary, created_at)
 model BUILD {
@@ -366,3 +367,6 @@ model VOICE_SESSIONS {
     end_time DateTime
     duration Int
 }
+
+
+
