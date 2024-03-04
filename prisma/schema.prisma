@@ -367,3 +367,6 @@ model VOICE_SESSIONS {
     end_time DateTime
     duration Int
 }
+
+
+
