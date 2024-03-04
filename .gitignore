@@ -60,4 +60,8 @@ notebook.txt
 # Vscode:
 .vscode/
 
+
+psql-database/thegamin_db_202401.sql
+
 src/ignore_hold/leaderboard.php
+
