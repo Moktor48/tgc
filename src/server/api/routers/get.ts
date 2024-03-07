@@ -519,4 +519,49 @@ export const getRouter = createTRPCRouter({
       });
       return user;
     }),
+
+  // Queries for LEADERBOARD
+  // Example is 10/29/23 to 1/29/24
+  pointQuery: protectedProcedure
+    .input(z.object({ startDate: z.string(), endDate: z.string() }))
+    .query(async ({ input }) => {
+      const points = await db.staff_duty.findMany({
+        where: {
+          timestamp: {
+            lte: new Date(input.endDate).toISOString(),
+            gte: new Date(input.startDate).toISOString(),
+          },
+        },
+        select: {
+          gmember_id: true,
+          duty_type: true,
+          timestamp: true,
+          target: true,
+          staff_point_chart: {
+            select: {
+              point_value: true,
+            },
+          },
+        },
+      });
+      return points;
+    }),
+
+  nameQuery: protectedProcedure
+    .input(z.object({ keys: z.array(z.bigint()) }))
+    .query(async ({ input }) => {
+      const names = await db.discord_user.findMany({
+        where: {
+          gmember_id: {
+            in: input.keys,
+          },
+        },
+        select: {
+          gmember_id: true,
+          disc_nickname: true,
+        },
+      });
+      return names;
+    }),
 }); // This is the end, lawlz.
+//

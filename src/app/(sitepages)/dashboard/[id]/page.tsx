@@ -2,13 +2,8 @@
 
 import React from "react";
 import { getServerAuthSession } from "~/server/auth";
-import { api } from "~/trpc/server";
 
-export default async function AccountPage({
-  params,
-}: {
-  params: { id: string };
-}) {
+export default async function AccountPage() {
   const session = await getServerAuthSession();
   if (!session) return <div>You must be logged in to view this page.</div>;
 
