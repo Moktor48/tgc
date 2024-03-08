@@ -74,7 +74,7 @@ export default async function NavBar({
           <Link href={`/editor/${id}/display/private/swtor/general/article`}>
             SWTOR
           </Link>
-          <Link href={`/games/general/public/article`}>
+          <Link href={`/editor/${id}/display/private/general/general/article`}>
             General Guild Articles
           </Link>
         </div>
@@ -92,6 +92,7 @@ export default async function NavBar({
             <Link href={`/dashboard/${id}/staff/admin`}>Admin</Link>
             <Link href={`/editor/${id}/approve`}>Post Approvals</Link>
             <Link href={`/editor/${id}`}>Create Post</Link>
+            <Link href={`/editor/tinytest`}>Test TINY</Link>
           </div>
         </div>
       )}

@@ -35,7 +35,8 @@ export default function SideBar() {
             </li>
             <li>
               <Link className="links" href="/games">
-                <span className="material-symbols-outlined">Casino</span> Games
+                <span className="material-symbols-outlined">Casino</span> Game
+                Filter
               </Link>
             </li>
             <li>
