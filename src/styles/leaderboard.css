@@ -1,74 +1,73 @@
-
 .leaderboard {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    padding: 10px;
-    border-radius: 12px;
-    color: #fff;
-    background-color: rgba(8, 1, 1, 0.75);
-    box-shadow: 0px 0px 10px 5px rgb(0, 0, 0);
-  }
-  
-  .leaderboard-headers {
-    color: #fff;
-  }
-  
-  .leaderboard-title {
-    text-align: center;
-    color: #fff;
-  }
-  
-  .leaderboard-content {
-    color: #c9c5c5;
-  }
-  
-  .leaderboard-form {
-    max-width: 35%;
-    margin: auto;
-    padding: 20px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    color: #c5c5c5;
-    margin-bottom: 40px;
-    margin-top: 20px;
-    background-color: rgba(8, 1, 1, 0.75);
-    box-shadow: 0px 0px 10px 5px rgb(0, 0, 0);
-  }
-  
-  .leaderboard-input-date {
-    padding: 8px;
-    color: black;
-    background-color: white;
-    border: 1px solid #ccc;
-    border-radius: 3px;
-    font-family: monospace;
-    padding-inline-start: 1px;
-    cursor: default;
-    align-items: center;
-    display: inline-flex;
-    overflow: hidden;
-  }
-  
-  .leaderboard-btn {
-    background-color: #4CAF50;
-    /* background-color: rgb(69, 160, 73); */
-    color: white;
-    padding: 8px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-left: 20px;
-  }
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  padding: 10px;
+  border-radius: 12px;
+  color: #fff;
+  background-color: rgba(8, 1, 1, 0.75);
+  box-shadow: 0px 0px 10px 5px rgb(0, 0, 0);
+}
 
-  .white-line-bar {
-    /* position: absolute; */
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 2px;
-    border: 5px;
-    color: #c9c5c5;
-    background-color: #ffffff;
-    display: block;
-  }
+.leaderboard-headers {
+  color: #fff;
+}
+
+.leaderboard-title {
+  text-align: center;
+  color: #fff;
+}
+
+.leaderboard-content {
+  color: #c9c5c5;
+}
+
+.leaderboard-form {
+  max-width: 35%;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  color: #c5c5c5;
+  margin-bottom: 40px;
+  margin-top: 20px;
+  background-color: rgba(8, 1, 1, 0.75);
+  box-shadow: 0px 0px 10px 5px rgb(0, 0, 0);
+}
+
+.leaderboard-input-date {
+  padding: 8px;
+  color: black;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  font-family: monospace;
+  padding-inline-start: 1px;
+  cursor: default;
+  align-items: center;
+  display: inline-flex;
+  overflow: hidden;
+}
+
+.leaderboard-btn {
+  background-color: #4caf50;
+  /* background-color: rgb(69, 160, 73); */
+  color: white;
+  padding: 8px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-left: 20px;
+}
+
+.white-line-bar {
+  /* position: absolute; */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  border: 5px;
+  color: #c9c5c5;
+  background-color: #ffffff;
+  display: block;
+}

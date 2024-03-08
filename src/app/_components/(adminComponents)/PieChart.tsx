@@ -3,6 +3,8 @@
 import "chart.js/auto";
 import React from "react"; // Import the necessary library such as React for now.
 import { Pie } from "react-chartjs-2"; // In the react-chartjs-2 library, import the Pie component.
+import { Colors } from "chart.js";
+import { Chart } from "react-chartjs-2";
 type DatasetType = { task: string; points: number }[];
 
 export default function PieChart({ dataset }: { dataset: DatasetType }) {
@@ -12,7 +14,18 @@ export default function PieChart({ dataset }: { dataset: DatasetType }) {
       datasets: [
         {
           data: dataset,
-          backgroundColor: ["red", "green", "blue"],
+          backgroundColor: [
+            "#FF0000",
+            "#FF7F00",
+            "#FFFF00",
+            "#7FFF00",
+            "#00FF00",
+            "#00FF7F",
+            "#00FFFF",
+            "#007FFF",
+            "#0000FF",
+            "#7F00FF",
+          ],
         },
       ],
       labels: ["Red", "Green", "Blue"],
@@ -25,12 +38,24 @@ export default function PieChart({ dataset }: { dataset: DatasetType }) {
       responsive: true,
     },
   };
+
   const data = {
     labels: dataset.map((item) => item.task),
     datasets: [
       {
         data: dataset.map((item) => item.points),
-        backgroundColor: ["red", "green", "blue"],
+        backgroundColor: [
+          "#FF0000",
+          "#FF7F00",
+          "#FFFF00",
+          "#7FFF00",
+          "#00FF00",
+          "#00FF7F",
+          "#00FFFF",
+          "#007FFF",
+          "#0000FF",
+          "#7F00FF",
+        ],
       },
     ],
   };
@@ -57,8 +82,10 @@ export default function PieChart({ dataset }: { dataset: DatasetType }) {
    */
 
   return (
-    <div>
-      <Pie data={data} />
+    <div className="w-full">
+      <div className="m-auto w-1/3 bg-slate-900">
+        <Pie data={data} />
+      </div>
     </div>
   );
 }
