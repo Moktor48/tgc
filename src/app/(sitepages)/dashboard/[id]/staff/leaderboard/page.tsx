@@ -1,6 +1,7 @@
 import React from "react";
 import { getServerAuthSession } from "~/server/auth";
 import { api } from "~/trpc/server";
+
 import Chart from "chart.js/auto";
 import { Pie } from "react-chartjs-2";
 import PieChart from "~/app/_components/(adminComponents)/PieChart";
@@ -9,6 +10,7 @@ type PointObject = {
   user_name: string;
   points: number;
 };
+
 export default async function page({
   params,
   searchParams,
