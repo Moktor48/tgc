@@ -1,14 +1,10 @@
 import React from "react";
 import { getServerAuthSession } from "~/server/auth";
 import { api } from "~/trpc/server";
-import Chart from "chart.js/auto";
-import { Pie } from "react-chartjs-2";
 import PieChart from "~/app/_components/(adminComponents)/PieChart";
+import DataWrapper from "~/app/_components/(adminComponents)/DataWrapper";
 type DatasetType = { task: string; points: number }[];
-type PointObject = {
-  user_name: string;
-  points: number;
-};
+
 export default async function page({
   params,
   searchParams,
@@ -25,7 +21,6 @@ export default async function page({
 
   // This query pulls all data from staff_duty given two dates
   const points = await api.get.dutyQuery.query({ startDate, endDate });
-  console.log(points);
 
   const userPoints = points.map((data) => {
     return {
@@ -56,7 +51,7 @@ export default async function page({
   const taskPointsWithOther = Object.entries(taskPoints).reduce<
     Record<string, number>
   >((acc, [task, points]) => {
-    if (points < 2600) {
+    if (points < 100) {
       if (acc.other) {
         acc.other += points;
       } else {
@@ -67,14 +62,13 @@ export default async function page({
     }
     return acc;
   }, {});
-  console.log(taskPointsWithOther);
+
   const dataset: DatasetType = Object.entries(taskPointsWithOther).map(
     ([task, points]) => ({
       task,
       points,
     }),
   );
-  console.log(dataset);
 
   // Parses data to compare user activity
   const objPoints = userPoints.reduce((acc: Record<string, number>, point) => {
@@ -100,31 +94,17 @@ export default async function page({
   const sortedObjPointsArray = objPointsArray.sort(
     (a, b) => b.points - a.points,
   );
-  console.log(sortedObjPointsArray);
 
   return (
     <div>
-      <h1>Points-Processing</h1>
-      <p>
+      <PieChart dataset={dataset} />
+      <h1 className="newscolor text-center">Points-Processing</h1>
+      <p className="newscolor text-center">
         This query is searching between {startDate} and {endDate}
       </p>
       <div>
-        <table>
-          <tr>
-            <th>Name</th>
-            <th>Points</th>
-          </tr>
-          {sortedObjPointsArray.map((data) => {
-            return (
-              <tr>
-                <td>{data.user_name}</td>
-                <td>{data.points}</td>
-              </tr>
-            );
-          })}
-        </table>
+        <DataWrapper data={sortedObjPointsArray} />
       </div>
-      <PieChart dataset={dataset} />
     </div>
   );
 }

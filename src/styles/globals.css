@@ -141,6 +141,10 @@ header {
   min-height: 15vh;
 }
 
+.newscolor {
+  background-color: rgba(44, 4, 4, 0.75);
+}
+
 #newsletter form {
   display: flex;
   flex-direction: column;
@@ -507,4 +511,14 @@ a {
   text-align: center;
   background-repeat: no-repeat;
   display: block;
+}
+
+/* Pagination Classes */
+.active {
+  color: green;
+  font-weight: bold;
+}
+
+.pointer:hover {
+  cursor: pointer;
 }
