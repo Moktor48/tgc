@@ -2,6 +2,7 @@
 import Link from "next/link";
 import React from "react";
 import { api } from "~/trpc/server";
+import { getServerAuthSession } from "~/server/auth";
 
 export default async function page({
   params,
@@ -14,6 +15,7 @@ export default async function page({
     audience: string;
   };
 }) {
+  const session = await getServerAuthSession();
   const id = params.id;
   const game = params.game;
   const type = params.type;
@@ -24,9 +26,19 @@ export default async function page({
         ? false
         : null;
   const audience = params.audience;
-  if (game != "eso" && game != "swtor" && game != "ffxiv") {
+  if (!permission) {
+    if (!session) return <h1>You need to log in</h1>;
+  }
+
+  if (
+    game != "eso" &&
+    game != "swtor" &&
+    game != "ffxiv" &&
+    game != "general"
+  ) {
     return <h1>Invalid game</h1>;
   }
+
   if (
     type != "notification" &&
     type != "article" &&
