@@ -12,7 +12,7 @@ export default async function FfxivPosts() {
   const ffxivPerms = await api.get.ffxivPermission.query({ userId: id });
   if (!ffxivPerms)
     return (
-      <div className="text-3xl text-yellow-500">
+      <div className="text-3xl text-red-500">
         LOCKED: No access to FFXIV-specific posts!
       </div>
     );
@@ -23,6 +23,12 @@ export default async function FfxivPosts() {
   )
     return null;
   const unpubPost = await api.get.unpublishedPostsFfxiv.query();
+  if (unpubPost == null || unpubPost.length == 0)
+    return (
+      <div className="text-3xl text-green-500">
+        No unpublished posts for FFXIV
+      </div>
+    );
   return (
     <div className="text-center">
       <h1 className="text-white">Unpublished Posts for FFXIV</h1>

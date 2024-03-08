@@ -1,3 +1,4 @@
+import Link from "next/link";
 import React from "react";
 import UserPull from "~/app/_components/(adminComponents)/UserPull";
 import UserSearch from "~/app/_components/(adminComponents)/UserSearch";
@@ -22,8 +23,17 @@ export default async function page({ params }: { params: { id: string } }) {
             {session.user.role}, and have access as{" "}
             {perm.admin && "Administrator"}
           </p>
+          <br />
           <UserPull />
+          <br />
+          <h1 className="text-yellow-500">User Permission Modifications</h1>
           <UserSearch id={id} />
+          <br />
+          <h1 className="text-yellow-500">User Builder</h1>
+          <Link href={`/dashboard/${id}/staff/admin/userBuilder`}>
+            <button className="button-40">BUILD!</button>
+          </Link>
+          <br />
         </div>
       </div>
     </>

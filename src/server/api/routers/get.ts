@@ -563,5 +563,34 @@ export const getRouter = createTRPCRouter({
       });
       return names;
     }),
+
+  dutyQuery: protectedProcedure
+    .input(z.object({ startDate: z.string(), endDate: z.string() }))
+    .query(async ({ input }) => {
+      const points = await db.staff_duty.findMany({
+        where: {
+          timestamp: {
+            lte: new Date(input.endDate).toISOString(),
+            gte: new Date(input.startDate).toISOString(),
+          },
+        },
+        select: {
+          gmember_id: true,
+          timestamp: true,
+          staff_point_chart: {
+            select: {
+              point_value: true,
+              task_description: true,
+            },
+          },
+          discord_user: {
+            select: {
+              disc_nickname: true,
+            },
+          },
+        },
+      });
+      return points;
+    }),
 }); // This is the end, lawlz.
 //
