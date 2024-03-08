@@ -9,6 +9,12 @@ export default async function GenPosts() {
   if (session.user.role != "staff")
     return <div>You are not authorized to be here.</div>;
   const unpubPost = await api.get.unpublishedPosts.query();
+  if (unpubPost == null || unpubPost.length == 0)
+    return (
+      <div className="text-3xl text-green-500">
+        No unpublished posts for the general guild
+      </div>
+    );
   return (
     <div className="text-center">
       <h1 className="text-white">Unpublished Posts for the General Guild</h1>

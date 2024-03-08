@@ -12,13 +12,19 @@ export default async function EsoPosts() {
   const esoPerms = await api.get.esoPermission.query({ userId: id });
   if (!esoPerms)
     return (
-      <div className="text-3xl text-yellow-500">
+      <div className="text-3xl text-red-500">
         LOCKED: No access to ESO-specific posts!
       </div>
     );
   if (!esoPerms.raidlead && !esoPerms.mentor && esoPerms.rank != "officer")
     return null;
   const unpubPost = await api.get.unpublishedPostsEso.query();
+  if (unpubPost == null || unpubPost.length == 0)
+    return (
+      <div className="text-3xl text-green-500">
+        No unpublished posts for ESO
+      </div>
+    );
   return (
     <div className="text-center">
       <h1 className="text-white">Unpublished Posts for ESO</h1>

@@ -8,9 +8,15 @@ export default async function UserPull() {
   const session = await getServerAuthSession();
   if (!session) return <div>You must be logged in to view this page.</div>;
   const id = session.user.id;
+  if (guest == null || guest.length == 0)
+    return (
+      <h1 className="text-4xl text-green-500">
+        No guests found in the database for approvals
+      </h1>
+    );
   return (
     <div className="flex flex-col justify-items-center">
-      <h1>Guests found in the database for approvals</h1>
+      <h1 className="text-4xl">Guests found in the database for approvals</h1>
       {guest.map(
         (user: {
           id: string;

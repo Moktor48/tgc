@@ -12,13 +12,19 @@ export default async function SwtorPosts() {
   const swtorPerms = await api.get.swtorPermission.query({ userId: id });
   if (!swtorPerms)
     return (
-      <div className="text-3xl text-yellow-500">
+      <div className="text-3xl text-red-500">
         LOCKED: No access to SWTOR-specific posts!
       </div>
     );
   if (swtorPerms.raidlead && swtorPerms.mentor && swtorPerms.rank != "officer")
     return null;
   const unpubPost = await api.get.unpublishedPostsSwtor.query();
+  if (unpubPost == null || unpubPost.length == 0)
+    return (
+      <div className="text-3xl text-green-500">
+        No unpublished posts for SWTOR!
+      </div>
+    );
   return (
     <div className="text-center">
       <h1 className="text-white">Unpublished Posts for SWTOR</h1>
