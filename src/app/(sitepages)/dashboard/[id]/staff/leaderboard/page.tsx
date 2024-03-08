@@ -1,9 +1,11 @@
 import React from "react";
 import { getServerAuthSession } from "~/server/auth";
 import { api } from "~/trpc/server";
+
 import PieChart from "~/app/_components/(adminComponents)/PieChart";
 import DataWrapper from "~/app/_components/(adminComponents)/DataWrapper";
 type DatasetType = { task: string; points: number }[];
+
 
 export default async function page({
   params,
