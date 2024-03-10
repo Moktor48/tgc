@@ -18,18 +18,55 @@ type FormData = {
   advanced: boolean;
   type: string;
 };
-export default function TinyMCE({ id }: { id: string }) {
-  const initialValue = "<p>Initial Content</p>";
+interface Permissions {
+  eso: boolean;
+  ffxiv: boolean;
+  swtor: boolean;
+  general: boolean;
+  staff: boolean;
+  raid: boolean;
+  officer: boolean;
+  guild_public: boolean;
+  member: boolean;
+  beginner: boolean;
+  intermediate: boolean;
+  advanced: boolean;
+  type: string;
+}
+
+interface DisplayData {
+  title: string;
+  summary: string;
+  content: string;
+  permissions: Permissions;
+  createdBy: {
+    id: string;
+  };
+}
+
+export default function TinyMCEApprove({
+  id,
+  postId,
+}: {
+  id: string;
+  postId: string;
+}) {
+  const display: { data?: DisplayData } = api.get.getPost.useQuery({
+    postId: postId,
+  });
+  const initialValue = display.data?.content ?? "NOTHING LOADED!!!";
   const editorRef = useRef<TinyMCEEditor | null>(null);
   const [dirty, setDirty] = useState(false);
   useEffect(() => setDirty(false), [initialValue]);
 
   //Functions should be made to replace the php
   const [postContent, setPostContent] = useState({
-    title: "==> SET TITLE <==",
-    summary: "==> SET SUMMARY <==",
-    content: "",
-    createdById: id,
+    title: display.data?.title ?? "",
+    summary: display.data?.summary ?? "",
+    content: display.data?.content ?? "",
+    modById: id,
+    postId: postId,
+    postById: display.data?.createdBy.id,
   });
 
   function handleChangeText(e: React.ChangeEvent<HTMLInputElement>) {
@@ -54,30 +91,38 @@ export default function TinyMCE({ id }: { id: string }) {
   });
 
   const [perm, setPerm] = useState({
-    priv: "general",
-    game: "member",
-    aud: "",
+    priv: display.data?.permissions.guild_public
+      ? "guild_public"
+      : display.data?.permissions.officer
+        ? "officer"
+        : display.data?.permissions.staff
+          ? "staff"
+          : "general",
+    game: display.data?.permissions.eso
+      ? "eso"
+      : display.data?.permissions.ffxiv
+        ? "ffxiv"
+        : display.data?.permissions.swtor
+          ? "swtor"
+          : "member",
+    aud: display.data?.permissions.beginner
+      ? "beginner"
+      : display.data?.permissions.intermediate
+        ? "intermediate"
+        : display.data?.permissions.advanced
+          ? "advanced"
+          : "",
   });
 
-  const postPermissions = api.post.postPermissions.useMutation();
+  const updatePost = api.put.updatePost.useMutation();
 
-  const post = api.post.post.useMutation({
-    onSuccess: (data) => {
-      const postId = data.id;
-      const PD = { ...permissionData, postId };
-      postPermissions.mutate(PD);
-      alert("Post Submitted!");
-      location.reload();
-    },
-  });
-
-  const save = () => {
+  const update = () => {
     if (editorRef.current) {
       const content = editorRef.current.getContent();
       postContent.content = content;
       setDirty(false);
       editorRef.current.setDirty(false);
-      post.mutate(postContent);
+      updatePost.mutate(postContent);
       const priv = perm.priv;
       const game = perm.game;
       const aud = perm.aud;
@@ -314,7 +359,7 @@ export default function TinyMCE({ id }: { id: string }) {
         />
         <button
           className={`button-40 ${!dirty ? "text-red-500" : "text-green-500"}`}
-          onClick={save}
+          onClick={update}
           disabled={!dirty}
         >
           Submit!

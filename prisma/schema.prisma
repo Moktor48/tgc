@@ -44,7 +44,6 @@ model Session {
 }
 
 model User {
-
   id               String              @id @default(cuid())
   name             String              @unique
   email            String              @unique
@@ -60,7 +59,6 @@ model User {
   swtor            swtor[]
   staff            staff[]
   post_mod         post_modification[]
-
 }
 
 model VerificationToken {
@@ -112,7 +110,7 @@ model post_modification {
   summary   String  @default("None") @db.Text
   content   String  @db.Text
   image     String? @default("None") @db.Text
-  postId    String
+  postId    String  @unique //FK from post
   published String
   modById   String
   modBy     User    @relation(fields: [modById], references: [id])
@@ -429,6 +427,3 @@ model voice_sessions {
   end_time         DateTime? @db.Timestamptz(6)
   duration         Float?
 }
-
-
-

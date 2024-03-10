@@ -8,8 +8,10 @@ export const putRouter = createTRPCRouter({
       z.object({
         postId: z.string(),
         title: z.string().optional(),
-        post: z.string().optional(),
+        content: z.string().optional(),
+        summary: z.string().optional(),
         published: z.boolean().optional(),
+        modById: z.string().optional(),
       }),
     )
     .mutation(async ({ input }) => {
@@ -17,7 +19,8 @@ export const putRouter = createTRPCRouter({
         where: { id: input.postId },
         data: {
           title: input.title,
-          content: input.post,
+          summary: input.summary,
+          content: input.content,
         },
       });
       const perm = await db.post_permission.update({
@@ -26,7 +29,13 @@ export const putRouter = createTRPCRouter({
           published: input.published,
         },
       });
-      return post && perm;
+      const mod = await db.post_modification.update({
+        where: { postId: input.postId },
+        data: {
+          modById: input.modById,
+        },
+      });
+      return post && perm && mod;
     }),
 
   updateUser: protectedProcedure
