@@ -72,12 +72,14 @@ model VerificationToken {
 // Post tables
 model post {
   id          String              @id @default(cuid())
-  post        String              @db.Text
-  createdAt   DateTime            @default(now())
-  updatedAt   DateTime            @updatedAt
   title       String
-  createdBy   User                @relation(fields: [createdById], references: [id])
+  summary     String              @default("None") @db.Text
+  content     String              @db.Text
+  image       String?             @db.VarChar(255)
+  timestamp   DateTime            @default(now()) @db.Timestamptz(6)
+  updatedAt   DateTime            @updatedAt @db.Timestamptz(6)
   createdById String
+  createdBy   User                @relation(fields: [createdById], references: [id])
   permissions post_permission[]
   mod         post_modification[]
 }
@@ -85,17 +87,34 @@ model post {
 model post_permission {
   id           String  @id @default(cuid())
   postId       String  @unique //FK from post
+  guild_public Boolean @default(false)
   general      Boolean @default(false) //Game focus
+  member       Boolean @default(false)
   eso          Boolean @default(false)
   ffxiv        Boolean @default(false)
   swtor        Boolean @default(false)
   staff        Boolean @default(false) //Staff focus
   officer      Boolean @default(false)
   raid         Boolean @default(false) //Staff focused, but applicable to game
+  beginner     Boolean @default(false)
+  intermediate Boolean @default(false)
+  advanced     Boolean @default(false)
   published    Boolean @default(false)
-  guild_public Boolean @default(false)
-  type         String //article, build, guide, raid, report, 
+  type         String //article, build, guide, raid, report, policy
   post         post    @relation(fields: [postId], references: [id], onDelete: Cascade)
+}
+
+model post_modification {
+  id        String  @id @default(cuid())
+  title     String
+  summary   String  @default("None") @db.Text
+  content   String  @db.Text
+  image     String? @default("None") @db.Text
+  postId    String
+  published String
+  modById   String
+  modBy     User    @relation(fields: [modById], references: [id])
+  postRef   post    @relation(fields: [postId], references: [id], onDelete: Cascade)
 }
 
 // Guild role tables
@@ -141,17 +160,6 @@ model staff {
   user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
-model post_modification {
-  id        String @id @default(cuid())
-  postRef   post   @relation(fields: [postId], references: [id], onDelete: Cascade)
-  postId    String
-  post      String @db.Text
-  title     String
-  published String
-  modBy     User   @relation(fields: [modById], references: [id])
-  modById   String
-}
-
 // TGC models
 // PRIMARY use, staff duty, leaderboard, etc
 // PRIMARY use, staff duty, leaderboard, etc
@@ -193,7 +201,7 @@ model staff_duty {
   duty_type         Int
   timestamp         DateTime          @db.Timestamptz(6)
   target            Int?
-  eso_target_user   String?           @db.VarChar(255)
+  eso_target_user   String?           @db.VarChar
   description       String?
   staff_point_chart staff_point_chart @relation(fields: [duty_type], references: [task_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_duty_to_task")
   discord_user      discord_user      @relation(fields: [gmember_id], references: [gmember_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_duty_to_user")
@@ -228,60 +236,16 @@ model characters {
 }
 
 // BUILD(build_id, title, content, cover_image_path, gmember_id, game_type, summary, created_at)
-model article {
-  article_id       BigInt   @id(map: "idx_16392_primary") @default(autoincrement())
-  title            String?  @db.VarChar(255)
-  undertitle       String   @db.VarChar(255)
-  content          String?
-  cover_image_path String?  @db.VarChar(255)
-  gmember_id       BigInt?
-  game_type        String?  @db.VarChar(50)
-  summary          String?
-  created_at       DateTime @default(now()) @db.Timestamptz(6)
-}
-
-model articles {
-  id               Int      @id(map: "idx_16400_primary") @default(autoincrement())
-  content_id       Int?
-  title            String   @db.VarChar(255)
-  content          String?
-  timestamp        DateTime @default(now()) @db.Timestamptz(6)
-  cover_image_path String?  @db.VarChar(255)
-  game_type        String?  @db.VarChar(255)
-  summary          String?
-}
 
 model audiences {
   audience_id   Int    @id(map: "idx_16408_primary") @default(autoincrement())
   audience_name String @db.VarChar(255)
 }
 
-model build {
-  build_id         Int      @id(map: "idx_16447_primary") @default(autoincrement())
-  title            String?  @db.VarChar(255)
-  content          String?
-  cover_image_path String?  @db.VarChar(255)
-  gmember_id       BigInt?
-  game_type        String?  @db.VarChar(50)
-  summary          String?
-  created_at       DateTime @default(now()) @db.Timestamptz(6)
-}
-
 model build_audience_mapping {
   id          Int  @id(map: "idx_16455_primary") @default(autoincrement())
   build_id    Int?
   audience_id Int?
-}
-
-model builds {
-  id               Int      @id(map: "idx_16460_primary") @default(autoincrement())
-  content_id       Int?
-  title            String   @db.VarChar(255)
-  content          String?
-  timestamp        DateTime @default(now()) @db.Timestamptz(6)
-  cover_image_path String?  @db.VarChar(255)
-  game_type        String?  @db.VarChar(255)
-  summary          String?
 }
 
 model content_access {
@@ -303,6 +267,8 @@ model contents {
 }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+
+// This can be combined with discord_user
 model discord_aliases {
   gmember_id      Int
   alias_uid       Int     @id(map: "idx_16491_primary") @default(autoincrement())
@@ -403,17 +369,6 @@ model guide_audience_mapping {
   id          Int  @id(map: "idx_16562_primary") @default(autoincrement())
   guide_id    Int?
   audience_id Int?
-}
-
-model guides {
-  id               Int      @id(map: "idx_16567_primary") @default(autoincrement())
-  content_id       Int?
-  title            String   @db.VarChar(255)
-  content          String?
-  timestamp        DateTime @default(now()) @db.Timestamptz(6)
-  cover_image_path String?  @db.VarChar(255)
-  game_type        String?  @db.VarChar(255)
-  summary          String?
 }
 
 model guild_names {

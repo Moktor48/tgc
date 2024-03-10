@@ -72,7 +72,8 @@ export const getRouter = createTRPCRouter({
         select: {
           id: true,
           title: true,
-          post: true,
+          content: true,
+          summary: true,
           createdBy: {
             select: {
               id: true,

@@ -17,7 +17,7 @@ export const putRouter = createTRPCRouter({
         where: { id: input.postId },
         data: {
           title: input.title,
-          post: input.post,
+          content: input.post,
         },
       });
       const perm = await db.post_permission.update({
