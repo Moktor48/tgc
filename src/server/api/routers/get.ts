@@ -126,7 +126,9 @@ export const getRouter = createTRPCRouter({
         permissions: {
           some: {
             published: false,
-            general: true,
+            eso: false,
+            ffxiv: false,
+            swtor: false,
           },
         },
       },
