@@ -1,6 +1,6 @@
 //This is the lead page for editor submissions.
 import React from "react";
-import PostForm from "~/app/_components/(postSubmission)/PostForm";
+import TinyMCE from "~/app/_components/(tinymce)/TinyMCE";
 import { getServerAuthSession } from "~/server/auth";
 
 export default async function page({ params }: { params: { id: string } }) {
@@ -11,7 +11,7 @@ export default async function page({ params }: { params: { id: string } }) {
     <>
       <div className="flex w-full justify-center">
         <div className="newsletter flex w-1/2">
-          <PostForm userId={id} />
+          <TinyMCE id={id} />
         </div>
       </div>
     </>

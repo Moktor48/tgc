@@ -8,7 +8,8 @@ export const postRouter = createTRPCRouter({
     .input(
       z.object({
         createdById: z.string(),
-        post: z.string(),
+        content: z.string(),
+        summary: z.string(),
         title: z.string(),
       }),
     )
@@ -16,7 +17,8 @@ export const postRouter = createTRPCRouter({
       const post = await db.post.create({
         data: {
           createdById: input.createdById,
-          post: input.post,
+          content: input.content,
+          summary: input.summary,
           title: input.title,
         },
       });
@@ -37,6 +39,9 @@ export const postRouter = createTRPCRouter({
         officer: z.boolean(),
         type: z.string(),
         guild_public: z.boolean(),
+        beginner: z.boolean(),
+        intermediate: z.boolean(),
+        advanced: z.boolean(),
       }),
     )
     .mutation(async ({ input }) => {
@@ -52,6 +57,9 @@ export const postRouter = createTRPCRouter({
           officer: input.officer,
           type: input.type,
           guild_public: input.guild_public,
+          beginner: input.beginner,
+          intermediate: input.intermediate,
+          advanced: input.advanced,
         },
       });
       return post;
@@ -188,7 +196,7 @@ export const postRouter = createTRPCRouter({
         data: {
           postId: input.postId,
           title: input.title,
-          post: input.post,
+          content: input.post,
           published: input.published,
           modById: input.modById,
         },
