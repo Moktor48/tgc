@@ -34,7 +34,14 @@ export default function StaffDutyForm() {
     //Value: "",
     //Tax: "",
   };
-  const formSubmit = api.post.staffDuty.useMutation();
+  const formSubmit = api.post.staffDuty.useMutation({
+    onSuccess: () => {
+      alert("Data has been uploaded");
+    },
+    onError: () => {
+      alert("There was an error uploading the data");
+    },
+  });
 
   // FIX THIS: It is filling in the same data for all entries
   const handleFileUpload = () => {
@@ -46,12 +53,12 @@ export default function StaffDutyForm() {
       const reader = new FileReader();
       reader.onload = function (event) {
         const fileContent = event.target?.result;
-        const newEntry = { ...entry };
 
         if (typeof fileContent === "string") {
           const lines = fileContent.split("\n");
 
           lines.forEach((line) => {
+            const newEntry = { ...entry };
             const values = line.split("\t");
             const time = new Date(values[0]!).toISOString();
             const name = dumpData?.find(
@@ -61,6 +68,7 @@ export default function StaffDutyForm() {
             if (name) {
               newEntry.gmember_id = name.gmember_id;
             }
+            if (!name) return;
             if (values[2] === "Inv") {
               guildInfo === "0"
                 ? (newEntry.duty_type = 100)
@@ -99,8 +107,7 @@ export default function StaffDutyForm() {
             //newEntry.Tax = values[7] ?? "";
             parsedData.push(newEntry);
           });
-          //formSubmit.mutate(parsedData);
-          console.log(parsedData);
+          formSubmit.mutate(parsedData);
         }
       };
 
