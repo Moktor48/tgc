@@ -558,7 +558,7 @@ export const getRouter = createTRPCRouter({
     }),
 
   nameQuery: protectedProcedure
-    .input(z.object({ keys: z.array(z.bigint()) }))
+    .input(z.object({ keys: z.array(z.string()) }))
     .query(async ({ input }) => {
       const names = await db.discord_user.findMany({
         where: {
@@ -573,6 +573,17 @@ export const getRouter = createTRPCRouter({
       });
       return names;
     }),
+
+  discordUserQuery: protectedProcedure.query(async () => {
+    const users = await db.discord_user.findMany({
+      select: {
+        gmember_id: true,
+        disc_nickname: true,
+        ingame_name: true,
+      },
+    });
+    return users;
+  }),
 
   dutyQuery: protectedProcedure
     .input(z.object({ startDate: z.string(), endDate: z.string() }))

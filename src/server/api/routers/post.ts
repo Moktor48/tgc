@@ -203,6 +203,24 @@ export const postRouter = createTRPCRouter({
       });
       return post;
     }),
+
+  staffDuty: protectedProcedure
+    .input(
+      z.array(
+        z.object({
+          gmember_id: z.string(),
+          duty_type: z.number(),
+          timestamp: z.date(),
+          eso_target_user: z.string(),
+        }),
+      ),
+    )
+    .mutation(async ({ input }) => {
+      const staff = await db.staff_duty.createMany({
+        data: input,
+      });
+      return staff;
+    }),
 }); // This is the end, lawlz.
 /*
   uploadImage: protectedProcedure

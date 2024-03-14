@@ -18,7 +18,7 @@ export default async function page({
   // This query pulls all data from staff_duty given two dates
   const points = await api.get.pointQuery.query({ startDate, endDate });
   console.log(points);
-  type PointObject = { GID: bigint; total: number };
+  type PointObject = { GID: string; total: number };
 
   // This piece of code will iterate through the points array and create a new array of objects with the GID and the total points by adding all points together for each GID
   const objPoints = points.reduce((acc: PointObject[], point) => {
@@ -50,7 +50,7 @@ export default async function page({
   }, []);
   console.log("OBJPOINTS:", objPoints);
 
-  const keys = [] as bigint[];
+  const keys = [] as string[];
   objPoints.map((obj) => {
     keys.push(obj.GID);
   });
