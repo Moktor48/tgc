@@ -92,6 +92,9 @@ export default async function NavBar({
             <Link href={`/dashboard/${id}/staff/admin`}>Admin</Link>
             <Link href={`/editor/${id}/approve`}>Post Approvals</Link>
             <Link href={`/editor/${id}`}>Create Post</Link>
+            <Link href={`/dashboard/${id}/staff/stafftracker`}>
+              Staff Tracker
+            </Link>
           </div>
         </div>
       )}
