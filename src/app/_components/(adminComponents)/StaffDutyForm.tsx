@@ -23,6 +23,7 @@ export default function StaffDutyForm() {
   };
   const userDump = api.get.discordUserQuery.useQuery();
   const dumpData = userDump.data;
+  console.log(dumpData);
   const parsedData: EntryType[] = [];
   const entry = {
     timestamp: new Date(),
@@ -106,7 +107,9 @@ export default function StaffDutyForm() {
             //newEntry.Value = values[6] ?? "";
             //newEntry.Tax = values[7] ?? "";
             parsedData.push(newEntry);
+            console.log(parsedData);
           });
+          console.log(parsedData);
           formSubmit.mutate(parsedData);
         }
       };

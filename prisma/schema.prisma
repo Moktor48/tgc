@@ -1,22 +1,13 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider      = "prisma-client-js"
   binaryTargets = ["native", "debian-openssl-3.0.x"]
 }
 
 datasource db {
-  provider  = "postgresql"
-  url       = env("POSTGRES_PRISMA_URL") // uses connection pooling
-  directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
-  // NOTE: When using mysql or sqlserver, uncomment the @db.Text annotations in model Account below
-  // Further reading:
-  // https://next-auth.js.org/adapters/prisma#create-the-prisma-schema
-  // https://www.prisma.io/docs/reference/api-reference/prisma-schema-reference#string
+  provider = "mysql"
+  url      = env("DATABASE_URL")
 }
 
-// Necessary for auth.js, don't change anything here!!!
 model Account {
   id                String  @id @default(cuid())
   userId            String  @unique
@@ -49,16 +40,16 @@ model User {
   email            String              @unique
   emailVerified    DateTime?
   image            String
-  role             String              @default("guest") //guest, member, staff
+  role             String              @default("guest")
   tgc_guild_member Boolean             @default(false)
-  accounts         Account[]
-  sessions         Session[]
+  accounts         Account?
+  sessions         Session?
+  eso              eso?
+  ffxiv            ffxiv?
   posts            post[]
-  eso              eso[]
-  ffxiv            ffxiv[]
-  swtor            swtor[]
-  staff            staff[]
   post_mod         post_modification[]
+  staff            staff?
+  swtor            swtor?
 }
 
 model VerificationToken {
@@ -69,62 +60,64 @@ model VerificationToken {
   @@unique([identifier, token])
 }
 
-// Post tables
 model post {
-  id          String              @id @default(cuid())
+  id          String             @id @default(cuid())
   title       String
-  summary     String              @default("None") @db.Text
-  content     String              @db.Text
-  image       String?             @db.VarChar(255)
-  timestamp   DateTime            @default(now()) @db.Timestamptz(6)
-  updatedAt   DateTime            @updatedAt @db.Timestamptz(6)
+  summary     String             @db.Text
+  content     String             @db.Text
+  image       String?            @db.VarChar(255)
+  timestamp   DateTime           @default(now())
+  updatedAt   DateTime           @updatedAt
   createdById String
-  createdBy   User                @relation(fields: [createdById], references: [id])
-  permissions post_permission[]
-  mod         post_modification[]
+  createdBy   User               @relation(fields: [createdById], references: [id])
+  mod         post_modification?
+  permissions post_permission?
+
+  @@index([createdById], map: "post_createdById_fkey")
 }
 
 model post_permission {
   id           String  @id @default(cuid())
-  postId       String  @unique //FK from post
+  postId       String  @unique
   guild_public Boolean @default(false)
-  general      Boolean @default(false) //Game focus
+  general      Boolean @default(false)
   member       Boolean @default(false)
   eso          Boolean @default(false)
   ffxiv        Boolean @default(false)
   swtor        Boolean @default(false)
-  staff        Boolean @default(false) //Staff focus
+  staff        Boolean @default(false)
   officer      Boolean @default(false)
-  raid         Boolean @default(false) //Staff focused, but applicable to game
+  raid         Boolean @default(false)
   beginner     Boolean @default(false)
   intermediate Boolean @default(false)
   advanced     Boolean @default(false)
   published    Boolean @default(false)
-  type         String //article, build, guide, raid, report, policy
+  type         String
   post         post    @relation(fields: [postId], references: [id], onDelete: Cascade)
 }
 
 model post_modification {
   id        String  @id @default(cuid())
   title     String
-  summary   String  @default("None") @db.Text
+  summary   String  @db.Text
   content   String  @db.Text
-  image     String? @default("None") @db.Text
-  postId    String  @unique //FK from post
+  image     String? @db.Text
+  postId    String  @unique
   published String
   modById   String
   modBy     User    @relation(fields: [modById], references: [id])
   postRef   post    @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@index([modById], map: "post_modification_modById_fkey")
 }
 
-// Guild role tables
 model eso {
   id       String   @id @default(cuid())
-  userId   String   @unique //FK from user
-  rank     String   @default("none") //member, respected, officer, deputy
-  raid     Boolean? @default(false) //Members that are part of a raid team
-  raidlead Boolean? @default(false) //Staff/Non-Staff position?, focused on raids
-  mentor   Boolean? @default(false) //Staff position, mentor
+  userId   String   @unique
+  rank     String   @default("none")
+  raid     Boolean? @default(false)
+  raidlead Boolean? @default(false)
+  mentor   Boolean? @default(false)
   user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
@@ -148,29 +141,19 @@ model swtor {
   user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
-// Staff role table
 model staff {
   id             String   @id @default(cuid())
   userId         String   @unique
-  admin          Boolean? @default(false) //Developers SPECIFICALLY with website access
-  specialist     Boolean? @default(false) //Kind of a catch-all for staff
+  admin          Boolean? @default(false)
+  specialist     Boolean? @default(false)
   representative Boolean? @default(false)
-  highcouncil    Boolean? @default(false) //Promote/demote ONLY by GM
-  guildmaster    Boolean? @default(false) //All permissions, should not be modifyable by ANYONE else
+  highcouncil    Boolean? @default(false)
+  guildmaster    Boolean? @default(false)
   user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
-// TGC models
-// PRIMARY use, staff duty, leaderboard, etc
-// PRIMARY use, staff duty, leaderboard, etc
-// PRIMARY use, staff duty, leaderboard, etc
-// PRIMARY use, staff duty, leaderboard, etc
-// PRIMARY use, staff duty, leaderboard, etc
-
-/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
-// Anchor model for users, data generated by Discord, good starting point
 model discord_user {
-  gmember_id        String       @id(map: "idx_16507_primary") //Generated by Discord
+  gmember_id        String       @id
   disc_nickname     String       @db.VarChar(255)
   ingame_name       String       @db.VarChar(255)
   highest_rank_role Int
@@ -178,149 +161,228 @@ model discord_user {
 }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
-// Duty point LIST
-model staff_point_chart {
-  task_id          Int          @id(map: "idx_16614_primary")
-  task_name        String       @db.VarChar(255) // Can be made PK/Unique
-  point_value      Int
-  task_description String?
-  staff_duty       staff_duty[]
+model eso_user {
+  gmember_id  String
+  eso_id      String @id @db.VarChar(255)
+  tier_tank   Int?
+  tier_healer Int?
+  tier_dps    Int?
+  parse       Int    @default(1)
 }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
-// Log of all duties
+model rank_role_mapping {
+  rank_role_id Int     @id
+  rank_role    String? @db.VarChar(60)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 model staff_duty {
-  duty_uid          Int               @id(map: "idx_16603_primary") @default(autoincrement())
-  gmember_id        String
-  duty_type         Int // Would be better as a descriptive string
-  timestamp         DateTime          @db.Timestamptz(6)
+  duty_uid          Int               @id @default(autoincrement())
+  gmember_id        String            @db.VarChar(45)
+  duty_type         Int
+  timestamp         DateTime          @db.DateTime(0)
   target            Int?
-  eso_target_user   String?           @db.VarChar // Never used
-  description       String? // Never used
+  eso_target_user   String?           @db.VarChar(255)
+  description       String?           @db.Text
   staff_point_chart staff_point_chart @relation(fields: [duty_type], references: [task_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_duty_to_task")
   discord_user      discord_user      @relation(fields: [gmember_id], references: [gmember_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_duty_to_user")
 
-  @@index([duty_type], map: "idx_16603_fk_duty_to_task")
+  @@index([duty_type], map: "fk_duty_to_task")
+  @@index([gmember_id], map: "fk_duty_to_user")
 }
 
-// Guild name-ID LIST
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model staff_point_chart {
+  task_id          Int          @id
+  task_name        String       @db.VarChar(255)
+  point_value      Int
+  task_description String?      @db.Text
+  staff_duty       staff_duty[]
+}
+
+model velothi_waivers {
+  gmember_id    String   @db.VarChar(255)
+  nickname      String?  @db.VarChar(255)
+  waiver        Boolean?
+  las           Decimal? @db.Decimal(10, 0)
+  special_class Int?
+  uid           Int      @id @default(autoincrement())
+  record_date   DateTime @default(now()) @db.DateTime(0)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model voice_sessions {
+  voice_session_id String    @id @db.VarChar(100)
+  gmember_id       String?   @db.VarChar(45)
+  channel_id       String?   @db.VarChar(45)
+  start_time       DateTime? @db.DateTime(0)
+  end_time         DateTime? @db.DateTime(0)
+  duration         Float?    @db.Float
+}
+
 model guild_names {
-  guild_id   Int    @id(map: "idx_16574_primary")
+  guild_id   Int    @id
   guild_name String @db.VarChar(255)
 }
 
-/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
-// EMPTY table
-model staff_admin {
-  task_uid      Int      @id(map: "idx_16598_primary") @default(autoincrement())
-  gmember_id    String
-  duty_type     Int
-  timestamp     DateTime @db.Timestamptz(6)
-  action_target Int?
+model parse_records {
+  parse_uid     Int      @id @default(autoincrement())
+  gmember_id    String   @db.VarChar(255)
+  disc_nickname String?  @db.VarChar(255)
+  char_name     String   @db.VarChar(255)
+  class         Int
+  damage        Int
+  timestamp     DateTime @default(now()) @db.DateTime(0)
+  patch_number  Int      @default(41)
 }
 
-/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
-// EMPTY table
-model staff_point_log {
-  uid        Int      @id(map: "idx_16620_primary") @default(autoincrement())
-  gmember_id String
-  cnt_points Int
-  timestamp  DateTime @db.Timestamptz(6)
+model build_audience_mapping {
+  id          Int  @id @default(autoincrement())
+  build_id    Int?
+  audience_id Int?
 }
 
-// Models not currently used in this project
-// Models not currently used in this project
-// Models not currently used in this project
-// Models not currently used in this project
-// Models not currently used in this project
+model guide_audience_mapping {
+  id          Int  @id @default(autoincrement())
+  guide_id    Int?
+  audience_id Int?
+}
+
+model content_types {
+  type_id   Int    @id @default(autoincrement())
+  type_name String @db.VarChar(255)
+}
+
+model contents {
+  content_id Int      @id @default(autoincrement())
+  gmember_id String?
+  timestamp  DateTime @default(now()) @db.Timestamp(0)
+  type_id    Int?
+}
+
+model article {
+  article_id       BigInt   @id @default(autoincrement()) @db.UnsignedBigInt
+  title            String?  @db.VarChar(255)
+  undertitle       String   @db.VarChar(255)
+  content          String?  @db.Text
+  cover_image_path String?  @db.VarChar(255)
+  gmember_id       String?
+  game_type        String?  @db.VarChar(50)
+  summary          String?  @db.Text
+  created_at       DateTime @default(now()) @db.Timestamp(0)
+}
+
+model articles {
+  id               Int      @id @default(autoincrement())
+  content_id       Int?
+  title            String   @db.VarChar(255)
+  content          String?  @db.Text
+  timestamp        DateTime @default(now()) @db.Timestamp(0)
+  cover_image_path String?  @db.VarChar(255)
+  game_type        String?  @db.VarChar(255)
+  summary          String?  @db.Text
+}
+
+model audiences {
+  audience_id   Int    @id @default(autoincrement())
+  audience_name String @db.VarChar(255)
+}
+
+model build {
+  build_id         Int      @id @default(autoincrement())
+  title            String?  @db.VarChar(255)
+  content          String?  @db.Text
+  cover_image_path String?  @db.VarChar(255)
+  gmember_id       String?
+  game_type        String?  @db.VarChar(50)
+  summary          String?  @db.Text
+  created_at       DateTime @default(now()) @db.Timestamp(0)
+}
+
+model builds {
+  id               Int      @id @default(autoincrement())
+  content_id       Int?
+  title            String   @db.VarChar(255)
+  content          String?  @db.Text
+  timestamp        DateTime @default(now()) @db.Timestamp(0)
+  cover_image_path String?  @db.VarChar(255)
+  game_type        String?  @db.VarChar(255)
+  summary          String?  @db.Text
+}
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 model characters {
-  character_uid Int     @id(map: "idx_16468_primary") @default(autoincrement())
+  character_uid Int     @id @default(autoincrement())
   gmember_id    String
   char_name     String  @db.VarChar(255)
   class_name    String? @db.VarChar(255)
   fact_id       Int?
   game_id       Int
-  misc_info     String?
+  misc_info     String? @db.Text
   trial_parse   Int?
 }
 
-// BUILD(build_id, title, content, cover_image_path, gmember_id, game_type, summary, created_at)
-
-model audiences {
-  audience_id   Int    @id(map: "idx_16408_primary") @default(autoincrement())
-  audience_name String @db.VarChar(255)
-}
-
-model build_audience_mapping {
-  id          Int  @id(map: "idx_16455_primary") @default(autoincrement())
-  build_id    Int?
-  audience_id Int?
-}
-
 model content_access {
-  id         Int     @id(map: "idx_16475_primary") @default(autoincrement())
+  id         Int     @id @default(autoincrement())
   content_id Int?
   rank_role  String? @db.VarChar(255)
 }
 
-model content_types {
-  type_id   Int    @id(map: "idx_16480_primary") @default(autoincrement())
-  type_name String @db.VarChar(255)
-}
-
-model contents {
-  content_id Int      @id(map: "idx_16485_primary") @default(autoincrement())
-  gmember_id String?
-  timestamp  DateTime @default(now()) @db.Timestamptz(6)
-  type_id    Int?
-}
-
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
-
-// This can be combined with discord_user
 model discord_aliases {
   gmember_id      String
-  alias_uid       Int     @id(map: "idx_16491_primary") @default(autoincrement())
+  alias_uid       Int     @id @default(autoincrement())
   alias_nickname  String? @db.VarChar(255)
   alias_disc_name String? @db.VarChar(255)
 }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 model discord_join_leave {
-  action_uid Int      @id(map: "idx_16498_primary") @default(autoincrement())
+  action_uid Int      @id @default(autoincrement())
   gmember_id String
   action     Int
-  timestamp  DateTime @db.Timestamptz(6)
+  timestamp  DateTime @db.DateTime(0)
 }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 model discord_message {
-  message_uid Int      @id(map: "idx_16502_primary")
+  message_uid Int      @id
   gmember_id  String
   channel_id  Int
-  content     String
-  timestamp   DateTime @db.Timestamptz(6)
+  content     String   @db.Text
+  timestamp   DateTime @db.DateTime(0)
 }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 model eso_event {
-  event_uid       Int      @id(map: "idx_16513_primary") @default(autoincrement())
+  event_uid       Int      @id @default(autoincrement())
   gmember_id      String
   event_type      String   @db.VarChar(255)
   attendee_cnt    Int
   duration        Int
   revenue         Int
-  start_timestamp DateTime @db.Timestamptz(6)
-  notes           String
+  start_timestamp DateTime @db.DateTime(0)
+  notes           String   @db.Text
 }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 model eso_event_unqiue {
   event_uid    Int
-  attendee_num Int    @id(map: "idx_16520_primary") @default(autoincrement())
+  attendee_num Int    @id @default(autoincrement())
   gmember_id   String
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model eso_messages {
+  eso_id       String   @db.VarChar(255)
+  content      String   @db.Text
+  guild_id     Int
+  timestamp    DateTime @db.DateTime(0)
+  officer_chat Boolean
+
+  @@ignore
 }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
@@ -331,24 +393,14 @@ model eso_raid {
   clears     Int
   wipes      Int
   duration   Int
-  raid_uid   Int    @id(map: "idx_16530_primary") @default(autoincrement())
+  raid_uid   Int    @id @default(autoincrement())
 }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 model eso_raid_unique {
   raid_uid     Int
-  attendee_num Int    @id(map: "idx_16535_primary") @default(autoincrement())
+  attendee_num Int    @id @default(autoincrement())
   gmember_id   String
-}
-
-/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
-model eso_user {
-  gmember_id  String
-  eso_id      String @id(map: "idx_16539_primary") @db.VarChar(255)
-  tier_tank   Int?
-  tier_healer Int?
-  tier_dps    Int?
-  parse       Int    @default(1)
 }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
@@ -357,17 +409,17 @@ model event_signups {
   gmember_id String
   role       Int?
   parse      Int
-  signup_uid Int    @id(map: "idx_16544_primary") @default(autoincrement())
+  signup_uid Int    @id @default(autoincrement())
 }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 model events {
-  event_id     Int      @id(map: "idx_16549_primary") @default(autoincrement())
+  event_id     Int      @id @default(autoincrement())
   event_type   String   @db.VarChar(255)
-  date_time    DateTime @db.Timestamptz(6)
+  date_time    DateTime @db.DateTime(0)
   duration     Int
   game         String   @db.VarChar(255)
-  details      String
+  details      String   @db.Text
   gmember_id   String
   repeat_event Boolean?
   req_tank     Int?
@@ -376,60 +428,93 @@ model events {
   req_parse    Int?
 }
 
-model guide_audience_mapping {
-  id          Int  @id(map: "idx_16562_primary") @default(autoincrement())
-  guide_id    Int?
-  audience_id Int?
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model factions {
+  faction_id   Int
+  faction_name String @db.VarChar(255)
+  game_id      Int
+
+  @@ignore
 }
 
-/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
-model rank_role_mapping {
-  rank_role_id Int     @id(map: "idx_16580_primary")
-  rank_role    String? @db.VarChar(60)
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model games {
+  game_id   Int
+  game_name String @db.VarChar(255)
+
+  @@ignore
+}
+
+model guides {
+  id               Int      @id @default(autoincrement())
+  content_id       Int?
+  title            String   @db.VarChar(255)
+  content          String?  @db.Text
+  timestamp        DateTime @default(now()) @db.Timestamp(0)
+  cover_image_path String?  @db.VarChar(255)
+  game_type        String?  @db.VarChar(255)
+  summary          String?  @db.Text
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model online_users {
+  eso   Int
+  ff    Int
+  swtor Int
+  other Int
+
+  @@ignore
 }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 model situation_disciplinary {
-  action_uid      Int      @id(map: "idx_16584_primary") @default(autoincrement())
+  action_uid      Int      @id @default(autoincrement())
   gmember_id      String
   punish_type     Int
   probation_weeks Int?
-  timestamp       DateTime @db.Timestamptz(6)
-  report          String?
+  timestamp       DateTime @db.DateTime(0)
+  report          String?  @db.Text
 }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 model situation_report {
-  report_uid Int      @id(map: "idx_16591_primary") @default(autoincrement())
+  report_uid Int      @id @default(autoincrement())
   action_uid Int?
-  timestamp  DateTime @db.Timestamptz(6)
+  timestamp  DateTime @db.DateTime(0)
   gmember_id String
-  content    String
+  content    String   @db.Text
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model staff_admin {
+  task_uid      Int      @id @default(autoincrement())
+  gmember_id    String
+  duty_type     Int
+  timestamp     DateTime @db.DateTime(0)
+  action_target Int?
 }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 model staff_ff_swtor {
-  task_uid   Int      @id(map: "idx_16610_primary") @default(autoincrement())
+  task_uid   Int      @id @default(autoincrement())
   gmember_id String
-  timestamp  DateTime @db.Timestamptz(6)
+  timestamp  DateTime @db.DateTime(0)
   duty_id    Int
 }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
-model staff_status_change {
-  transaction_id     Int      @id(map: "idx_16625_primary") @default(autoincrement())
-  status_update      Int
-  training_type      Int?
-  trainer_gmember_id String?
-  timestamp          DateTime @db.Timestamptz(6)
+model staff_point_log {
+  uid        Int      @id @default(autoincrement())
+  gmember_id String
+  cnt_points Int
+  timestamp  DateTime @db.DateTime(0)
 }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
-model voice_sessions {
-  voice_session_id String    @id(map: "idx_16629_primary") @db.VarChar(100)
-  gmember_id       String?   @db.VarChar(45)
-  channel_id       String?   @db.VarChar(45)
-  start_time       DateTime? @db.Timestamptz(6)
-  end_time         DateTime? @db.Timestamptz(6)
-  duration         Float?
+model staff_status_change {
+  transaction_id     Int      @id @default(autoincrement())
+  status_update      Int
+  training_type      Int?
+  trainer_gmember_id Int?
+  timestamp          DateTime @db.DateTime(0)
 }
