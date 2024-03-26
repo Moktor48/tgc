@@ -36,6 +36,7 @@ export default function LeaderQuery({ id }: { id: string }) {
         <form onSubmit={handleSubmit}>
           <label htmlFor="start">Start Date</label>
           <input
+            className="text-black"
             type="date"
             name="start"
             value={queryDate.start}
@@ -55,6 +56,7 @@ export default function LeaderQuery({ id }: { id: string }) {
           {!present && <label htmlFor="end">End Date</label>}
           {!present && (
             <input
+              className="text-black"
               type="date"
               name="end"
               value={queryDate.end}

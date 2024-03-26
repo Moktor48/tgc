@@ -24,7 +24,7 @@ export default async function StaffPage({
   return (
     <>
       <div className="flex w-full justify-center">
-        <div className="newsletter flex w-1/2">
+        <div className="newsletter flex w-1/2 text-white">
           <p>
             Clearly you are a staff member, {session?.user.name}, permissions
             include {perm?.specialist && "specialist "}{" "}

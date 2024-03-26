@@ -23,8 +23,7 @@ export default function StaffDutyForm() {
   };
   const userDump = api.get.discordUserQuery.useQuery();
   const dumpData = userDump.data;
-  console.log(dumpData);
-  const parsedData: EntryType[] = [];
+
   const entry = {
     timestamp: new Date(),
     gmember_id: "",
@@ -44,7 +43,6 @@ export default function StaffDutyForm() {
     },
   });
 
-  // FIX THIS: It is filling in the same data for all entries
   const handleFileUpload = () => {
     if (selectedFile) {
       if (!selectedFile.name.endsWith(".txt")) {
@@ -52,12 +50,15 @@ export default function StaffDutyForm() {
         return;
       }
       const reader = new FileReader();
+      console.log(guildInfo);
       reader.onload = function (event) {
         const fileContent = event.target?.result;
 
         if (typeof fileContent === "string") {
           const lines = fileContent.split("\n");
+          const parsedData: EntryType[] = [];
 
+          // start of forEach
           lines.forEach((line) => {
             const newEntry = { ...entry };
             const values = line.split("\t");
@@ -65,12 +66,15 @@ export default function StaffDutyForm() {
             const name = dumpData?.find(
               (user) => user.ingame_name === values[1],
             );
-
             if (name) {
               newEntry.gmember_id = name.gmember_id;
             }
             if (!name) return;
-            if (values[2] === "Inv") {
+            if (
+              values[2] === "Invited" ||
+              values[2] === "Accepted" ||
+              values[2] === "Declined"
+            ) {
               guildInfo === "0"
                 ? (newEntry.duty_type = 100)
                 : guildInfo === "1"
@@ -88,13 +92,13 @@ export default function StaffDutyForm() {
                             : guildInfo === "10"
                               ? (newEntry.duty_type = 90)
                               : null;
-            } else if (values[2] === "Join") {
+            } else if (values[2] === "Joined") {
               newEntry.duty_type = 96;
-            } else if (values[2] === "Pro") {
+            } else if (values[2] === "Promoted") {
               newEntry.duty_type = 98;
-            } else if (values[2] === "Kick") {
+            } else if (values[2] === "Kicked") {
               newEntry.duty_type = 99;
-            } else if (values[2] === "Dem") {
+            } else if (values[2] === "Demoted") {
               newEntry.duty_type = 97;
             } else if (values[2] === "Left") {
               newEntry.duty_type = 95;
@@ -107,8 +111,7 @@ export default function StaffDutyForm() {
             //newEntry.Value = values[6] ?? "";
             //newEntry.Tax = values[7] ?? "";
             parsedData.push(newEntry);
-            console.log(parsedData);
-          });
+          }); // end of forEach
           console.log(parsedData);
           formSubmit.mutate(parsedData);
         }
@@ -120,9 +123,17 @@ export default function StaffDutyForm() {
 
   return (
     <div>
-      <h3>Select a file to upload:</h3>
-      <input type="file" onChange={handleFileChange} />
-      <button onClick={handleFileUpload} disabled={guildInfo === "0"}>
+      <h3 className="text-white">Select a file to upload:</h3>
+      <input
+        className="button-40 text-white"
+        type="file"
+        onChange={handleFileChange}
+      />
+      <button
+        className="button-40 text-green-500"
+        onClick={handleFileUpload}
+        disabled={guildInfo === "0"}
+      >
         Upload
       </button>
       <form action="">
@@ -142,7 +153,12 @@ export default function StaffDutyForm() {
           <option value={9}>TNC</option>
           <option value={10}>TDC</option>
         </select>
-        <input type="submit" name="submit" value="Upload File" />
+        <input
+          className="button-40 text-white"
+          type="submit"
+          name="submit"
+          value="Upload File"
+        />
       </form>
     </div>
   );

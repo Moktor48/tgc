@@ -95,7 +95,6 @@ export default async function NavBar({
             <Link href={`/dashboard/${id}/staff/stafftracker`}>
               Staff Tracker
             </Link>
-            <Link href={`/dashboard/${id}/staff/leaderboard`}>Leaderboard</Link>
           </div>
         </div>
       )}
