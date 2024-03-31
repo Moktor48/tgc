@@ -29,7 +29,17 @@ export default async function SwtorPosts() {
     <div className="text-center">
       <h1 className="text-white">Unpublished Posts for SWTOR</h1>
       {unpubPost.map(
-        (post: { id: string; title: string; createdBy: { name: string } }) => {
+        (post: {
+          id: string;
+          title: string;
+          createdBy: {
+            name: string;
+            id: string;
+          };
+          permissions: {
+            swtor: boolean;
+          } | null;
+        }) => {
           return (
             <div>
               <Link

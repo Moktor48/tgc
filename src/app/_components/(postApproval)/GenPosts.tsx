@@ -19,7 +19,17 @@ export default async function GenPosts() {
     <div className="text-center">
       <h1 className="text-white">Unpublished Posts for the General Guild</h1>
       {unpubPost.map(
-        (post: { id: string; title: string; createdBy: { name: string } }) => {
+        (post: {
+          id: string;
+          title: string;
+          createdBy: {
+            name: string;
+            id: string;
+          };
+          permissions: {
+            general: boolean;
+          } | null;
+        }) => {
           return (
             <div>
               <Link

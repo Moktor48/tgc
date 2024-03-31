@@ -33,7 +33,17 @@ export default async function FfxivPosts() {
     <div className="text-center">
       <h1 className="text-white">Unpublished Posts for FFXIV</h1>
       {unpubPost.map(
-        (post: { id: string; title: string; createdBy: { name: string } }) => {
+        (post: {
+          id: string;
+          title: string;
+          createdBy: {
+            name: string;
+            id: string;
+          };
+          permissions: {
+            ffxiv: boolean;
+          } | null;
+        }) => {
           return (
             <div>
               <Link

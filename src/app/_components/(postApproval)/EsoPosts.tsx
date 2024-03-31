@@ -29,7 +29,17 @@ export default async function EsoPosts() {
     <div className="text-center">
       <h1 className="text-white">Unpublished Posts for ESO</h1>
       {unpubPost.map(
-        (post: { id: string; title: string; createdBy: { name: string } }) => {
+        (post: {
+          id: string;
+          title: string;
+          createdBy: {
+            name: string;
+            id: string;
+          };
+          permissions: {
+            eso: boolean;
+          } | null;
+        }) => {
           return (
             <div>
               <Link

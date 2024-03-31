@@ -131,12 +131,10 @@ export const getRouter = createTRPCRouter({
     const posts = await db.post.findMany({
       where: {
         permissions: {
-          some: {
-            published: false,
-            eso: false,
-            ffxiv: false,
-            swtor: false,
-          },
+          published: false,
+          eso: false,
+          ffxiv: false,
+          swtor: false,
         },
       },
       select: {
@@ -162,10 +160,8 @@ export const getRouter = createTRPCRouter({
     const posts = await db.post.findMany({
       where: {
         permissions: {
-          some: {
-            published: false,
-            eso: true,
-          },
+          published: false,
+          eso: true,
         },
       },
       select: {
@@ -191,10 +187,8 @@ export const getRouter = createTRPCRouter({
     const posts = await db.post.findMany({
       where: {
         permissions: {
-          some: {
-            published: false,
-            ffxiv: true,
-          },
+          published: false,
+          ffxiv: true,
         },
       },
       select: {
@@ -220,10 +214,8 @@ export const getRouter = createTRPCRouter({
     const posts = await db.post.findMany({
       where: {
         permissions: {
-          some: {
-            published: false,
-            swtor: true,
-          },
+          published: false,
+          swtor: true,
         },
       },
       select: {
@@ -250,10 +242,8 @@ export const getRouter = createTRPCRouter({
     const posts = await db.post.findMany({
       where: {
         permissions: {
-          some: {
-            published: true,
-            general: true,
-          },
+          published: true,
+          general: true,
         },
       },
       select: {
@@ -279,10 +269,8 @@ export const getRouter = createTRPCRouter({
     const posts = await db.post.findMany({
       where: {
         permissions: {
-          some: {
-            published: true,
-            eso: true,
-          },
+          published: true,
+          eso: true,
         },
       },
       select: {
@@ -303,10 +291,8 @@ export const getRouter = createTRPCRouter({
     const posts = await db.post.findMany({
       where: {
         permissions: {
-          some: {
-            published: true,
-            ffxiv: true,
-          },
+          published: true,
+          ffxiv: true,
         },
       },
       select: {
@@ -332,10 +318,8 @@ export const getRouter = createTRPCRouter({
     const posts = await db.post.findMany({
       where: {
         permissions: {
-          some: {
-            published: true,
-            swtor: true,
-          },
+          published: true,
+          swtor: true,
         },
       },
       select: {
@@ -370,13 +354,11 @@ export const getRouter = createTRPCRouter({
       const posts = await db.post.findMany({
         where: {
           permissions: {
-            some: {
-              published: true,
-              eso: input.eso,
-              ffxiv: input.ffxiv,
-              swtor: input.swtor,
-              type: input.type,
-            },
+            published: true,
+            eso: input.eso,
+            ffxiv: input.ffxiv,
+            swtor: input.swtor,
+            type: input.type,
           },
         },
         select: {
@@ -414,15 +396,13 @@ export const getRouter = createTRPCRouter({
       const posts = await db.post.findMany({
         where: {
           permissions: {
-            some: {
-              published: true,
-              guild_public: true,
-              general: input.general,
-              eso: input.eso,
-              ffxiv: input.ffxiv,
-              swtor: input.swtor,
-              type: input.type,
-            },
+            published: true,
+            guild_public: true,
+            general: input.general,
+            eso: input.eso,
+            ffxiv: input.ffxiv,
+            swtor: input.swtor,
+            type: input.type,
           },
         },
         select: {
@@ -465,18 +445,16 @@ export const getRouter = createTRPCRouter({
       const posts = await db.post.findMany({
         where: {
           permissions: {
-            some: {
-              published: true,
-              guild_public: input.public,
-              general: input.general,
-              eso: input.eso,
-              ffxiv: input.ffxiv,
-              swtor: input.swtor,
-              type: input.type,
-              staff: input.staff,
-              raid: input.raid,
-              officer: input.officer,
-            },
+            published: true,
+            guild_public: input.public,
+            general: input.general,
+            eso: input.eso,
+            ffxiv: input.ffxiv,
+            swtor: input.swtor,
+            type: input.type,
+            staff: input.staff,
+            raid: input.raid,
+            officer: input.officer,
           },
         },
         select: {
