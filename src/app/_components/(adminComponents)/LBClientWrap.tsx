@@ -28,9 +28,22 @@ export default function LBClientWrap({
   ]);
 
   const [checked, setChecked] = useState<CheckedItem[]>([]);
+
   // Props here will be an array of objects with a key: value pairing, sorted data should be x:y values
   const addChart = (props: PieProps) => {
-    setPie((prevPie) => [...prevPie, <PieChart {...props} />]);
+    setPie((prevPie) => {
+      // Check if a <PieChart> with the same props already exists
+      if (
+        !prevPie.find(
+          (chart) => JSON.stringify(chart.props) === JSON.stringify(props),
+        )
+      ) {
+        // If not, add a new <PieChart>
+        return [...prevPie, <PieChart {...props} />];
+      }
+      // If a <PieChart> with the same props already exists, return the previous state
+      return prevPie;
+    });
   };
 
   // Sort functions
@@ -53,16 +66,21 @@ export default function LBClientWrap({
 
   const compare = () => {
     const user = [] as string[];
-    console.log("checked:", checked);
     checked.forEach((element) => {
+      if (!element.isChecked) {
+        setPie((prevPie) =>
+          prevPie.filter(
+            (chart: { props: { title: string } }) =>
+              chart.props.title !== `Points Earned by ${element.id}`,
+          ),
+        );
+      }
       if (element.isChecked) {
         user.push(element.id);
       }
     });
     user.forEach((element) => {
-      console.log(rawData);
       const userPoints = rawData.filter((data) => data.user_name === element);
-      console.log(userPoints);
 
       // Push all data into an array
       const pointArray = userPoints.map((data) => {
@@ -71,7 +89,6 @@ export default function LBClientWrap({
           task: data.task,
         };
       });
-      console.log("pointArray:", pointArray);
       // Combines all points earned to parse task points combined
       const taskPoints = pointArray.reduce<Record<string, number>>(
         (acc, point) => {
