@@ -3,18 +3,27 @@ import React, { useState } from "react";
 import DataDisplayPage from "./DataDisplayPage";
 import Pagination from "./Pagination";
 
-type DataType = Record<string, string | number | bigint>;
+type DataType = Record<string, string | number | null>;
 
-export default function DataWrapper({ data }: { data: DataType[] }) {
+export default function DataWrapper({
+  checkBox,
+  rankedList,
+}: {
+  rankedList: DataType[];
+  checkBox: (event: React.ChangeEvent<HTMLInputElement>) => void;
+}) {
   const [currentPage, setCurrentPage] = useState(1);
   const recordsPerPage = 20;
   const indexOfLastRecord = currentPage * recordsPerPage;
   const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
-  const currentRecords = data.slice(indexOfFirstRecord, indexOfLastRecord);
-  const totalPages = Math.ceil(data.length / recordsPerPage);
+  const currentRecords = rankedList.slice(
+    indexOfFirstRecord,
+    indexOfLastRecord,
+  );
+  const totalPages = Math.ceil(rankedList.length / recordsPerPage);
   return (
     <div>
-      <DataDisplayPage data={currentRecords} />
+      <DataDisplayPage records={currentRecords} checkBox={checkBox} />
       <Pagination
         nPages={totalPages}
         currentPage={currentPage}

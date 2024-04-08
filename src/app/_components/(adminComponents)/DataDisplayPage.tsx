@@ -1,9 +1,15 @@
 "use client";
 import React from "react";
-type DataType = Record<string, string | number | bigint>;
+type DataType = Record<string, string | number | null>;
 
-export default function DataDisplayPage({ data }: { data: DataType[] }) {
-  if (data.length === 0 ?? !data) {
+export default function DataDisplayPage({
+  records,
+  checkBox,
+}: {
+  records: DataType[];
+  checkBox: (event: React.ChangeEvent<HTMLInputElement>) => void;
+}) {
+  if (records.length === 0 ?? !records) {
     return <div>No data to display</div>;
   }
 
@@ -12,20 +18,29 @@ export default function DataDisplayPage({ data }: { data: DataType[] }) {
       <table className="newscolor mx-auto w-1/3">
         <thead>
           <tr>
-            {data[0] &&
-              Object.keys(data[0]).map((header) => {
+            <th>Select User</th>
+            {records[0] &&
+              Object.keys(records[0]).map((header) => {
                 return <th key={header}>{header}</th>;
               })}
           </tr>
         </thead>
+        {/*Row Index should be the gmember_id */}
         <tbody>
-          {data.map((row, rowIndex) => {
+          {records.map((row, rowIndex) => {
             return (
-              <tr key={rowIndex}>
+              <tr key={rowIndex} className="w-full">
+                <td className="flex justify-center">
+                  <input
+                    type="checkbox"
+                    id={row.user_name?.toString()}
+                    onChange={checkBox}
+                  ></input>
+                </td>
                 {Object.values(row).map((value, index) => {
                   return (
                     <td key={index} className="text-center">
-                      {typeof value === "bigint" ? value.toString() : value}
+                      {value}
                     </td>
                   );
                 })}

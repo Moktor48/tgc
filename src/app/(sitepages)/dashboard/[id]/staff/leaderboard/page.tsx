@@ -1,12 +1,12 @@
+//This page is a general query for a date range
+
 import React from "react";
 import { getServerAuthSession } from "~/server/auth";
 import { api } from "~/trpc/server";
 
-import PieChart from "~/app/_components/(adminComponents)/PieChart";
-import DataWrapper from "~/app/_components/(adminComponents)/DataWrapper";
-type DatasetType = { task: string; points: number }[];
+import LBClientWrap from "~/app/_components/(adminComponents)/LBClientWrap";
 
-
+type DataType = Record<string, string | number | null>;
 export default async function page({
   params,
   searchParams,
@@ -18,20 +18,24 @@ export default async function page({
   if (!session) return <p>You need to log in</p>;
   const id = params.id;
   if (!id) return <p>Invalid ID</p>;
+
   const startDate = searchParams.start;
   const endDate = searchParams.end;
 
   // This query pulls all data from staff_duty given two dates
   const points = await api.get.dutyQuery.query({ startDate, endDate });
 
+  // Raw data HERE [{}{}{}]
   const userPoints = points.map((data) => {
     return {
-      user_id: data.gmember_id.toString(),
+      user_id: data.gmember_id,
       user_name: data.discord_user.disc_nickname,
       points: data.staff_point_chart.point_value,
+      task: data.staff_point_chart.task_description,
     };
   });
-  // Parses data to compare tasks
+
+  // Push all data into an array
   const pointArray = points.map((data) => {
     return {
       points: data.staff_point_chart.point_value,
@@ -39,6 +43,7 @@ export default async function page({
     };
   });
 
+  // Combines all points earned to parse task points combined
   const taskPoints = pointArray.reduce<Record<string, number>>((acc, point) => {
     if (point.task && point.points) {
       if (acc[point.task]) {
@@ -49,7 +54,7 @@ export default async function page({
     }
     return acc;
   }, {});
-
+  // If points are less than 100, combine them into an "other" category
   const taskPointsWithOther = Object.entries(taskPoints).reduce<
     Record<string, number>
   >((acc, [task, points]) => {
@@ -65,14 +70,15 @@ export default async function page({
     return acc;
   }, {});
 
-  const dataset: DatasetType = Object.entries(taskPointsWithOther).map(
+  // Sorts by task, how many points were earned for each task into data to be read by initial CHART
+  const pointsPerTask: DataType[] = Object.entries(taskPointsWithOther).map(
     ([task, points]) => ({
       task,
       points,
     }),
   );
 
-  // Parses data to compare user activity
+  // Combining all points earned by user
   const objPoints = userPoints.reduce((acc: Record<string, number>, point) => {
     if (point.points) {
       if (acc[point.user_name]) {
@@ -83,72 +89,31 @@ export default async function page({
     }
     return acc;
   }, {});
-
-  type UserPoints = { user_name: string; points: number };
-
-  const objPointsArray: UserPoints[] = Object.entries(objPoints).map(
+  // pushing objPoints into a clean and sorted array highest to lowest (User - Points leaderboard LIST)
+  const objPointsArray: DataType[] = Object.entries(objPoints).map(
     ([user_name, points]) => ({
       user_name,
       points: Number(points),
     }),
   );
 
-  const sortedObjPointsArray = objPointsArray.sort(
-    (a, b) => b.points - a.points,
-  );
+  // Sorts by user, how many points each user earned
+  const rankedList = objPointsArray.sort((a, b) => {
+    const aPoints = typeof a.points === "number" ? a.points : 0;
+    const bPoints = typeof b.points === "number" ? b.points : 0;
+    return bPoints - aPoints;
+  });
 
   return (
     <div>
-      <PieChart dataset={dataset} />
-      <h1 className="newscolor text-center">Points-Processing</h1>
       <p className="newscolor text-center">
         This query is searching between {startDate} and {endDate}
       </p>
-      <div>
-        <DataWrapper data={sortedObjPointsArray} />
-      </div>
+      <LBClientWrap
+        rankedList={rankedList}
+        chartData={pointsPerTask}
+        rawData={userPoints}
+      />
     </div>
   );
 }
-
-/*
-Next, truncate and page
-
-const itemsPerPage = 20;
-const [currentPage, setCurrentPage] = useState(1);
-
-const startIndex = (currentPage - 1) * itemsPerPage;
-const endIndex = startIndex + itemsPerPage;
-
-const currentPageData = sortedObjPointsArray.slice(startIndex, endIndex);
-
-return (
-  <div>
-    <h1>Points-Processing</h1>
-    <p>
-      This query is searching between {startDate} and {endDate}
-    </p>
-    <div>
-      <table>
-        <tr>
-          <th>Name</th>
-          <th>Points</th>
-        </tr>
-        {currentPageData.map(({ user_name, points }) => (
-          <tr key={user_name}>
-            <td>{user_name}</td>
-            <td>{points}</td>
-          </tr>
-        ))}
-      </table>
-    </div>
-    <button onClick={() => setCurrentPage(currentPage - 1)} disabled={currentPage === 1}>
-      Previous
-    </button>
-    <button onClick={() => setCurrentPage(currentPage + 1)} disabled={currentPage * itemsPerPage >= sortedObjPointsArray.length}>
-      Next
-    </button>
-    <PieChart dataset={dataset} />
-  </div>
-);
-*/

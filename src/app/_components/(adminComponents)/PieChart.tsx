@@ -1,13 +1,16 @@
 "use client";
-// ./components/PieChart.js
 import "chart.js/auto";
-import React from "react"; // Import the necessary library such as React for now.
-import { Pie } from "react-chartjs-2"; // In the react-chartjs-2 library, import the Pie component.
-import { Colors } from "chart.js";
-import { Chart } from "react-chartjs-2";
-type DatasetType = { task: string; points: number }[];
+import React from "react";
+import { Pie } from "react-chartjs-2";
+type DataType = Record<string, string | number | null>;
+type Props = {
+  dataset: DataType[];
+  title: string;
+};
 
-export default function PieChart({ dataset }: { dataset: DatasetType }) {
+export default function PieChart(props: Props) {
+  const title = props.title;
+  const dataset = props.dataset;
   const cfg = {
     type: "pie",
     data: {
@@ -82,10 +85,9 @@ export default function PieChart({ dataset }: { dataset: DatasetType }) {
    */
 
   return (
-    <div className="w-full">
-      <div className="m-auto w-1/3 bg-slate-900">
-        <Pie data={data} />
-      </div>
+    <div key={title} className="bg-slate-900">
+      {title}
+      <Pie data={data} />
     </div>
   );
 }
