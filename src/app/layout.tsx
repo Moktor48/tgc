@@ -41,13 +41,18 @@ export default async function RootLayout({
         height: "100%",
       }}
     >
+      <head>
+        <meta
+          name="google-site-verification"
+          content={process.env.GOOGLE_SEARCH_CONSOLE}
+        />
+      </head>
       <body className={`font-sans ${inter.variable}`}>
         <Provider session={session}>
           <TRPCReactProvider cookies={cookies().toString()}>
             <header>
               <StatBar />
               <SideBar />
-
             </header>
             {!session && <NavBarPublic />}
             {session && <NavBar role={role} id={userId} />}
