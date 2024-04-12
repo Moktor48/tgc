@@ -44,6 +44,7 @@ export default async function StaffPage({
             <span className="text-3xl text-yellow-500">Post Approvals</span>
           </Link>{" "}
           <br />
+          <Link href={`/dashboard/${id}/staff/userSearch`}>Search Users</Link>
         </div>
       </div>
     </>

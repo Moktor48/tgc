@@ -193,20 +193,21 @@ export default function UserModify({
   };
   return (
     <div>
-      <h1>User Modifications</h1>
-      <div>
+      <h1 className="text-white">User Modifications</h1>
+      <div className="text-white">
         <h2>User</h2>
         <p>User Name: {user?.name}</p>
         <p>User Email: {user?.email}</p>
         <Image src={`${user?.image}`} width={30} height={30} alt="avatar" />
       </div>
-      <div>
+      <div className="text-white">
         {showPermissions && <h2>ESO Permissions</h2>}
         <form>
           {showPermissions && (
             <label>
               Rank:
               <select
+                className="text-black"
                 value={esoState.rank}
                 onChange={(e) =>
                   setEsoState({ ...esoState, rank: e.target.value })
@@ -259,13 +260,14 @@ export default function UserModify({
           )}
         </form>
       </div>
-      <div>
+      <div className="text-white">
         {showFFXIVPermissions && <h2>FFXIV Permissions</h2>}
         <form>
           {showFFXIVPermissions && (
             <label>
               Rank:
               <select
+                className="text-black"
                 value={ffxivState.rank}
                 onChange={(e) =>
                   setFfxivState({ ...ffxivState, rank: e.target.value })
@@ -318,13 +320,14 @@ export default function UserModify({
           )}
         </form>
       </div>
-      <div>
+      <div className="text-white">
         {showSWTORPermissions && <h2>SWTOR Permissions</h2>}
         <form>
           {showSWTORPermissions && (
             <label>
               Rank:
               <select
+                className="text-black"
                 value={swtorState.rank}
                 onChange={(e) =>
                   setSwtorState({ ...swtorState, rank: e.target.value })
@@ -377,7 +380,7 @@ export default function UserModify({
           )}
         </form>
       </div>
-      <div>
+      <div className="text-white">
         {showStaffPermissions && <h2>Staff Permissions</h2>}
         <form>
           {showStaffPermissions && (

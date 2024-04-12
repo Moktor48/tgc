@@ -8,8 +8,9 @@ export default function UserSearch({ id }: { id: string }) {
     router.push(`/dashboard/${id}/staff/search/${e.target.value}`);
   };
   return (
-    <div>
+    <div className="flex justify-center">
       <section className="formPlate">
+        <h2>User Modification</h2>
         <form>
           <select onChange={handleChange}>
             <option value="">Select a user</option>
