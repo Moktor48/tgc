@@ -66,7 +66,7 @@ export const putRouter = createTRPCRouter({
   updateUserEso: protectedProcedure
     .input(
       z.object({
-        id: z.string(),
+        userId: z.string(),
         rank: z.string().optional(),
         raid: z.boolean().optional(),
         raidlead: z.boolean().optional(),
@@ -75,7 +75,7 @@ export const putRouter = createTRPCRouter({
     )
     .mutation(async ({ input }) => {
       const putUserEso = await db.eso.update({
-        where: { id: input.id },
+        where: { userId: input.userId },
         data: {
           rank: input.rank,
           raid: input.raid,
@@ -89,7 +89,7 @@ export const putRouter = createTRPCRouter({
   updateUserFfxiv: protectedProcedure
     .input(
       z.object({
-        id: z.string(),
+        userId: z.string(),
         rank: z.string().optional(),
         raid: z.boolean().optional(),
         raidlead: z.boolean().optional(),
@@ -98,7 +98,7 @@ export const putRouter = createTRPCRouter({
     )
     .mutation(async ({ input }) => {
       const putUserFfxiv = await db.ffxiv.update({
-        where: { id: input.id },
+        where: { userId: input.userId },
         data: {
           rank: input.rank,
           raid: input.raid,
@@ -112,7 +112,7 @@ export const putRouter = createTRPCRouter({
   updateUserSwtor: protectedProcedure
     .input(
       z.object({
-        id: z.string(),
+        userId: z.string(),
         rank: z.string().optional(),
         raid: z.boolean().optional(),
         raidlead: z.boolean().optional(),
@@ -121,7 +121,7 @@ export const putRouter = createTRPCRouter({
     )
     .mutation(async ({ input }) => {
       const putUserSwtor = await db.swtor.update({
-        where: { id: input.id },
+        where: { userId: input.userId },
         data: {
           rank: input.rank,
           raid: input.raid,

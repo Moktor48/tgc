@@ -29,6 +29,7 @@ export const getRouter = createTRPCRouter({
           eso: true,
           swtor: true,
           ffxiv: true,
+          staff: true,
         },
       });
       return user;

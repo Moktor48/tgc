@@ -112,8 +112,7 @@ model post_modification {
 }
 
 model eso {
-  id       String   @id @default(cuid())
-  userId   String   @unique
+  userId   String   @id
   rank     String   @default("none")
   raid     Boolean? @default(false)
   raidlead Boolean? @default(false)
@@ -122,8 +121,7 @@ model eso {
 }
 
 model ffxiv {
-  id       String   @id @default(cuid())
-  userId   String   @unique
+  userId   String   @id
   rank     String   @default("none")
   raid     Boolean? @default(false)
   raidlead Boolean? @default(false)
@@ -132,8 +130,7 @@ model ffxiv {
 }
 
 model swtor {
-  id       String   @id @default(cuid())
-  userId   String   @unique
+  userId   String   @id
   rank     String   @default("none")
   raid     Boolean? @default(false)
   raidlead Boolean? @default(false)
@@ -142,8 +139,7 @@ model swtor {
 }
 
 model staff {
-  id             String   @id @default(cuid())
-  userId         String   @unique
+  userId         String   @id
   admin          Boolean? @default(false)
   specialist     Boolean? @default(false)
   representative Boolean? @default(false)

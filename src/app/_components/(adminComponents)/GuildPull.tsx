@@ -34,167 +34,233 @@ type GuildMember = {
   banner: string | null;
 };
 type RoleMapping = Record<string, string>;
+
 export async function GuildPull() {
   const session = await getServerAuthSession();
   if (!session)
     return <div className="text-red-500">You are not logged in.</div>;
+
   const userId = session.user.id;
-  const guild = session.user.guild;
+  const token = await api.get.pullAccess.query({
+    userId: session.user.id,
+  });
 
-  if (!guild) {
-    const token = await api.get.pullAccess.query({
-      userId: session.user.id,
-    });
-    if (!token)
-      return <div className="text-red-500">You are not logged in.</div>;
-    const userAccess = await api.get.fullProfile.query({ userId });
-    const roleMapping: RoleMapping = {
-      "567556412360622080": "Active Staff", // User.role = staff
-      "504803026368856074": "Guild Specialist", //staff.specialist = true
-      "504811023111290881": "Guildmaster", // staff.guildmaster = true
-      "504801655154540547": "High Council", // staff.highcouncil = true
-      "809241522058952725": "Certified Mentor",
-      "900500968016318516": "Representative", // staff.representative = true
-      "504803493396348939": "Raid Leader Core",
-      "791378938969718815": "Raid Leader Open",
-      "576530924712361986": "Untagged",
-      "452344937263005696": "ESO", //eso.rank = member
-      "715796093983653930": "ESO Staff", //eso.rank = officer
-      "379492525964001290": "SWTOR", //swtor.rank = member
-      "715795715808297022": "SWTOR Staff", //swtor.rank = officer
-      "1068151252837478410": "FFXIV", //ffxiv.rank = member
-      "1071853800438108320": "FFXIV Staff", //ffxiv.rank = officer
-    };
+  if (!token) return <div className="text-red-500">You are not logged in.</div>;
 
-    const guildRes = await fetch("https://discord.com/api/users/@me/guilds", {
-      headers: {
-        Authorization: `Bearer ${token.access_token}`,
-      },
+  const userAccess = await api.get.fullProfile.query({ userId });
+  if (!userAccess?.eso?.userId) {
+    await api.post.createEsoPermission.mutate({
+      userId: userId,
+      rank: "none",
+      raid: false,
+      raidlead: false,
+      mentor: false,
     });
-    const guilds: Guild[] = (await guildRes.json()) as [];
-    const tgc = guilds.find((g) => g.id === "314436945792991232");
-    if (tgc?.id != "314436945792991232") {
-      return (
-        <div className="text-red-500">
-          You are not a member of The Gaming Council
-        </div>
-      );
-    } else {
-      await api.put.updateUser.mutate({
-        id: session.user.id,
-        guild: true,
-      });
-    }
-    const guildData = await fetch(
-      "https://discord.com/api/users/@me/guilds/314436945792991232/member",
-      {
-        headers: {
-          Authorization: `Bearer ${token.access_token}`,
-        },
-      },
-    );
-    const esoEntry = {
-      id: null,
+  }
+  if (!userAccess?.ffxiv?.userId) {
+    await api.post.createFfxivPermission.mutate({
       userId: userId,
       rank: "none",
       raid: false,
       raidlead: false,
       mentor: false,
-    };
-    const ffxivEntry = {
-      id: "",
+    });
+  }
+  if (!userAccess?.swtor?.userId) {
+    await api.post.createSwtorPermission.mutate({
       userId: userId,
       rank: "none",
       raid: false,
       raidlead: false,
       mentor: false,
-    };
-    const swtorEntry = {
-      id: "",
-      userId: userId,
-      rank: "none",
-      raid: false,
-      raidlead: false,
-      mentor: false,
-    };
-    const staffEntry = {
+    });
+  }
+  if (!userAccess?.staff?.userId) {
+    await api.post.createStaffPermission.mutate({
       userId: userId,
       admin: false,
       specialist: false,
       representative: false,
       highcouncil: false,
       guildmaster: false,
-    };
-    const guildMember = (await guildData.json()) as GuildMember;
-    if (guildMember.roles.includes("576530924712361986")) {
-      return <p>Please wait until your Discord verification is complete</p>;
-    } else {
-      guildMember.roles.forEach((roleId) => {
-        const role = roleMapping[roleId];
+    });
+  }
 
-        switch (role) {
-          case "ESO":
-            esoEntry.rank = "ESO";
-            break;
-          case "ESO Staff":
-            esoEntry.rank = "ESO Staff";
-            esoEntry.raidlead = true;
-            break;
-          case "SWTOR":
-            swtorEntry.rank = "SWTOR";
-            break;
-          case "SWTOR Staff":
-            swtorEntry.rank = "SWTOR Staff";
-            swtorEntry.raidlead = true;
-            break;
-          case "FFXIV":
-            ffxivEntry.rank = "FFXIV";
-            break;
-          case "FFXIV Staff":
-            ffxivEntry.rank = "FFXIV Staff";
-            ffxivEntry.raidlead = true;
-            break;
-          case "Active Staff":
-            staffEntry.admin = true;
-            break;
-          case "Guild Specialist":
-            staffEntry.specialist = true;
-            break;
-          case "Guildmaster":
-            staffEntry.guildmaster = true;
-            break;
-          case "High Council":
-            staffEntry.highcouncil = true;
-            break;
-          case "Certified Mentor":
-            esoEntry.mentor = true;
-            ffxivEntry.mentor = true;
-            swtorEntry.mentor = true;
-            break;
-          case "Representative":
-            staffEntry.representative = true;
-            break;
-          case "Raid Leader Core":
-            esoEntry.raidlead = true;
-            ffxivEntry.raidlead = true;
-            swtorEntry.raidlead = true;
-            break;
-          case "Raid Leader Open":
-            esoEntry.raidlead = true;
-            ffxivEntry.raidlead = true;
-            swtorEntry.raidlead = true;
-            break;
-          default:
-            break;
-        }
-      });
-    }
+  const roleMapping: RoleMapping = {
+    "567556412360622080": "Active Staff", // User.role = staff
+    "504803026368856074": "Guild Specialist", //staff.specialist = true
+    "504811023111290881": "Guildmaster", // staff.guildmaster = true
+    "504801655154540547": "High Council", // staff.highcouncil = true
+    "809241522058952725": "Certified Mentor",
+    "900500968016318516": "Representative", // staff.representative = true
+    "504803493396348939": "Raid Leader Core",
+    "791378938969718815": "Raid Leader Open",
+    "576530924712361986": "Untagged",
+    "452344937263005696": "ESO", //eso.rank = member
+    "715796093983653930": "ESO Staff", //eso.rank = officer
+    "379492525964001290": "SWTOR", //swtor.rank = member
+    "715795715808297022": "SWTOR Staff", //swtor.rank = officer
+    "1068151252837478410": "FFXIV", //ffxiv.rank = member
+    "1071853800438108320": "FFXIV Staff", //ffxiv.rank = officer
+  };
+
+  const guildRes = await fetch("https://discord.com/api/users/@me/guilds", {
+    headers: {
+      Authorization: `Bearer ${token.access_token}`,
+    },
+  });
+  const guilds: Guild[] = (await guildRes.json()) as [];
+  const tgc = guilds.find((g) => g.id === "314436945792991232");
+  if (tgc?.id != "314436945792991232") {
+    return (
+      <div className="text-red-500">
+        You are not a member of The Gaming Council
+      </div>
+    );
+  } else {
+    await api.put.updateUser.mutate({
+      id: session.user.id,
+      guild: true,
+    });
+  }
+
+  const guildData = await fetch(
+    "https://discord.com/api/users/@me/guilds/314436945792991232/member",
+    {
+      headers: {
+        Authorization: `Bearer ${token.access_token}`,
+      },
+    },
+  );
+
+  const esoEntry = {
+    userId: userId,
+    rank: "none",
+    raid: false,
+    raidlead: false,
+    mentor: false,
+  };
+  const ffxivEntry = {
+    userId: userId,
+    rank: "none",
+    raid: false,
+    raidlead: false,
+    mentor: false,
+  };
+  const swtorEntry = {
+    userId: userId,
+    rank: "none",
+    raid: false,
+    raidlead: false,
+    mentor: false,
+  };
+  const staffEntry = {
+    userId: userId,
+    admin: false,
+    specialist: false,
+    representative: false,
+    highcouncil: false,
+    guildmaster: false,
+  };
+  let guildStaff = false;
+  const guildMember = (await guildData.json()) as GuildMember;
+
+  if (guildMember.roles.includes("576530924712361986")) {
+    return alert("Please wait until your Discord verification is complete");
+  } else {
+    guildMember.roles.forEach((roleId) => {
+      const role = roleMapping[roleId];
+
+      switch (role) {
+        case "ESO":
+          esoEntry.rank = "member";
+          break;
+        case "ESO Staff":
+          esoEntry.rank = "officer";
+          break;
+        case "SWTOR":
+          swtorEntry.rank = "member";
+          break;
+        case "SWTOR Staff":
+          swtorEntry.rank = "officer";
+          break;
+        case "FFXIV":
+          ffxivEntry.rank = "member";
+          break;
+        case "FFXIV Staff":
+          ffxivEntry.rank = "officer";
+          break;
+        case "Active Staff":
+          guildStaff = true;
+          break;
+        case "Guild Specialist":
+          staffEntry.specialist = true;
+          break;
+        case "Guildmaster":
+          staffEntry.guildmaster = true;
+          break;
+        case "High Council":
+          staffEntry.highcouncil = true;
+          break;
+        case "Certified Mentor":
+          esoEntry.mentor = true;
+          ffxivEntry.mentor = true;
+          swtorEntry.mentor = true;
+          break;
+        case "Representative":
+          staffEntry.representative = true;
+          break;
+        case "Raid Leader Core":
+          esoEntry.raidlead = true;
+          ffxivEntry.raidlead = true;
+          swtorEntry.raidlead = true;
+          break;
+        case "Raid Leader Open":
+          esoEntry.raidlead = true;
+          ffxivEntry.raidlead = true;
+          swtorEntry.raidlead = true;
+          break;
+        default:
+          break;
+      }
+    });
+
     await api.put.updateUserEso.mutate(esoEntry);
     await api.put.updateUserFfxiv.mutate(ffxivEntry);
     await api.put.updateUserSwtor.mutate(swtorEntry);
     await api.put.updateUserStaff.mutate(staffEntry);
+    if (guildStaff) {
+      await api.put.updateUser.mutate({ id: userId, role: "staff" });
+    }
+    const userAccess = await api.get.fullProfile.query({ userId });
+    const highRank = userAccess?.staff?.guildmaster
+      ? "Guildmaster"
+      : userAccess?.staff?.highcouncil
+        ? "High Council"
+        : userAccess?.staff?.representative
+          ? "Representative"
+          : userAccess?.staff?.admin
+            ? "Admin"
+            : userAccess?.staff?.specialist
+              ? "Staff Specialist"
+              : "Member";
+    const accessDisplay = [
+      { ESO: userAccess?.eso?.rank },
+      { FFXIV: userAccess?.ffxiv?.rank },
+      { SWTOR: userAccess?.swtor?.rank },
+      { Role: userAccess?.role },
+      { Rank: highRank },
+      { Raidlead: userAccess?.eso?.raidlead },
+      { Mentor: userAccess?.eso?.mentor },
+    ];
+    const userAlert = () => {};
   }
-  return <div className="text-green-500">Authorized Guild Member</div>;
+  return (
+    <div>
+      <div className="text-green-500">Authorized Guild Member</div>
+      <button>Permissions</button>
+    </div>
+  );
 }
 
 /**
