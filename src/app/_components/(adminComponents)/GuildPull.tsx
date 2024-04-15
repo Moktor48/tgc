@@ -1,5 +1,6 @@
 import { api } from "~/trpc/server";
 import { getServerAuthSession } from "~/server/auth";
+
 interface Guild {
   id: string;
   name: string;
@@ -39,14 +40,13 @@ export async function GuildPull() {
   const session = await getServerAuthSession();
   if (!session)
     return <div className="text-red-500">You are not logged in.</div>;
-
   const userId = session.user.id;
   const token = await api.get.pullAccess.query({
     userId: session.user.id,
   });
-
   if (!token) return <div className="text-red-500">You are not logged in.</div>;
 
+  // FUNCTION SAVED
   const userAccess = await api.get.fullProfile.query({ userId });
   if (!userAccess?.eso?.userId) {
     await api.post.createEsoPermission.mutate({
@@ -85,7 +85,9 @@ export async function GuildPull() {
       guildmaster: false,
     });
   }
+  // FUNCTION SAVED
 
+  //FUNCTION SAVED
   const roleMapping: RoleMapping = {
     "567556412360622080": "Active Staff", // User.role = staff
     "504803026368856074": "Guild Specialist", //staff.specialist = true
@@ -109,7 +111,9 @@ export async function GuildPull() {
       Authorization: `Bearer ${token.access_token}`,
     },
   });
+
   const guilds: Guild[] = (await guildRes.json()) as [];
+
   const tgc = guilds.find((g) => g.id === "314436945792991232");
   if (tgc?.id != "314436945792991232") {
     return (
@@ -123,6 +127,7 @@ export async function GuildPull() {
       guild: true,
     });
   }
+  // FUNCTION SAVED
 
   const guildData = await fetch(
     "https://discord.com/api/users/@me/guilds/314436945792991232/member",
@@ -163,6 +168,7 @@ export async function GuildPull() {
     guildmaster: false,
   };
   let guildStaff = false;
+
   const guildMember = (await guildData.json()) as GuildMember;
 
   if (guildMember.roles.includes("576530924712361986")) {
@@ -232,33 +238,11 @@ export async function GuildPull() {
     if (guildStaff) {
       await api.put.updateUser.mutate({ id: userId, role: "staff" });
     }
-    const userAccess = await api.get.fullProfile.query({ userId });
-    const highRank = userAccess?.staff?.guildmaster
-      ? "Guildmaster"
-      : userAccess?.staff?.highcouncil
-        ? "High Council"
-        : userAccess?.staff?.representative
-          ? "Representative"
-          : userAccess?.staff?.admin
-            ? "Admin"
-            : userAccess?.staff?.specialist
-              ? "Staff Specialist"
-              : "Member";
-    const accessDisplay = [
-      { ESO: userAccess?.eso?.rank },
-      { FFXIV: userAccess?.ffxiv?.rank },
-      { SWTOR: userAccess?.swtor?.rank },
-      { Role: userAccess?.role },
-      { Rank: highRank },
-      { Raidlead: userAccess?.eso?.raidlead },
-      { Mentor: userAccess?.eso?.mentor },
-    ];
-    const userAlert = () => {};
   }
+
   return (
     <div>
       <div className="text-green-500">Authorized Guild Member</div>
-      <button>Permissions</button>
     </div>
   );
 }
