@@ -10,7 +10,8 @@
     "dev": "next dev",
     "postinstall": "prisma generate",
     "lint": "next lint",
-    "start": "next start"
+    "start": "next start",
+    "rebuild": "git pull origina main && npm install && npm run build && pm2 restart all"
   },
   "dependencies": {
     "@next-auth/prisma-adapter": "^1.0.7",
