@@ -3,7 +3,7 @@ import React from "react";
 import { useState } from "react";
 import PieChart from "~/app/_components/(adminComponents)/PieChart";
 import DataWrapper from "~/app/_components/(adminComponents)/DataWrapper";
-import { raw } from "@prisma/client/runtime/library";
+
 type DataType = Record<string, string | number | null>;
 type Props = {
   rankedList: DataType[];

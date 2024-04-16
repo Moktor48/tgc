@@ -40,7 +40,6 @@ export default async function UserManage({
         userFfxiv={userFfxiv}
         userSwtor={userSwtor}
         userStaff={userStaff}
-        perm={perm}
         officer={officer}
       />
     </div>

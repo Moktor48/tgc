@@ -11,36 +11,6 @@ type Props = {
 export default function PieChart(props: Props) {
   const title = props.title;
   const dataset = props.dataset;
-  const cfg = {
-    type: "pie",
-    data: {
-      datasets: [
-        {
-          data: dataset,
-          backgroundColor: [
-            "#FF0000",
-            "#FF7F00",
-            "#FFFF00",
-            "#7FFF00",
-            "#00FF00",
-            "#00FF7F",
-            "#00FFFF",
-            "#007FFF",
-            "#0000FF",
-            "#7F00FF",
-          ],
-        },
-      ],
-      labels: ["Red", "Green", "Blue"],
-    },
-    options: {
-      parsing: {
-        xAxisKey: "dataset\\.task",
-        yAxisKey: "dataset\\.points",
-      },
-      responsive: true,
-    },
-  };
 
   const data = {
     labels: dataset.map((item) => item.task),

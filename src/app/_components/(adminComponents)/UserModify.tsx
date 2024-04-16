@@ -9,15 +9,7 @@ interface Profile {
     ffxiv: string | undefined;
     swtor: string | undefined;
   };
-  perm: {
-    id: string;
-    userId: string;
-    admin: boolean | null;
-    specialist: boolean | null;
-    representative: boolean | null;
-    highcouncil: boolean | null;
-    guildmaster: boolean | null;
-  } | null;
+
   user: {
     id: string;
     name: string;
@@ -26,7 +18,6 @@ interface Profile {
     role: string;
   } | null;
   userEso: {
-    id: string;
     userId: string;
     rank: string;
     raid: boolean | null;
@@ -34,7 +25,6 @@ interface Profile {
     mentor: boolean | null;
   } | null;
   userFfxiv: {
-    id: string;
     userId: string;
     rank: string;
     raid: boolean | null;
@@ -42,7 +32,6 @@ interface Profile {
     mentor: boolean | null;
   } | null;
   userSwtor: {
-    id: string;
     userId: string;
     rank: string;
     raid: boolean | null;
@@ -50,7 +39,6 @@ interface Profile {
     mentor: boolean | null;
   } | null;
   userStaff: {
-    id: string;
     userId: string;
     admin: boolean | null;
     specialist: boolean | null;
@@ -61,7 +49,6 @@ interface Profile {
 }
 
 export default function UserModify({
-  perm,
   officer,
   user,
   userEso,
@@ -71,7 +58,6 @@ export default function UserModify({
   searchUserId,
 }: Profile) {
   const [esoState, setEsoState] = useState({
-    id: userEso?.id ?? "",
     userId: userEso?.userId ?? searchUserId,
     rank: userEso?.rank ?? "none",
     raid: userEso?.raid ?? false,
@@ -79,7 +65,6 @@ export default function UserModify({
     mentor: userEso?.mentor ?? false,
   });
   const [ffxivState, setFfxivState] = useState({
-    id: userFfxiv?.id ?? "",
     userId: userFfxiv?.userId ?? searchUserId,
     rank: userFfxiv?.rank ?? "none",
     raid: userFfxiv?.raid ?? false,
@@ -87,7 +72,6 @@ export default function UserModify({
     mentor: userFfxiv?.mentor ?? false,
   });
   const [swtorState, setSwtorState] = useState({
-    id: userSwtor?.id ?? "",
     userId: userSwtor?.userId ?? searchUserId,
     rank: userSwtor?.rank ?? "none",
     raid: userSwtor?.raid ?? false,
@@ -95,7 +79,6 @@ export default function UserModify({
     mentor: userSwtor?.mentor ?? false,
   });
   const [staffState, setStaffState] = useState({
-    id: userStaff?.id ?? "",
     userId: userStaff?.userId ?? searchUserId,
     admin: userStaff?.admin ?? false,
     specialist: userStaff?.specialist ?? false,
@@ -107,8 +90,8 @@ export default function UserModify({
   const [sucStateFfxiv, setSucStateFfxiv] = useState("text-red-500");
   const [sucStateSwtor, setSucStateSwtor] = useState("text-red-500");
   const [sucStateStaff, setSucStateStaff] = useState("text-red-500");
-  const hasGuildmasterPermissions = Boolean(perm?.guildmaster);
-  const hasHighCouncilPermissions = Boolean(perm?.highcouncil);
+  const hasGuildmasterPermissions = Boolean(userStaff?.guildmaster);
+  const hasHighCouncilPermissions = Boolean(userStaff?.highcouncil);
   const isOfficer = officer.eso === "officer";
   const isFFXIVOfficer = officer.ffxiv === "officer";
   const isSWTOROfficer = officer.swtor === "officer";
@@ -170,22 +153,22 @@ export default function UserModify({
   });
 
   const submitForms = async () => {
-    if (esoState.id === "") {
+    if (esoState.userId === "") {
       createEso.mutate(esoState);
     } else {
       updEso.mutate(esoState);
     }
-    if (ffxivState.id === "") {
+    if (ffxivState.userId === "") {
       createFfxiv.mutate(ffxivState);
     } else {
       updFfxiv.mutate(ffxivState);
     }
-    if (swtorState.id === "") {
+    if (swtorState.userId === "") {
       createSwtor.mutate(swtorState);
     } else {
       updSwtor.mutate(swtorState);
     }
-    if (staffState.id === "") {
+    if (staffState.userId === "") {
       createStaff.mutate(staffState);
     } else {
       updStaff.mutate(staffState);
@@ -425,7 +408,7 @@ export default function UserModify({
             </label>
           )}
 
-          {perm?.guildmaster && (
+          {userStaff?.guildmaster && (
             <label>
               High Council:
               <input
@@ -441,7 +424,7 @@ export default function UserModify({
             </label>
           )}
 
-          {perm?.guildmaster && (
+          {userStaff?.guildmaster && (
             <label>
               Guildmaster:
               <input
