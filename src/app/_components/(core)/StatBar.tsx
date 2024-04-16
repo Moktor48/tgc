@@ -10,10 +10,14 @@ export default async function StatBar() {
   if (!session) {
     return (
       <div className="stats-bar">
-        <div className="stats-item">Online Members</div>
+        <div className="stats-item">
+          Work in Progress! Auto-permissions work, editor in process,
+          leaderboard functioning.
+        </div>
+        {/*<div className="stats-item">Online Members</div>
         <div className="stats-item">ESO: {esoCount}</div>
         <div className="stats-item">FFXIV: {ffxivCount}</div>
-        <div className="stats-item">SWTOR: {swtorCount}</div>
+    <div className="stats-item">SWTOR: {swtorCount}</div>*/}
       </div>
     );
   }
@@ -21,10 +25,14 @@ export default async function StatBar() {
 
   return (
     <div className="stats-bar">
-      <div className="stats-item">Online Members</div>
-      <div className="stats-item">ESO: {esoCount}</div>
-      <div className="stats-item">FFXIV: {ffxivCount}</div>
-      <div className="stats-item">SWTOR: {swtorCount}</div>
+      <div className="stats-item">
+        Work in Progress! Auto-permissions work, editor in process, leaderboard
+        functioning.
+      </div>
+      {/*<div className="stats-item">Online Members</div>
+        <div className="stats-item">ESO: {esoCount}</div>
+        <div className="stats-item">FFXIV: {ffxivCount}</div>
+    <div className="stats-item">SWTOR: {swtorCount}</div>*/}
       <div className="stats-item-menu flex">
         <span className="inline-flex">
           {session.user.image != null && (
