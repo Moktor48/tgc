@@ -29,7 +29,7 @@ export default async function RootLayout({
 }) {
   // pull ALL the things here, permissions, etc, and add to sessionStorage?
   const session = await getServerAuthSession();
-  const userId = session?.user.id;
+  const userId = session!.user.id;
   const role = session?.user.role;
 
   return (
