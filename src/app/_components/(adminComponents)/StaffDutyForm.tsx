@@ -37,6 +37,7 @@ export default function StaffDutyForm() {
   const formSubmit = api.post.staffDuty.useMutation({
     onSuccess: () => {
       alert("Data has been uploaded");
+      location.reload();
     },
     onError: () => {
       alert("There was an error uploading the data");
@@ -122,22 +123,14 @@ export default function StaffDutyForm() {
   };
 
   return (
-    <div>
-      <h3 className="text-white">Select a file to upload:</h3>
-      <input
-        className="button-40 text-white"
-        type="file"
-        onChange={handleFileChange}
-      />
-      <button
-        className="button-40 text-green-500"
-        onClick={handleFileUpload}
-        disabled={guildInfo === "0"}
-      >
-        Upload
-      </button>
-      <form action="">
-        <h3>Choose a Guild:</h3>
+    <div className="column flex w-full justify-center">
+      <div className="newsletter flex w-1/3">
+        <h3 className="text-white">Select a file to upload:</h3>
+        <br />
+        <input className="text-white" type="file" onChange={handleFileChange} />
+        <br />
+
+        <h3 className="text-white">Choose a Guild:</h3>
         <select
           name="guildType"
           id="guildType"
@@ -153,68 +146,20 @@ export default function StaffDutyForm() {
           <option value={9}>TNC</option>
           <option value={10}>TDC</option>
         </select>
-        <input
-          className="button-40 text-white"
-          type="submit"
-          name="submit"
-          value="Upload File"
-        />
-      </form>
+        <br />
+        <span className="bg-black text-red-500">
+          WARNING! DOUBLE check that you are submitting the correct file to the
+          correct guild!!!!! Once you submit, it makes a permanent entry to the
+          database!
+        </span>
+        <button
+          className="button-40 text-green-500"
+          onClick={handleFileUpload}
+          disabled={guildInfo === "0"}
+        >
+          Upload
+        </button>
+      </div>
     </div>
   );
 }
-
-/*
-
-IF
-guildInfo = "0"        values[2] = "Inv"    newEntry.duty_type = "100"
-          = "1"                                             = "91"
-          = "2"                                             = "92"
-          = "3"                                             = "93"
-          = "4"                                             = "94"
-          = "5"                                             = "95"
-          = "9"                                             = "89"
-          = "10"                                            = "90"
-
-if (values[2] === "Inv") {
-  if (guildInfo === "0") {
-    newEntry.duty_type = "100";
-  } else if (guildInfo === "1") {
-    newEntry.duty_type = "91";
-  } else if (guildInfo === "2") {
-    newEntry.duty_type = "92";
-  } else if (guildInfo === "3") {
-    newEntry.duty_type = "93";
-  } else if (guildInfo === "4") {
-    newEntry.duty_type = "94";
-  } else if (guildInfo === "5") {
-    newEntry.duty_type = "95";
-  } else if (guildInfo === "9") {
-    newEntry.duty_type = "89";
-  } else if (guildInfo === "10") {
-    newEntry.duty_type = "90";
-  }
-}
-
-if (values[2] === "Inv") {
-  guildInfo === "0" ? newEntry.duty_type = "100" : guildInfo === "1" ? newEntry.duty_type = "91" : guildInfo === "2" ? newEntry.duty_type = "92" : guildInfo === "3" ? newEntry.duty_type = "93" : guildInfo === "4" ? newEntry.duty_type = "94" : guildInfo === "5" ? newEntry.duty_type = "95" : guildInfo === "9" ? newEntry.duty_type = "89" : guildInfo === "10" ? newEntry.duty_type = "90" : null;
-} else if (values[2] === "Join") {newEntry.duty_type = "96"} else if (values[2] === "Pro") {newEntry.duty_type = "98"} else if (values[2] === "Kick") {newEntry.duty_type = "99"} else if (values[2] === "Dem") {newEntry.duty_type = "97"} else if (values[2] === "Left") {newEntry.duty_type = "95"}
-
-
-        case 'Join':
-            return 96;
-        
-        case 'Pro':
-            return 98;
-        case 'Kick':
-            return 99;
-        case 'Dem':
-            return 97;
-        case 'Left':
-            return 95;
-        default:
-            return -1;
-
-case 'Inv':
-            return 100;
-*/

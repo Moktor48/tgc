@@ -92,17 +92,29 @@ export default function UserModify({
   const [sucStateStaff, setSucStateStaff] = useState("text-red-500");
   const hasGuildmasterPermissions = Boolean(userStaff?.guildmaster);
   const hasHighCouncilPermissions = Boolean(userStaff?.highcouncil);
+  const hasAdminPermissions = Boolean(userStaff?.admin);
   const isOfficer = officer.eso === "officer";
   const isFFXIVOfficer = officer.ffxiv === "officer";
   const isSWTOROfficer = officer.swtor === "officer";
   const showPermissions =
-    hasGuildmasterPermissions || hasHighCouncilPermissions || isOfficer;
+    hasGuildmasterPermissions ||
+    hasHighCouncilPermissions ||
+    hasAdminPermissions ||
+    isOfficer;
   const showFFXIVPermissions =
-    hasGuildmasterPermissions || hasHighCouncilPermissions || isFFXIVOfficer;
+    hasGuildmasterPermissions ||
+    hasHighCouncilPermissions ||
+    hasAdminPermissions ||
+    isFFXIVOfficer;
   const showSWTORPermissions =
-    hasGuildmasterPermissions || hasHighCouncilPermissions || isSWTOROfficer;
+    hasGuildmasterPermissions ||
+    hasHighCouncilPermissions ||
+    hasAdminPermissions ||
+    isSWTOROfficer;
   const showStaffPermissions =
-    hasGuildmasterPermissions || hasHighCouncilPermissions;
+    hasGuildmasterPermissions ||
+    hasHighCouncilPermissions ||
+    hasAdminPermissions;
   const updEso = api.put.updateUserEso.useMutation({
     onSuccess(data) {
       if (!data) return null;

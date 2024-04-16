@@ -1,7 +1,4 @@
-//Page for staff members, will include portals to staff related pages.
-import Link from "next/link";
 import React from "react";
-import LeaderQuery from "~/app/_components/(adminComponents)/LeaderQuery";
 import { getServerAuthSession } from "~/server/auth";
 import { api } from "~/trpc/server";
 
@@ -32,19 +29,6 @@ export default async function StaffPage({
             {perm?.admin && "admin "} {perm?.highcouncil && "high council "}{" "}
             {perm?.guildmaster && "guildmaster"}.
           </p>
-          <p>Custom Page for officers</p>
-          <p>Guild breakdown for this officer</p>
-          <p>Ability to create and modify events for guild</p>
-          <p>Ability to make guild page announcements</p>
-          <br />
-          <h1 className="text-yellow-500">Leaderboard Point List</h1>
-          <LeaderQuery id={id} />
-          <br />
-          <Link href={`../../../editor/${id}/approve`}>
-            <span className="text-3xl text-yellow-500">Post Approvals</span>
-          </Link>{" "}
-          <br />
-          <Link href={`/dashboard/${id}/staff/userSearch`}>Search Users</Link>
         </div>
       </div>
     </>

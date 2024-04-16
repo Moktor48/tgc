@@ -136,11 +136,11 @@ export const putRouter = createTRPCRouter({
     .input(
       z.object({
         userId: z.string(),
-        admin: z.boolean(),
-        specialist: z.boolean(),
-        representative: z.boolean(),
-        highcouncil: z.boolean(),
-        guildmaster: z.boolean(),
+        admin: z.boolean().optional(),
+        specialist: z.boolean().optional(),
+        representative: z.boolean().optional(),
+        highcouncil: z.boolean().optional(),
+        guildmaster: z.boolean().optional(),
       }),
     )
     .mutation(async ({ input }) => {

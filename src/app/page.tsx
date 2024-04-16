@@ -49,6 +49,7 @@ export default async function Home() {
   const token = await api.get.pullAccess.query({
     userId: session.user.id,
   });
+  const userAccess = await api.get.fullProfile.query({ userId });
   const esoEntry = {
     userId: userId,
     rank: "none",
@@ -72,13 +73,12 @@ export default async function Home() {
   };
   const staffEntry = {
     userId: userId,
-    admin: false,
+    admin: userAccess?.staff?.admin ?? false,
     specialist: false,
     representative: false,
     highcouncil: false,
     guildmaster: false,
   };
-  const userAccess = await api.get.fullProfile.query({ userId });
 
   if (!userAccess?.eso?.userId) {
     await api.post.createEsoPermission.mutate({
@@ -141,6 +141,7 @@ export default async function Home() {
   }
   const roleMapping: RoleMapping = {
     "567556412360622080": "Active Staff", // User.role = staff
+    "504802843966963723": "Junior Officer", // Held just in case
     "504803026368856074": "Guild Specialist", //staff.specialist = true
     "504811023111290881": "Guildmaster", // staff.guildmaster = true
     "504801655154540547": "High Council", // staff.highcouncil = true
@@ -201,6 +202,7 @@ export default async function Home() {
           break;
         case "Guildmaster":
           staffEntry.guildmaster = true;
+          staffEntry.admin = true;
           break;
         case "High Council":
           staffEntry.highcouncil = true;

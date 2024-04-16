@@ -1,13 +1,16 @@
 import Link from "next/link";
 import Image from "next/image";
+import { api } from "~/trpc/server";
 
 export default async function NavBar({
   role,
   id,
 }: {
   role: string | undefined;
-  id: string | undefined;
+  id: string;
 }) {
+  const admin = await api.get.staffPermission.query({ userId: id });
+
   return (
     <div className="navbar" id="navbar">
       <div className="dropdown">
@@ -89,12 +92,17 @@ export default async function NavBar({
           </button>
           <div className="nav-dropdown-content">
             <Link href={`/dashboard/${id}/staff`}>Staff</Link>
-            <Link href={`/dashboard/${id}/staff/admin`}>Admin</Link>
+
             <Link href={`/editor/${id}/approve`}>Post Approvals</Link>
             <Link href={`/editor/${id}`}>Create Post</Link>
-            <Link href={`/dashboard/${id}/staff/stafftracker`}>
-              Staff Tracker
-            </Link>
+            {admin?.admin && (
+              <Link href={`/dashboard/${id}/staff/stafftracker`}>
+                Staff Tracker
+              </Link>
+            )}
+            {admin?.admin && (
+              <Link href={`/dashboard/${id}/staff/admin`}>Admin</Link>
+            )}
           </div>
         </div>
       )}

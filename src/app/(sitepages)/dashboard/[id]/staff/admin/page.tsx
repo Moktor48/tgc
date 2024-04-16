@@ -1,5 +1,6 @@
 import Link from "next/link";
 import React from "react";
+import LeaderQuery from "~/app/_components/(adminComponents)/LeaderQuery";
 import UserPull from "~/app/_components/(adminComponents)/UserPull";
 import UserSearch from "~/app/_components/(adminComponents)/UserSearch";
 import { getServerAuthSession } from "~/server/auth";
@@ -34,6 +35,10 @@ export default async function page({ params }: { params: { id: string } }) {
             <button className="button-40">BUILD!</button>
           </Link>
           <br />
+          <div className="bg-slate-900">
+            <h1 className="text-yellow-500">Leaderboard Point List</h1>
+            <LeaderQuery id={id} />
+          </div>
         </div>
       </div>
     </>
