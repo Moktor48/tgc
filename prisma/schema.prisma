@@ -514,3 +514,10 @@ model velothi_waivers {
   uid           Int      @id @default(autoincrement())
   record_date   DateTime @default(now()) @db.DateTime(0)
 }
+
+model trials {
+  trial_name String @id @db.VarChar(255)
+  base_value Int    @default(0)
+  hard_mode  Int    @default(0)
+  veteran    Int    @default(0)
+}

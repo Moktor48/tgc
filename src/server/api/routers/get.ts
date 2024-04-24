@@ -592,5 +592,36 @@ export const getRouter = createTRPCRouter({
       });
       return points;
     }),
+  trialLeader: protectedProcedure.query(async () => {
+    const leaders = await db.user.findMany({
+      where: {
+        eso: {
+          raidlead: true,
+        },
+      },
+    });
+    return leaders;
+  }),
+  raiders: protectedProcedure.query(async () => {
+    const raiders = await db.user.findMany({
+      where: {
+        eso: {
+          raid: true,
+        },
+      },
+    });
+    return raiders;
+  }),
+  trials: protectedProcedure.query(async () => {
+    const trials = await db.trials.findMany({});
+    return trials;
+  }),
 }); // This is the end, lawlz.
-//
+/**
+ * 
+ allUsers: protectedProcedure.query(async () => {
+    const users = await db.user.findMany({});
+    return users;
+  }),
+ * 
+ */
