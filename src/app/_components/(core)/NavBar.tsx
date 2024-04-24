@@ -7,8 +7,9 @@ export default async function NavBar({
   id,
 }: {
   role: string | undefined;
-  id: string;
+  id: string | undefined;
 }) {
+  if (!id) return null;
   const admin = await api.get.staffPermission.query({ userId: id });
 
   return (
