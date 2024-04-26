@@ -10,7 +10,7 @@ export default async function page() {
   const permissions = await api.get.fullProfile.query({
     userId: userId,
   });
-  if (!permissions?.eso?.raidlead)
+  if (!permissions?.eso?.raidlead && !permissions?.staff?.admin)
     return <p className="text-red-500">Unauthorized</p>;
   const trialLeaders = await api.get.trialLeader.query();
   const raiders = await api.get.raiders.query();

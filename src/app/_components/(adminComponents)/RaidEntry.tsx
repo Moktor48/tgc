@@ -33,9 +33,8 @@ export default function RaidEntry({
     veteran: number;
   }[];
 }) {
-  const defaultLeader = leaders.find((leader) => leader.id === userId);
-  const [leader, setLeader] = useState({defaultLeader.name});
-  const [member, setMember] = useState([]);
+  const [leader, setLeader] = useState("");
+  const [selectedRaiders, setSelectedRaiders] = useState<string[]>([]);
   const [trial, setTrial] = useState("");
   const [modifiers, setModifiers] = useState({
     hardMode: false,
@@ -44,33 +43,96 @@ export default function RaidEntry({
     speedRun: false,
     noBuffs: false,
   });
+  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value, checked } = e.target;
+    setSelectedRaiders((prevState) => {
+      if (checked) {
+        // Add raider to selectedRaiders
+        return [...prevState, value];
+      } else {
+        // Remove raider from selectedRaiders
+        return prevState.filter((raider) => raider !== value);
+      }
+    });
+  };
   return (
     <div>
       <form>
-        <select>
-          <option value={trial}>Please select...</option>
-          {trials.map((trial) => (
-            <option key={trial.trial_name} value={trial.trial_name}>
-              {trial.trial_name}
-            </option>
-          ))}
-        </select>
-        <select>
+        <select onChange={(e) => setLeader(e.target.value)}>
           <option value={leader}>Please select...</option>
-          {leaders.map((leader) => (
-            <option key={leader.id} value={leader.id}>
-              {leader.name}
+          {leaders.map((data) => (
+            <option key={data.id} value={data.id}>
+              {data.name}
             </option>
           ))}
         </select>
-        <select>
-          <option value="">Please select...</option>
-          {raiders.map((raider) => (
-            <option key={raider.id} value={raider.id}>
-              {raider.name}
+        <select onChange={(e) => setTrial(e.target.value)}>
+          <option value={trial}>Please select...</option>
+          {trials.map((data) => (
+            <option key={data.trial_name} value={data.trial_name}>
+              {data.trial_name}
             </option>
           ))}
         </select>
+        <div>
+          <input
+            type="checkbox"
+            value="hardMode"
+            onChange={(e) =>
+              setModifiers({ ...modifiers, hardMode: e.target.checked })
+            }
+            checked={modifiers.hardMode}
+          />
+          <label>Hard Mode</label>
+          <input
+            type="checkbox"
+            value="veteran"
+            onChange={(e) =>
+              setModifiers({ ...modifiers, veteran: e.target.checked })
+            }
+            checked={modifiers.veteran}
+          />
+          <label>Veteran</label>
+          <input
+            type="checkbox"
+            value="noDeath"
+            onChange={(e) =>
+              setModifiers({ ...modifiers, noDeath: e.target.checked })
+            }
+            checked={modifiers.noDeath}
+          />
+          <label>No Death</label>
+          <input
+            type="checkbox"
+            value="speedRun"
+            onChange={(e) =>
+              setModifiers({ ...modifiers, speedRun: e.target.checked })
+            }
+            checked={modifiers.speedRun}
+          />
+          <label>Speed Run</label>
+          <input
+            type="checkbox"
+            value="noBuffs"
+            onChange={(e) =>
+              setModifiers({ ...modifiers, noBuffs: e.target.checked })
+            }
+            checked={modifiers.noBuffs}
+          />
+          <label>No Buffs</label>
+        </div>
+
+        {raiders.map((data) => (
+          <label key={data.id}>
+            <input
+              type="checkbox"
+              value={data.id}
+              onChange={handleCheckboxChange}
+              checked={selectedRaiders.includes(data.id)}
+            />
+            {data.name}
+          </label>
+        ))}
       </form>
     </div>
   );

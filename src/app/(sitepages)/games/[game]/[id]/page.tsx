@@ -20,21 +20,33 @@ export default async function page({ params }: { params: { game: string } }) {
   }
   if (!permission || permission.rank === "none")
     return <p>You do not seem to belong to this guild.</p>;
-
+  const admin = await api.get.staffPermission.query({ userId: id });
   return (
-    <>
+    <div>
+      <p className="text-white">Hello {session.user.name}!</p>
+      <p className="text-3xl text-white">
+        Current published guild announcements for {game} will be here
+      </p>
       <div>
-        <p className="text-white">Hello {session.user.name}!</p>
-        <p className="text-3xl text-white">
-          Current published guild announcements for {game} will be here
-        </p>
-        <div>
-          <h1>Article Selection</h1>
-          <Link href={`/games/${game}/${id}/guide`}>Guides</Link>
-          <Link href={`/games/${game}/${id}/build`}>Builds</Link>
-        </div>
+        <h1>Article Selection</h1>
+        <Link href={`/games/${game}/${id}/guide`}>Guides</Link>
+        <Link href={`/games/${game}/${id}/build`}>Builds</Link>
       </div>
-    </>
+      {game === "eso" && permission.raidlead && (
+        <div>
+          <Link href={`/dashboard/${id}/staff/raidpoints`}>
+            <h1>Trial Entry SysTem</h1>
+          </Link>
+        </div>
+      )}
+      {admin?.admin && (
+        <div>
+          <Link href={`/dashboard/${id}/staff/raidpoints`}>
+            <h1>Trial Entry SysTem</h1>
+          </Link>
+        </div>
+      )}
+    </div>
   );
 }
 
