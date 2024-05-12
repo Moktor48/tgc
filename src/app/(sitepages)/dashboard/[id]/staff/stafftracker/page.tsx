@@ -10,9 +10,7 @@ export default async function page() {
   const admin = await api.get.staffPermission.query({
     userId: session.user.id,
   });
-  if (!admin)
-    return <span className="bg-black text-red-500">UNAUTHORIZED</span>;
-  if (!admin.admin)
+  if (!admin?.admin)
     return <span className="bg-black text-red-500">UNAUTHORIZED</span>;
   return (
     <div>

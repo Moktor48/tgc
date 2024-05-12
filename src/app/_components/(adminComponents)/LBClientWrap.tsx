@@ -18,17 +18,22 @@ type PieProps = {
   dataset: DataType[];
   title: string;
 };
+interface Point {
+  points: number;
+  task: string;
+}
 export default function LBClientWrap({
   rankedList,
   chartData,
   rawData,
 }: Props) {
+  //Basic Pie Chart with overall display when first loaded
   const [pie, setPie] = useState([
     <PieChart title={"Points Earned by Staff"} dataset={chartData} />,
   ]);
 
   const [checked, setChecked] = useState<CheckedItem[]>([]);
-
+  // Code to add additional charts based on selecting a member
   // Props here will be an array of objects with a key: value pairing, sorted data should be x:y values
   const addChart = (props: PieProps) => {
     setPie((prevPie) => {
@@ -64,6 +69,7 @@ export default function LBClientWrap({
     });
   };
 
+  // This adds indivdual stats in, and is likely the starting point to collate distributed information
   const compare = () => {
     const user = [] as string[];
     checked.forEach((element) => {
@@ -83,10 +89,10 @@ export default function LBClientWrap({
       const userPoints = rawData.filter((data) => data.user_name === element);
 
       // Push all data into an array
-      const pointArray = userPoints.map((data) => {
+      const pointArray: Point[] = userPoints.map((data) => {
         return {
-          points: data.points,
-          task: data.task,
+          points: Number(data.points),
+          task: data.task ? data.task.toString() : "",
         };
       });
       // Combines all points earned to parse task points combined
@@ -94,16 +100,16 @@ export default function LBClientWrap({
         (acc, point) => {
           if (point.task && point.points) {
             if (acc[point.task]) {
-              acc[point.task] += Number(point.points);
+              acc[point.task] += point.points;
             } else {
-              acc[point.task] = Number(point.points);
+              acc[point.task] = point.points;
             }
           }
           return acc;
         },
         {},
       );
-      const taskPointsArray: DataType[] = Object.entries(taskPoints).map(
+      const taskPointsArray = Object.entries(taskPoints).map(
         ([task, points]) => ({ task, points }),
       );
 
@@ -127,8 +133,11 @@ export default function LBClientWrap({
       </div>
       <div className="flex justify-center">
         <button className="button-40" onClick={compare}>
-          COMPARE
+          COMPARE SELECTED MEMBERS
         </button>
+      </div>
+      <div className="flex w-full justify-center">
+        <span className="newscolor w-1/2 text-center">Detailed Data</span>
       </div>
     </div>
   );

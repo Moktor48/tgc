@@ -76,6 +76,8 @@ export default async function Home() {
     admin: userAccess?.staff?.admin ?? false,
     specialist: false,
     representative: false,
+    juniorofficer: false,
+    officer: false,
     highcouncil: false,
     guildmaster: false,
   };
@@ -113,6 +115,8 @@ export default async function Home() {
       admin: false,
       specialist: false,
       representative: false,
+      juniorofficer: false,
+      officer: false,
       highcouncil: false,
       guildmaster: false,
     });
@@ -141,7 +145,7 @@ export default async function Home() {
   }
   const roleMapping: RoleMapping = {
     "567556412360622080": "Active Staff", // User.role = staff
-    "504802843966963723": "Junior Officer", // Held just in case
+    "504802843966963723": "Junior Officer", // staff.juniorofficer = true
     "504803026368856074": "Guild Specialist", //staff.specialist = true
     "504811023111290881": "Guildmaster", // staff.guildmaster = true
     "504801655154540547": "High Council", // staff.highcouncil = true
@@ -156,6 +160,7 @@ export default async function Home() {
     "715795715808297022": "SWTOR Staff", //swtor.rank = officer
     "1068151252837478410": "FFXIV", //ffxiv.rank = member
     "1071853800438108320": "FFXIV Staff", //ffxiv.rank = officer
+    "504802286560739338": "Community Officer", // staff.officer = true
   };
 
   const guildData = await fetch(
@@ -214,6 +219,12 @@ export default async function Home() {
           break;
         case "Representative":
           staffEntry.representative = true;
+          break;
+        case "Junior Officer":
+          staffEntry.juniorofficer = true;
+          break;
+        case "Community Officer":
+          staffEntry.officer = true;
           break;
         case "Raid Leader Core":
           esoEntry.raidlead = true;

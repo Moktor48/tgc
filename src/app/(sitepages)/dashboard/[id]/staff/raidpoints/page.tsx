@@ -10,23 +10,24 @@ export default async function page() {
   const permissions = await api.get.fullProfile.query({
     userId: userId,
   });
-  if (!permissions?.eso?.raidlead && !permissions?.staff?.admin)
-    return <p className="text-red-500">Unauthorized</p>;
-  const trialLeaders = await api.get.trialLeader.query();
-  const raiders = await api.get.raiders.query();
-  const trials = await api.get.trials.query();
+  //if (!permissions?.eso?.raidlead && !permissions?.staff?.admin)
+  //return <p className="text-red-500">Unauthorized</p>;
+  //const trialLeaders = await api.get.trialLeader.query();
+  //const raiders = await api.get.raiders.query();
+  //const trials = await api.get.trials.query();
   return (
     <div>
       <h1>TGC Entry System - Trials (TEST)</h1>
-      <RaidEntry
+      {/*<RaidEntry
         leaders={trialLeaders}
         raiders={raiders}
         trials={trials}
         userId={userId}
-      />
+  />*/}
     </div>
   );
 }
+
 /**
 NOTES:
 Entry for raids

@@ -5,7 +5,6 @@ import { Element } from "html-react-parser";
 import type { HTMLReactParserOptions } from "html-react-parser";
 
 export default function TinyMCEDisplay({
-  id,
   postId,
 }: {
   id: string;

@@ -29,7 +29,7 @@ model Account {
 model Session {
   id           String   @id @default(cuid())
   sessionToken String   @unique
-  userId       String   @unique
+  userId       String
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
@@ -43,7 +43,7 @@ model User {
   role             String              @default("guest")
   tgc_guild_member Boolean             @default(false)
   accounts         Account?
-  sessions         Session?
+  sessions         Session[]
   eso              eso?
   ffxiv            ffxiv?
   posts            post[]
@@ -112,7 +112,7 @@ model post_modification {
 }
 
 model eso {
-  userId   String   @id
+  userId   String   @id @unique
   rank     String   @default("none")
   raid     Boolean? @default(false)
   raidlead Boolean? @default(false)
@@ -121,7 +121,7 @@ model eso {
 }
 
 model ffxiv {
-  userId   String   @id
+  userId   String   @id @unique
   rank     String   @default("none")
   raid     Boolean? @default(false)
   raidlead Boolean? @default(false)
@@ -130,7 +130,7 @@ model ffxiv {
 }
 
 model swtor {
-  userId   String   @id
+  userId   String   @id @unique
   rank     String   @default("none")
   raid     Boolean? @default(false)
   raidlead Boolean? @default(false)
@@ -139,12 +139,15 @@ model swtor {
 }
 
 model staff {
-  userId         String   @id
+  userId         String   @id @unique
   admin          Boolean? @default(false)
   specialist     Boolean? @default(false)
   representative Boolean? @default(false)
   highcouncil    Boolean? @default(false)
   guildmaster    Boolean? @default(false)
+  juniorofficer  Boolean? @default(false)
+  officer        Boolean? @default(false)
+  seniorofficer  Boolean? @default(false)
   user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
@@ -174,6 +177,7 @@ model staff_duty {
   timestamp         DateTime          @default(now()) @db.Timestamp(6)
   target            Int?
   eso_target_user   String?           @db.VarChar(255)
+  message_content   String?           @db.Text
   description       String?
   staff_point_chart staff_point_chart @relation(fields: [duty_type], references: [task_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_duty_to_task")
   discord_user      discord_user      @relation(fields: [gmember_id], references: [gmember_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_duty_to_user")
@@ -262,11 +266,11 @@ model discord_join_leave {
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 model discord_message {
-  message_uid Int      @id
+  message_uid BigInt   @id
   gmember_id  String
-  channel_id  Int
-  content     String
+  content     String   @db.Text
   timestamp   DateTime @default(now()) @db.Timestamp(6)
+  channel_id  Int?
 }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments

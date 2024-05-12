@@ -15,33 +15,13 @@ export default async function UserManage({
   const perm = await api.get.staffPermission.query({
     userId: userId,
   });
-  const permE = await api.get.esoPermission.query({
-    userId: userId,
-  });
-  const permF = await api.get.ffxivPermission.query({
-    userId: userId,
-  });
-  const permS = await api.get.swtorPermission.query({
-    userId: userId,
-  });
-  const officer = { eso: permE?.rank, ffxiv: permF?.rank, swtor: permS?.rank };
+
   if (!perm?.admin) return <p>You aren't allowed to be here!</p>;
   const user = await api.get.userProfile.query({ userId: searchId });
-  const userEso = await api.get.esoPermission.query({ userId: searchId });
-  const userFfxiv = await api.get.ffxivPermission.query({ userId: searchId });
-  const userSwtor = await api.get.swtorPermission.query({ userId: searchId });
   const userStaff = await api.get.staffPermission.query({ userId: searchId });
   return (
     <div>
-      <UserModify
-        user={user}
-        searchUserId={searchId}
-        userEso={userEso}
-        userFfxiv={userFfxiv}
-        userSwtor={userSwtor}
-        userStaff={userStaff}
-        officer={officer}
-      />
+      <UserModify user={user} searchUserId={searchId} userStaff={userStaff} />
     </div>
   );
 }

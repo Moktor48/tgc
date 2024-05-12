@@ -5,6 +5,7 @@ import { getServerAuthSession } from "~/server/auth";
 import { api } from "~/trpc/server";
 
 import LBClientWrap from "~/app/_components/(adminComponents)/LBClientWrap";
+import LBDisplayWrap from "~/app/_components/(adminComponents)/LBDisplayWrap";
 
 type DataType = Record<string, string | number | null>;
 export default async function page({
@@ -15,17 +16,28 @@ export default async function page({
   searchParams: { start: string; end: string };
 }) {
   const session = await getServerAuthSession();
-  if (!session) return <p>You need to log in</p>;
+  if (!session) return <p className="text-yellow-500">You need to log in</p>;
   const id = params.id;
-  if (!id) return <p>Invalid ID</p>;
+  if (!id) return <p className="text-red-500">Invalid ID</p>;
+  const admin = await api.get.staffPermission.query({ userId: id });
+  if (!admin) return <p className="text-red-500">Invalid Permissions</p>;
+  const start = new Date(searchParams.start);
+  start.setUTCHours(4, 0, 0, 0); // Set the time to 04:00:00.000Z
 
-  const startDate = searchParams.start;
-  const endDate = searchParams.end;
+  const end = new Date(searchParams.end);
+  end.setUTCDate(end.getUTCDate() + 1); // Add 1 day
+  end.setUTCHours(3, 59, 59, 999); // Set the time to 03:59:59.999Z
 
   // This query pulls all data from staff_duty given two dates
-  const points = await api.get.dutyQuery.query({ startDate, endDate });
+  const points = await api.get.dutyQuery.query({ start, end });
 
-  // Raw data HERE [{}{}{}]
+  if (points[0]) {
+    console.log("First record timestamp:", points[0].timestamp);
+  }
+  if (points[points.length - 1]) {
+    console.log("Last record timestamp:", points[points.length - 1]!.timestamp);
+  }
+  // Raw data HERE [{}{}{}] This is the primary source of data, name/task/points
   const userPoints = points.map((data) => {
     return {
       user_id: data.gmember_id,
@@ -34,8 +46,48 @@ export default async function page({
       task: data.staff_point_chart.task_description,
     };
   });
+  //---------------------------------------Task Count per User---------------------------------------
+  // Counting tasks per user
+  const filteredUsers: Record<string, Record<string, number>> = {};
 
-  // Push all data into an array
+  const userTasks = userPoints.reduce<Record<string, Record<string, number>>>(
+    (acc, point) => {
+      if (
+        point.user_name &&
+        point.task &&
+        point.task !== "Left the Guild" &&
+        point.task !== "Joined the Guild"
+      ) {
+        if (!acc[point.user_name]) {
+          acc[point.user_name] = {};
+        }
+        if (!acc[point.user_name]![point.task]) {
+          acc[point.user_name]![point.task] = 1;
+        } else {
+          acc[point.user_name]![point.task] += 1;
+        }
+      } else if (
+        point.user_name &&
+        (point.task === "Left the Guild" || point.task === "Joined the Guild")
+      ) {
+        if (!filteredUsers[point.user_name]) {
+          filteredUsers[point.user_name] = {};
+        }
+        if (!filteredUsers[point.user_name]![point.task]) {
+          filteredUsers[point.user_name]![point.task] = 1;
+        } else {
+          filteredUsers[point.user_name]![point.task] += 1;
+        }
+      }
+      return acc;
+    },
+    {},
+  );
+  console.log("User Task Count:", userTasks);
+  console.log("Filtered Users:", filteredUsers);
+
+  //----------------------------------------POINTS per TASK----------------------------------------
+  // Push all data into an array, this is for the overall guild stats (tracking tasks of ALL)
   const pointArray = points.map((data) => {
     return {
       points: data.staff_point_chart.point_value,
@@ -43,7 +95,7 @@ export default async function page({
     };
   });
 
-  // Combines all points earned to parse task points combined
+  // Combines all points earned to parse task points combined (reduces all points by task)
   const taskPoints = pointArray.reduce<Record<string, number>>((acc, point) => {
     if (point.task && point.points) {
       if (acc[point.task]) {
@@ -77,7 +129,7 @@ export default async function page({
       points,
     }),
   );
-
+  //-------------------------------------USER POINTS, GENERAL-------------------------------------
   // Combining all points earned by user
   const objPoints = userPoints.reduce((acc: Record<string, number>, point) => {
     if (point.points) {
@@ -104,16 +156,49 @@ export default async function page({
     return bPoints - aPoints;
   });
 
+  //------------------------USER POINTS, Individual-------------------------------------
+  const pointArrayIndividual = points.map((data) => {
+    return {
+      user_name: data.discord_user.disc_nickname,
+      points: data.staff_point_chart.point_value,
+      task: data.staff_point_chart.task_description,
+    };
+  });
+
+  const taskPointsIndividual = pointArrayIndividual.reduce<
+    Record<string, Record<string, number>>
+  >((acc, point) => {
+    if (point.task && point.points && point.user_name) {
+      if (!acc[point.user_name]) {
+        acc[point.user_name] = {};
+      }
+      if (acc[point.user_name]![point.task]) {
+        acc[point.user_name]![point.task] += point.points;
+      } else {
+        acc[point.user_name]![point.task] = point.points;
+      }
+    }
+    return acc;
+  }, {});
+
   return (
-    <div>
+    <div className="">
       <p className="newscolor text-center">
-        This query is searching between {startDate} and {endDate}
+        This query is searching between {start.toISOString()} and{" "}
+        {end.toISOString()}
       </p>
       <LBClientWrap
         rankedList={rankedList}
         chartData={pointsPerTask}
         rawData={userPoints}
       />
+      <div className="">
+        <LBDisplayWrap
+          point={taskPointsIndividual}
+          task={userTasks}
+          join={filteredUsers}
+        />
+      </div>
     </div>
   );
 }

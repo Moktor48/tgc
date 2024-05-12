@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 
 export default function LeaderQuery({ id }: { id: string }) {
   const d = new Date();
-  const start = d.setDate(d.getDate() - 7);
+  const start = d.setDate(d.getDate() - 6);
   const startDate = new Date(start).toISOString().split("T")[0]!;
   const endDate = new Date().toISOString();
   const router = useRouter();
@@ -34,18 +34,22 @@ export default function LeaderQuery({ id }: { id: string }) {
     <div>
       <div>
         <form onSubmit={handleSubmit}>
-          <label htmlFor="start">Start Date</label>
+          <label className="mr-10" htmlFor="start">
+            Start Date
+          </label>
           <input
-            className="text-black"
+            className="text-white"
             type="date"
             name="start"
             value={queryDate.start}
-            onChange={(event) =>
-              setQueryDate({ ...queryDate, start: event.target.value })
-            }
+            onChange={(event) => {
+              setQueryDate({ ...queryDate, start: event.target.value });
+            }}
           />
           <br />
-          <label htmlFor="present">Query to Present?</label>
+          <label className="mr-10" htmlFor="present">
+            Query to NOW?
+          </label>
           <input
             name="present"
             type="checkbox"
@@ -53,16 +57,20 @@ export default function LeaderQuery({ id }: { id: string }) {
             onChange={handleChange}
           />
           <br />
-          {!present && <label htmlFor="end">End Date</label>}
+          {!present && (
+            <label className="mr-10" htmlFor="end">
+              End Date
+            </label>
+          )}
           {!present && (
             <input
-              className="text-black"
+              className="text-white"
               type="date"
               name="end"
               value={queryDate.end}
-              onChange={(event) =>
-                setQueryDate({ ...queryDate, end: event.target.value })
-              }
+              onChange={(event) => {
+                setQueryDate({ ...queryDate, end: event.target.value });
+              }}
             />
           )}
           <br />

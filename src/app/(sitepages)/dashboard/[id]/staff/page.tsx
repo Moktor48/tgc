@@ -30,10 +30,12 @@ export default async function StaffPage({
             {perm?.admin && "admin "} {perm?.highcouncil && "high council "}{" "}
             {perm?.guildmaster && "guildmaster"}.
           </p>
-          <div className="bg-slate-900">
-            <h1 className="text-yellow-500">Leaderboard Point List</h1>
-            <LeaderQuery id={id} />
-          </div>
+          {perm?.admin && (
+            <div className="bg-slate-900">
+              <h1 className="text-yellow-500">Leaderboard Point List</h1>
+              <LeaderQuery id={id} />
+            </div>
+          )}
         </div>
       </div>
     </>

@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import type { ChangeEvent } from "react";
 import { api } from "~/trpc/react";
+
 type EntryType = {
   timestamp: Date;
   gmember_id: string;
@@ -25,14 +26,14 @@ export default function StaffDutyForm() {
   const dumpData = userDump.data;
 
   const entry = {
-    timestamp: new Date(),
-    gmember_id: "",
-    duty_type: 0,
-    //Qty: "",
-    //What: "",
-    eso_target_user: "",
-    //Value: "",
-    //Tax: "",
+    timestamp: new Date(), // [0]
+    gmember_id: "", // [1]
+    duty_type: 0, // [2]
+    //Qty: "", unused, left here for completeness [3]
+    //What: "", unused, left here for completeness [4]
+    eso_target_user: "", // [5]
+    //Value: "", unused, left here for completeness [6]
+    //Tax: "", unused, left here for completeness [7]
   };
   const formSubmit = api.post.staffDuty.useMutation({
     onSuccess: () => {
@@ -51,7 +52,7 @@ export default function StaffDutyForm() {
         return;
       }
       const reader = new FileReader();
-      console.log(guildInfo);
+
       reader.onload = function (event) {
         const fileContent = event.target?.result;
 
@@ -63,7 +64,10 @@ export default function StaffDutyForm() {
           lines.forEach((line) => {
             const newEntry = { ...entry };
             const values = line.split("\t");
-            const time = new Date(values[0]!).toISOString();
+
+            const dateTime = values[0]!;
+            const utcDateTime = dateTime.replace(" ", "T") + "Z";
+
             const name = dumpData?.find(
               (user) => user.ingame_name === values[1],
             );
@@ -71,11 +75,7 @@ export default function StaffDutyForm() {
               newEntry.gmember_id = name.gmember_id;
             }
             if (!name) return;
-            if (
-              values[2] === "Invited" ||
-              values[2] === "Accepted" ||
-              values[2] === "Declined"
-            ) {
+            if (values[2] === "Invited") {
               guildInfo === "0"
                 ? (newEntry.duty_type = 100)
                 : guildInfo === "1"
@@ -94,7 +94,23 @@ export default function StaffDutyForm() {
                               ? (newEntry.duty_type = 90)
                               : null;
             } else if (values[2] === "Joined") {
-              newEntry.duty_type = 96;
+              guildInfo === "0"
+                ? (newEntry.duty_type = 96)
+                : guildInfo === "1"
+                  ? (newEntry.duty_type = 961)
+                  : guildInfo === "2"
+                    ? (newEntry.duty_type = 962)
+                    : guildInfo === "3"
+                      ? (newEntry.duty_type = 963)
+                      : guildInfo === "4"
+                        ? (newEntry.duty_type = 964)
+                        : guildInfo === "5"
+                          ? (newEntry.duty_type = 965)
+                          : guildInfo === "9"
+                            ? (newEntry.duty_type = 966)
+                            : guildInfo === "10"
+                              ? (newEntry.duty_type = 967)
+                              : null;
             } else if (values[2] === "Promoted") {
               newEntry.duty_type = 98;
             } else if (values[2] === "Kicked") {
@@ -102,18 +118,32 @@ export default function StaffDutyForm() {
             } else if (values[2] === "Demoted") {
               newEntry.duty_type = 97;
             } else if (values[2] === "Left") {
-              newEntry.duty_type = 95;
+              guildInfo === "0"
+                ? (newEntry.duty_type = 96)
+                : guildInfo === "1"
+                  ? (newEntry.duty_type = 951)
+                  : guildInfo === "2"
+                    ? (newEntry.duty_type = 952)
+                    : guildInfo === "3"
+                      ? (newEntry.duty_type = 953)
+                      : guildInfo === "4"
+                        ? (newEntry.duty_type = 954)
+                        : guildInfo === "5"
+                          ? (newEntry.duty_type = 955)
+                          : guildInfo === "9"
+                            ? (newEntry.duty_type = 956)
+                            : guildInfo === "10"
+                              ? (newEntry.duty_type = 957)
+                              : null;
+            } else if (values[2] === "Accepted") {
+              newEntry.duty_type = 48;
+            } else if (values[2] === "Declined") {
+              newEntry.duty_type = 49;
             }
-            newEntry.timestamp = new Date(time);
-            //newEntry.duty_type = values[2] ?? "";
-            //newEntry.Qty = values[3] ?? "";
-            //newEntry.What = values[4] ?? "";
+            newEntry.timestamp = new Date(utcDateTime);
             newEntry.eso_target_user = values[5] ?? "";
-            //newEntry.Value = values[6] ?? "";
-            //newEntry.Tax = values[7] ?? "";
             parsedData.push(newEntry);
           }); // end of forEach
-          console.log(parsedData);
           formSubmit.mutate(parsedData);
         }
       };
@@ -129,7 +159,10 @@ export default function StaffDutyForm() {
         <br />
         <input className="text-white" type="file" onChange={handleFileChange} />
         <br />
-
+        <h2 className="bg-black text-red-500">
+          PLEASE ensure the guild selected matches the SnapShot file uploaded!!!
+          This can cause MAJOR problems for the database.
+        </h2>
         <h3 className="text-white">Choose a Guild:</h3>
         <select
           name="guildType"
@@ -147,6 +180,7 @@ export default function StaffDutyForm() {
           <option value={10}>TDC</option>
         </select>
         <br />
+
         <span className="bg-black text-red-500">
           WARNING! DOUBLE check that you are submitting the correct file to the
           correct guild!!!!! Once you submit, it makes a permanent entry to the

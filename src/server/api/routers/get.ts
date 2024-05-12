@@ -565,14 +565,17 @@ export const getRouter = createTRPCRouter({
   }),
 
   dutyQuery: protectedProcedure
-    .input(z.object({ startDate: z.string(), endDate: z.string() }))
+    .input(z.object({ start: z.date(), end: z.date() }))
     .query(async ({ input }) => {
       const points = await db.staff_duty.findMany({
         where: {
           timestamp: {
-            lte: new Date(input.endDate).toISOString(),
-            gte: new Date(input.startDate).toISOString(),
+            lte: new Date(input.end).toISOString(),
+            gte: new Date(input.start).toISOString(),
           },
+        },
+        orderBy: {
+          timestamp: "asc",
         },
         select: {
           gmember_id: true,
@@ -612,11 +615,14 @@ export const getRouter = createTRPCRouter({
     });
     return raiders;
   }),
-  trials: protectedProcedure.query(async () => {
+
+  /*trials: protectedProcedure.query(async () => {
     const trials = await db.trials.findMany({});
     return trials;
-  }),
-}); // This is the end, lawlz.
+  }),*/
+});
+
+// This is the end, lawlz.
 /**
  * 
  allUsers: protectedProcedure.query(async () => {

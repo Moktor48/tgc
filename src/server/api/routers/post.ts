@@ -20,6 +20,8 @@ export const postRouter = createTRPCRouter({
           content: input.content,
           summary: input.summary,
           title: input.title,
+          timestamp: new Date(),
+          updatedAt: new Date(),
         },
       });
       return post;
@@ -94,6 +96,8 @@ export const postRouter = createTRPCRouter({
         admin: z.boolean(),
         specialist: z.boolean(),
         representative: z.boolean(),
+        juniorofficer: z.boolean(),
+        officer: z.boolean(),
         highcouncil: z.boolean(),
         guildmaster: z.boolean(),
       }),
@@ -105,6 +109,8 @@ export const postRouter = createTRPCRouter({
           admin: input.admin,
           specialist: input.specialist,
           representative: input.representative,
+          juniorofficer: input.juniorofficer,
+          officer: input.officer,
           highcouncil: input.highcouncil,
           guildmaster: input.guildmaster,
         },
@@ -189,6 +195,7 @@ export const postRouter = createTRPCRouter({
         post: z.string(),
         published: z.string(),
         modById: z.string(),
+        summary: z.string(),
       }),
     )
     .mutation(async ({ input }) => {
@@ -199,6 +206,7 @@ export const postRouter = createTRPCRouter({
           content: input.post,
           published: input.published,
           modById: input.modById,
+          summary: input.summary,
         },
       });
       return post;

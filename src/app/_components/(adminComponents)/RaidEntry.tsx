@@ -2,12 +2,10 @@
 import React, { useState } from "react";
 
 export default function RaidEntry({
-  userId,
   leaders,
   raiders,
   trials,
 }: {
-  userId: string;
   leaders: {
     id: string;
     name: string;

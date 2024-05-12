@@ -92,8 +92,6 @@ export default async function NavBar({
             </h2>
           </button>
           <div className="nav-dropdown-content">
-            <Link href={`/dashboard/${id}/staff`}>Staff</Link>
-
             <Link href={`/editor/${id}/approve`}>Post Approvals</Link>
             <Link href={`/editor/${id}`}>Create Post</Link>
             {admin?.admin && (
@@ -103,6 +101,9 @@ export default async function NavBar({
             )}
             {admin?.admin && (
               <Link href={`/dashboard/${id}/staff/admin`}>Admin</Link>
+            )}
+            {admin?.admin && (
+              <Link href={`/dashboard/${id}/staff`}>Leaderboard</Link>
             )}
           </div>
         </div>
