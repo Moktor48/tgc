@@ -497,3 +497,6 @@ a {
 .pointer:hover {
   cursor: pointer;
 }
+.override-flex-direction {
+  flex-direction: row !important;
+}

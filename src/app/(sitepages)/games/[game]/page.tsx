@@ -9,6 +9,10 @@ export default async function page({ params }: { params: { game: string } }) {
   return (
     <>
       <div>
+        <h1>I want to run trials!</h1>
+        <Link className="text-white" href="/games/eso/trialinfo">
+          Trial Information
+        </Link>
         {!session && <p>You must log in to see guild content.</p>}
         {session && (
           <Link href={`/games/${game}/${id}`} className="text-white">
