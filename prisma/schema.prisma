@@ -10,7 +10,7 @@ datasource db {
 
 model Account {
   id                String  @id @default(cuid())
-  userId            String
+  userId            String  @unique
   type              String
   provider          String
   providerAccountId String
@@ -31,7 +31,9 @@ model Session {
   sessionToken String   @unique
   userId       String
   expires      DateTime
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user         User     @relation(fields: [userId], references: [id], onUpdate: Restrict, map: "Session_ibfk_1")
+
+  @@index([userId], map: "Session_ibfk_1")
 }
 
 model User {
@@ -42,7 +44,7 @@ model User {
   image            String
   role             String              @default("guest")
   tgc_guild_member Boolean             @default(false)
-  accounts         Account[]
+  accounts         Account?
   sessions         Session[]
   eso              eso?
   ffxiv            ffxiv?
@@ -165,22 +167,25 @@ model staff_point_chart {
   task_id          Int          @id
   task_name        String       @db.VarChar(255)
   point_value      Int
-  task_description String?      @db.Text
+  task_description String?
   staff_duty       staff_duty[]
 }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 model staff_duty {
   duty_uid          Int               @id @default(autoincrement())
-  gmember_id        String            @db.VarChar(45)
+  gmember_id        String
   duty_type         Int
-  timestamp         DateTime          @db.DateTime(0)
+  timestamp         DateTime          @default(now()) @db.Timestamp(6)
   target            Int?
   eso_target_user   String?           @db.VarChar(255)
   message_content   String?           @db.Text
-  description       String?           @db.Text
-  staff_point_chart staff_point_chart @relation(fields: [duty_type], references: [task_id], onUpdate: Restrict, map: "fk_duty_to_task")
-  discord_user      discord_user      @relation(fields: [gmember_id], references: [gmember_id], onUpdate: Restrict, map: "fk_duty_to_user")
+  description       String?
+  staff_point_chart staff_point_chart @relation(fields: [duty_type], references: [task_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_duty_to_task")
+  discord_user      discord_user      @relation(fields: [gmember_id], references: [gmember_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_duty_to_user")
+
+  @@index([gmember_id], map: "fk_duty_to_user")
+  @@index([duty_type], map: "idx_16603_fk_duty_to_task")
 }
 
 model guild_names {
@@ -193,7 +198,7 @@ model staff_admin {
   task_uid      Int      @id @default(autoincrement())
   gmember_id    String
   duty_type     Int
-  timestamp     DateTime @db.DateTime(0)
+  timestamp     DateTime @default(now()) @db.Timestamp(6)
   action_target Int?
 }
 
@@ -202,7 +207,7 @@ model staff_point_log {
   uid        Int      @id @default(autoincrement())
   gmember_id String
   cnt_points Int
-  timestamp  DateTime @db.DateTime(0)
+  timestamp  DateTime @default(now()) @db.Timestamp(6)
 }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
@@ -213,7 +218,7 @@ model characters {
   class_name    String? @db.VarChar(255)
   fact_id       Int?
   game_id       Int
-  misc_info     String? @db.Text
+  misc_info     String?
   trial_parse   Int?
 }
 
@@ -242,7 +247,7 @@ model content_types {
 model contents {
   content_id Int      @id @default(autoincrement())
   gmember_id String?
-  timestamp  DateTime @default(now()) @db.Timestamp(0)
+  timestamp  DateTime @default(now()) @db.Timestamp(6)
   type_id    Int?
 }
 
@@ -258,18 +263,16 @@ model discord_join_leave {
   action_uid Int      @id @default(autoincrement())
   gmember_id String
   action     Int
-  timestamp  DateTime @db.DateTime(0)
+  timestamp  DateTime @default(now()) @db.Timestamp(6)
 }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 model discord_message {
-  message_uid  BigInt   @id @default(autoincrement())
-  gmember_id   String
-  nickname     String   @db.VarChar(255)
-  channel_name String   @db.VarChar(255)
-  content      String   @db.Text
-  timestamp    DateTime @db.DateTime(0)
-  old_content  String?  @db.Text
+  message_uid BigInt   @id
+  gmember_id  String
+  content     String   @db.Text
+  timestamp   DateTime @default(now()) @db.Timestamp(6)
+  channel_id  Int?
 }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
@@ -280,8 +283,8 @@ model eso_event {
   attendee_cnt    Int
   duration        Int
   revenue         Int
-  start_timestamp DateTime @db.DateTime(0)
-  notes           String   @db.Text
+  start_timestamp DateTime @default(now()) @db.Timestamp(6)
+  notes           String
 }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
@@ -332,10 +335,10 @@ model event_signups {
 model events {
   event_id     Int      @id @default(autoincrement())
   event_type   String   @db.VarChar(255)
-  date_time    DateTime @db.DateTime(0)
+  date_time    DateTime @default(now()) @db.Timestamp(6)
   duration     Int
   game         String   @db.VarChar(255)
-  details      String   @db.Text
+  details      String
   gmember_id   String
   repeat_event Boolean?
   req_tank     Int?
@@ -362,24 +365,24 @@ model situation_disciplinary {
   gmember_id      String
   punish_type     Int
   probation_weeks Int?
-  timestamp       DateTime @db.DateTime(0)
-  report          String?  @db.Text
+  timestamp       DateTime @default(now()) @db.Timestamp(6)
+  report          String?
 }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 model situation_report {
   report_uid Int      @id @default(autoincrement())
   action_uid Int?
-  timestamp  DateTime @db.DateTime(0)
+  timestamp  DateTime @default(now()) @db.Timestamp(6)
   gmember_id String
-  content    String   @db.Text
+  content    String
 }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 model staff_ff_swtor {
   task_uid   Int      @id @default(autoincrement())
   gmember_id String
-  timestamp  DateTime @db.DateTime(0)
+  timestamp  DateTime @default(now()) @db.Timestamp(6)
   duty_id    Int
 }
 
@@ -388,8 +391,8 @@ model staff_status_change {
   transaction_id     Int      @id @default(autoincrement())
   status_update      Int
   training_type      Int?
-  trainer_gmember_id Int?
-  timestamp          DateTime @db.DateTime(0)
+  trainer_gmember_id String?
+  timestamp          DateTime @default(now()) @db.Timestamp(6)
 }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
@@ -397,9 +400,9 @@ model voice_sessions {
   voice_session_id String    @id @db.VarChar(100)
   gmember_id       String?   @db.VarChar(45)
   channel_id       String?   @db.VarChar(45)
-  start_time       DateTime? @db.DateTime(0)
-  end_time         DateTime? @db.DateTime(0)
-  duration         Float?    @db.Float
+  start_time       DateTime? @db.Timestamp(6)
+  end_time         DateTime? @db.Timestamp(6)
+  duration         Float?
 }
 
 model article {
@@ -408,7 +411,7 @@ model article {
   undertitle       String   @db.VarChar(255)
   content          String?  @db.Text
   cover_image_path String?  @db.VarChar(255)
-  gmember_id       String?
+  gmember_id       BigInt?
   game_type        String?  @db.VarChar(50)
   summary          String?  @db.Text
   created_at       DateTime @default(now()) @db.Timestamp(0)
@@ -430,7 +433,7 @@ model build {
   title            String?  @db.VarChar(255)
   content          String?  @db.Text
   cover_image_path String?  @db.VarChar(255)
-  gmember_id       String?
+  gmember_id       BigInt?
   game_type        String?  @db.VarChar(50)
   summary          String?  @db.Text
   created_at       DateTime @default(now()) @db.Timestamp(0)
@@ -479,13 +482,9 @@ model velothi_waivers {
   record_date   DateTime @default(now()) @db.DateTime(0)
 }
 
-model voice_time {
-  conn_uid        BigInt   @id @default(autoincrement())
-  gmember_id      String   @db.VarChar(255)
-  nick            String   @db.VarChar(255)
-  connection_time DateTime @db.Time(6)
-  new_channel     String?  @db.VarChar(255)
-  old_channel     String?  @db.VarChar(255)
-  n_users         String?  @db.Text
-  o_users         String?  @db.Text
+model trials {
+  trial_name String @id @db.VarChar(255)
+  base_value Int    @default(0)
+  hard_mode  Int    @default(0)
+  veteran    Int    @default(0)
 }
