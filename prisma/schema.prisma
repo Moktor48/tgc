@@ -153,7 +153,6 @@ model staff {
   user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
-/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 model discord_user {
   gmember_id        String       @id
   disc_nickname     String       @db.VarChar(255)
@@ -162,7 +161,6 @@ model discord_user {
   staff_duty        staff_duty[]
 }
 
-/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 model staff_point_chart {
   task_id          Int          @id
   task_name        String       @db.VarChar(255)
@@ -171,7 +169,6 @@ model staff_point_chart {
   staff_duty       staff_duty[]
 }
 
-/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 model staff_duty {
   duty_uid          Int               @id @default(autoincrement())
   gmember_id        String

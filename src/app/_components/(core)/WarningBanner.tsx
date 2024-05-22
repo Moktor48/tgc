@@ -9,6 +9,9 @@ export default function WarningBanner() {
 
       <h1>Latest updates</h1>
       <p>
+        Session bug fixed, should be able to log in from multiple sites now.
+      </p>
+      <p>
         Added Raid information to inform... this is not yet formatted, I am just
         bringing the data over and beautifying as I can.
       </p>
