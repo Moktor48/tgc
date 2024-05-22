@@ -42,7 +42,7 @@ model User {
   image            String
   role             String              @default("guest")
   tgc_guild_member Boolean             @default(false)
-  accounts         Account?
+  accounts         Account[]
   sessions         Session[]
   eso              eso?
   ffxiv            ffxiv?
