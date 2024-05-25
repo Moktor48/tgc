@@ -6,6 +6,7 @@ import { api } from "~/trpc/server";
 
 import LBClientWrap from "~/app/_components/(adminComponents)/LBClientWrap";
 import LBDisplayWrap from "~/app/_components/(adminComponents)/LBDisplayWrap";
+import WeekLeader from "~/app/_components/(adminComponents)/WeekLeader";
 
 type DataType = Record<string, string | number | null>;
 export default async function page({

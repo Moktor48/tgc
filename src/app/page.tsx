@@ -161,6 +161,7 @@ export default async function Home() {
     "1068151252837478410": "FFXIV", //ffxiv.rank = member
     "1071853800438108320": "FFXIV Staff", //ffxiv.rank = officer
     "504802286560739338": "Community Officer", // staff.officer = true
+    "513499609125879813": "Inactive Staff", // Need to figure this one out for queries
   };
 
   const guildData = await fetch(
