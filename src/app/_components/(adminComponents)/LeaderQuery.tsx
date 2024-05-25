@@ -14,14 +14,14 @@ export default function LeaderQuery({ id }: { id: string }) {
     end: endDate,
   });
 
-  const [present, setPresent] = useState(true);
+  // const [present, setPresent] = useState(true);
 
-  const handleChange = () => {
-    setPresent(!present);
-    if (present) {
-      setQueryDate({ ...queryDate, end: new Date().toISOString() });
-    }
-  };
+  // const handleChange = () => {
+  //   setPresent(!present);
+  //   if (present) {
+  //     setQueryDate({ ...queryDate, end: new Date().toISOString() });
+  //   }
+  // };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -38,7 +38,7 @@ export default function LeaderQuery({ id }: { id: string }) {
             Start Date
           </label>
           <input
-            className="text-white"
+            className="text-black"
             type="date"
             name="start"
             value={queryDate.start}
@@ -50,29 +50,28 @@ export default function LeaderQuery({ id }: { id: string }) {
           <label className="mr-10" htmlFor="present">
             Query to NOW?
           </label>
-          <input
+          {/* <input
             name="present"
             type="checkbox"
             checked={present}
             onChange={handleChange}
-          />
+          /> */}
           <br />
-          {!present && (
-            <label className="mr-10" htmlFor="end">
-              End Date
-            </label>
-          )}
-          {!present && (
-            <input
-              className="text-white"
-              type="date"
-              name="end"
-              value={queryDate.end}
-              onChange={(event) => {
-                setQueryDate({ ...queryDate, end: event.target.value });
-              }}
-            />
-          )}
+
+          <label className="mr-10" htmlFor="end">
+            End Date
+          </label>
+
+          <input
+            className="text-white"
+            type="date"
+            name="end"
+            value={queryDate.end}
+            onChange={(event) => {
+              setQueryDate({ ...queryDate, end: event.target.value });
+            }}
+          />
+
           <br />
           <button className="button-40">Submit</button>
         </form>

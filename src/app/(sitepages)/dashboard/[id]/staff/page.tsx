@@ -36,7 +36,9 @@ export default async function StaffPage({
               <h1 className="text-yellow-500">Leaderboard Point List</h1>
               <LeaderQuery id={id} />
               <Link href={`/dashboard/${id}/staff/leaderboard/currentLB`}>
-                <h1 className="text-yellow-500">Current Leaderboard</h1>
+                <h1 className="text-5xl text-yellow-500">
+                  {"Click HERE --->Current Leaderboard<---"}
+                </h1>
               </Link>
             </div>
           )}

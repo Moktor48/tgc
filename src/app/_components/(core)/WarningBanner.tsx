@@ -9,6 +9,10 @@ export default function WarningBanner() {
 
       <h1>Latest updates</h1>
       <p>
+        Set a fixed time period for leaderboard queries (Saturday 0400-Saturday
+        0400 UTC)
+      </p>
+      <p>
         Session bug fixed, should be able to log in from multiple sites now.
       </p>
       <p>
