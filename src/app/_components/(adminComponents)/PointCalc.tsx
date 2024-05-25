@@ -13,6 +13,14 @@ export default async function PointCalc({
 }) {
   const start = new Date(startD);
   const end = new Date(endD);
+  const options: Intl.DateTimeFormatOptions = {
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+  };
+  const startArray = start.toUTCString().split(" ");
+  const startDate = `${startArray[2]} ${startArray[1]}, ${startArray[3]}`;
+  const endDate = end.toLocaleDateString("en-US", options);
 
   // This query pulls all data from staff_duty given two dates
   const points = await api.get.dutyQuery.query({ start, end });
@@ -168,6 +176,8 @@ export default async function PointCalc({
           rankedList={rankedList}
           chartData={pointsPerTask}
           rawData={userPoints}
+          startDate={startDate}
+          endDate={endDate}
         />
       </div>
       <div className="">

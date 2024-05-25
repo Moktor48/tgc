@@ -9,6 +9,8 @@ type Props = {
   rankedList: DataType[];
   chartData: DataType[];
   rawData: DataType[];
+  startDate: string;
+  endDate: string;
 };
 type CheckedItem = {
   id: string;
@@ -26,6 +28,8 @@ export default function LBClientWrap({
   rankedList,
   chartData,
   rawData,
+  startDate,
+  endDate,
 }: Props) {
   //Basic Pie Chart with overall display when first loaded
   const [pie, setPie] = useState([
@@ -128,7 +132,9 @@ export default function LBClientWrap({
         ))}
       </div>
       <div>
-        <h1 className="newscolor text-center">Points-Processing</h1>
+        <h1 className="newscolor text-center">
+          Points Earned from {startDate} to {endDate}
+        </h1>
         <DataWrapper rankedList={rankedList} checkBox={checkBox} />
       </div>
       <div className="flex justify-center">

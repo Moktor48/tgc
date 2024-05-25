@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import type { ChangeEvent } from "react";
 import { api } from "~/trpc/react";
+import moment from "moment-timezone";
 
 type EntryType = {
   timestamp: Date;
@@ -17,6 +18,7 @@ type EntryType = {
 export default function StaffDutyForm() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [guildInfo, setGuildInfo] = useState<string>("0");
+  const [zone, setZone] = useState<string>("0");
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.files?.[0]) {
       setSelectedFile(event.target.files[0]);
@@ -66,7 +68,11 @@ export default function StaffDutyForm() {
             const values = line.split("\t");
 
             const dateTime = values[0]!;
-            const utcDateTime = dateTime.replace(" ", "T") + "Z";
+            console.log("dateTime:", dateTime);
+            const time = moment.tz(dateTime, zone);
+            console.log("time:", time);
+            const utcTime = time.utc().format();
+            console.log("utcTime:", utcTime);
 
             const name = dumpData?.find(
               (user) => user.ingame_name === values[1],
@@ -140,7 +146,7 @@ export default function StaffDutyForm() {
             } else if (values[2] === "Declined") {
               newEntry.duty_type = 49;
             }
-            newEntry.timestamp = new Date(utcDateTime);
+            newEntry.timestamp = new Date(utcTime);
             newEntry.eso_target_user = values[5] ?? "";
             parsedData.push(newEntry);
           }); // end of forEach
@@ -180,7 +186,24 @@ export default function StaffDutyForm() {
           <option value={10}>TDC</option>
         </select>
         <br />
-
+        <h3 className="bg-black text-red-500">
+          Choose the timezone the SnapShot was CREATED in. Very important!!!
+        </h3>
+        <br />
+        <select
+          name="timeZone"
+          id="timeZone"
+          value={zone}
+          onChange={(e) => setZone(e.target.value)}
+        >
+          <option value={0}>Select a Time Zone for SnapShot</option>
+          <option value={"America/New_York"}>Eastern</option> {/* -5 */}
+          <option value={"America/Chicago"}>Central</option> {/* -6 */}
+          <option value={"America/Denver"}>Mountain</option> {/* -7 */}
+          <option value={"America/Los_Angeles"}>Pacific</option> {/* -8 */}
+          <option value={"America/Phoenix"}>AZ</option> {/* -7 */}
+        </select>
+        <br />
         <span className="bg-black text-red-500">
           WARNING! DOUBLE check that you are submitting the correct file to the
           correct guild!!!!! Once you submit, it makes a permanent entry to the
@@ -189,7 +212,7 @@ export default function StaffDutyForm() {
         <button
           className="button-40 text-green-500"
           onClick={handleFileUpload}
-          disabled={guildInfo === "0"}
+          disabled={guildInfo === "0" ?? zone === "0"}
         >
           Upload
         </button>

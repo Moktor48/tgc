@@ -12,8 +12,7 @@ export default async function WeekLeader(params: { id: string }) {
   if (!admin) return <p className="text-red-500">Invalid Permissions</p>;
 
   const today = new Date();
-  const day = today.getDay();
-  const diff = day >= 6 ? day - 6 : 5 + (7 - day); // calculate the difference to the last Friday
+  const diff = today.getDay(); // calculate the difference to the last Friday
   today.setDate(today.getDate() - diff); // subtract the difference from today's date
   const end = today;
   const start = new Date(end);
