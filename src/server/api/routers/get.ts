@@ -589,6 +589,7 @@ export const getRouter = createTRPCRouter({
           discord_user: {
             select: {
               disc_nickname: true,
+              highest_rank_role: true,
             },
           },
         },

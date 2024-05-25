@@ -32,3 +32,28 @@ export const performanceData = [
     },
   },
 ];
+
+export const rankList = [
+  {
+    Guildmaster: 19,
+    "High Council": 18,
+    Council: 17,
+    "Senior Officer": 16 || 14,
+    "Community Officer": 13,
+    "Junior Officer": 12,
+    "Guild Specialist": 11,
+  },
+];
+
+export const rankCompare = [
+  {
+    19: "senior",
+    18: "senior",
+    17: "senior",
+    16: "senior",
+    14: "senior",
+    13: "officer",
+    12: "junior",
+    11: "specialist",
+  },
+];

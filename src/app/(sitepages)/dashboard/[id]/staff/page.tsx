@@ -1,6 +1,5 @@
 import Link from "next/link";
 import React from "react";
-import LeaderQuery from "~/app/_components/(adminComponents)/LeaderQuery";
 import { getServerAuthSession } from "~/server/auth";
 import { api } from "~/trpc/server";
 
@@ -33,12 +32,8 @@ export default async function StaffPage({
           </p>
           {perm?.admin && (
             <div className="bg-slate-900">
-              <h1 className="text-yellow-500">Leaderboard Point List</h1>
-              <LeaderQuery id={id} />
-              <Link href={`/dashboard/${id}/staff/leaderboard/currentLB`}>
-                <h1 className="text-5xl text-yellow-500">
-                  {"Click HERE --->Current Leaderboard<---"}
-                </h1>
+              <Link href={`/dashboard/${id}/staff/leaderboard`}>
+                <button className="button-40">Leaderboard</button>
               </Link>
             </div>
           )}

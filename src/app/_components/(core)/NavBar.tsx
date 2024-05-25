@@ -103,7 +103,9 @@ export default async function NavBar({
               <Link href={`/dashboard/${id}/staff/admin`}>Admin</Link>
             )}
             {admin?.admin && (
-              <Link href={`/dashboard/${id}/staff`}>Leaderboard</Link>
+              <Link href={`/dashboard/${id}/staff/leaderboard`}>
+                Leaderboard
+              </Link>
             )}
           </div>
         </div>

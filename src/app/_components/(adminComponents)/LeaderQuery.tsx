@@ -14,31 +14,22 @@ export default function LeaderQuery({ id }: { id: string }) {
     end: endDate,
   });
 
-  // const [present, setPresent] = useState(true);
-
-  // const handleChange = () => {
-  //   setPresent(!present);
-  //   if (present) {
-  //     setQueryDate({ ...queryDate, end: new Date().toISOString() });
-  //   }
-  // };
-
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     router.push(
-      `/dashboard/${id}/staff/leaderboard?start=${queryDate.start}&end=${queryDate.end}`,
+      `/dashboard/${id}/staff/leaderboard/currentLB?start=${queryDate.start}&end=${queryDate.end}`,
     );
   };
 
   return (
-    <div>
-      <div>
+    <div className="flex justify-center text-white">
+      <div className="newsletter w-2/3">
         <form onSubmit={handleSubmit}>
           <label className="mr-10" htmlFor="start">
             Start Date
           </label>
           <input
-            className="text-black"
+            className="text-white"
             type="date"
             name="start"
             value={queryDate.start}
@@ -46,16 +37,6 @@ export default function LeaderQuery({ id }: { id: string }) {
               setQueryDate({ ...queryDate, start: event.target.value });
             }}
           />
-          <br />
-          <label className="mr-10" htmlFor="present">
-            Query to NOW?
-          </label>
-          {/* <input
-            name="present"
-            type="checkbox"
-            checked={present}
-            onChange={handleChange}
-          /> */}
           <br />
 
           <label className="mr-10" htmlFor="end">

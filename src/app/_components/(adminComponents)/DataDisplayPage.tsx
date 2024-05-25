@@ -33,6 +33,7 @@ export default function DataDisplayPage({
                 <td className="flex justify-center">
                   <input
                     type="checkbox"
+                    className="mt-1"
                     id={row.user_name?.toString()}
                     onChange={checkBox}
                   ></input>
