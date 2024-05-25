@@ -14,7 +14,7 @@ export default async function WeekLeader(params: { id: string }) {
 
   const today = new Date();
   const day = today.getDay();
-  const diff = day >= 5 ? day - 5 : 5 + (7 - day); // calculate the difference to the last Friday
+  const diff = day >= 6 ? day - 6 : 5 + (7 - day); // calculate the difference to the last Friday
   today.setDate(today.getDate() - diff); // subtract the difference from today's date
   const end = today;
   const start = new Date(end);
