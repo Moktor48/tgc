@@ -5,6 +5,7 @@ import WarningBanner from "./_components/(core)/WarningBanner";
 import React from "react";
 import { api } from "~/trpc/server";
 import { getServerAuthSession } from "~/server/auth";
+import WeekLeader from "./_components/(adminComponents)/WeekLeader";
 type RoleMapping = Record<string, string>;
 interface Guild {
   id: string;

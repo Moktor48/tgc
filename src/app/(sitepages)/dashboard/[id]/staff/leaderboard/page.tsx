@@ -6,7 +6,6 @@ import { api } from "~/trpc/server";
 
 import LBClientWrap from "~/app/_components/(adminComponents)/LBClientWrap";
 import LBDisplayWrap from "~/app/_components/(adminComponents)/LBDisplayWrap";
-import WeekLeader from "~/app/_components/(adminComponents)/WeekLeader";
 
 type DataType = Record<string, string | number | null>;
 export default async function page({
@@ -32,12 +31,6 @@ export default async function page({
   // This query pulls all data from staff_duty given two dates
   const points = await api.get.dutyQuery.query({ start, end });
 
-  if (points[0]) {
-    console.log("First record timestamp:", points[0].timestamp);
-  }
-  if (points[points.length - 1]) {
-    console.log("Last record timestamp:", points[points.length - 1]!.timestamp);
-  }
   // Raw data HERE [{}{}{}] This is the primary source of data, name/task/points
   const userPoints = points.map((data) => {
     return {
