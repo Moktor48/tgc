@@ -2,6 +2,7 @@ import React from "react";
 import { api } from "~/trpc/server";
 import LBClientWrap from "./LBClientWrap";
 import LBDisplayWrap from "./LBDisplayWrap";
+import { rankCompare } from "../(core)/coreData";
 type DataType = Record<string, string | number | null>;
 
 export default async function PointCalc({
@@ -32,7 +33,7 @@ export default async function PointCalc({
       user_name: data.discord_user.disc_nickname,
       points: data.staff_point_chart.point_value,
       task: data.staff_point_chart.task_description,
-      rank: data.discord_user.highest_rank_role,
+      rank: rankCompare[data.discord_user.highest_rank_role]!,
     };
   });
 
@@ -118,6 +119,7 @@ export default async function PointCalc({
     }),
   );
   //-------------------------------------USER POINTS, GENERAL-------------------------------------
+  // This is probably where we can snake in the rank
   // Combining all points earned by user
   const objPoints = userPoints.reduce((acc: Record<string, number>, point) => {
     if (point.points) {
@@ -129,6 +131,7 @@ export default async function PointCalc({
     }
     return acc;
   }, {});
+
   // pushing objPoints into a clean and sorted array highest to lowest (User - Points leaderboard LIST)
   const objPointsArray: DataType[] = Object.entries(objPoints).map(
     ([user_name, points]) => ({
@@ -142,6 +145,14 @@ export default async function PointCalc({
     const aPoints = typeof a.points === "number" ? a.points : 0;
     const bPoints = typeof b.points === "number" ? b.points : 0;
     return bPoints - aPoints;
+  });
+
+  const rankedListRank = rankedList.map((item) => {
+    const userPoint = userPoints.find((up) => up.user_name === item.user_name);
+    return {
+      ...item,
+      rank: userPoint ? userPoint.rank : null,
+    };
   });
 
   //------------------------USER POINTS, Individual-------------------------------------
@@ -173,7 +184,7 @@ export default async function PointCalc({
       <h1 className="newscolor text-center">Leaderboard</h1>
       <div className="">
         <LBClientWrap
-          rankedList={rankedList}
+          rankedList={rankedListRank}
           chartData={pointsPerTask}
           rawData={userPoints}
           startDate={startDate}

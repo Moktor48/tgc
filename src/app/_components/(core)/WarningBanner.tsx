@@ -9,6 +9,7 @@ export default function WarningBanner() {
 
       <h1>Latest updates</h1>
       <ul>
+        <li>Added rank to the leaderboard to prep for point comparisons</li>
         <li>Fixed the timezone issue for Snapshots</li>
         <li>
           Set a fixed time period for leaderboard queries (Sunday 0400-Sunday

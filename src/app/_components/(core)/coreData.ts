@@ -33,27 +33,14 @@ export const performanceData = [
   },
 ];
 
-export const rankList = [
-  {
-    Guildmaster: 19,
-    "High Council": 18,
-    Council: 17,
-    "Senior Officer": 16 || 14,
-    "Community Officer": 13,
-    "Junior Officer": 12,
-    "Guild Specialist": 11,
-  },
-];
-
-export const rankCompare = [
-  {
-    19: "senior",
-    18: "senior",
-    17: "senior",
-    16: "senior",
-    14: "senior",
-    13: "officer",
-    12: "junior",
-    11: "specialist",
-  },
-];
+type RankCompare = Record<number, string>;
+export const rankCompare: RankCompare = {
+  19: "Guild Master",
+  18: "High Council",
+  17: "Council",
+  16: "Senior Officer",
+  14: "Senior Officer",
+  13: "Community Officer",
+  12: "Junior Officer",
+  11: "Guild Specialist",
+};

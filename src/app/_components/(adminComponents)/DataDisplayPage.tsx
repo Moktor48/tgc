@@ -15,17 +15,17 @@ export default function DataDisplayPage({
 
   return (
     <div className="w-full">
-      <table className="newscolor mx-auto w-1/3">
+      <table className="newscolor mx-auto w-2/3">
         <thead>
           <tr>
             <th>Select User</th>
-            {records[0] &&
-              Object.keys(records[0]).map((header) => {
-                return <th key={header}>{header}</th>;
-              })}
+            <th>Name</th>
+            <th>Points</th>
+            <th>Rank</th>
           </tr>
         </thead>
         {/*Row Index should be the gmember_id */}
+
         <tbody>
           {records.map((row, rowIndex) => {
             return (
@@ -38,6 +38,7 @@ export default function DataDisplayPage({
                     onChange={checkBox}
                   ></input>
                 </td>
+
                 {Object.values(row).map((value, index) => {
                   return (
                     <td key={index} className="text-center">

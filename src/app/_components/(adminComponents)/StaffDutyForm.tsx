@@ -66,14 +66,9 @@ export default function StaffDutyForm() {
           lines.forEach((line) => {
             const newEntry = { ...entry };
             const values = line.split("\t");
-
             const dateTime = values[0]!;
-            console.log("dateTime:", dateTime);
             const time = moment.tz(dateTime, zone);
-            console.log("time:", time);
             const utcTime = time.utc().format();
-            console.log("utcTime:", utcTime);
-
             const name = dumpData?.find(
               (user) => user.ingame_name === values[1],
             );
