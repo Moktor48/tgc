@@ -3,6 +3,7 @@ import React from "react";
 import { useState } from "react";
 import PieChart from "~/app/_components/(adminComponents)/PieChart";
 import DataWrapper from "~/app/_components/(adminComponents)/DataWrapper";
+import LeaderPointStandard from "./LeaderPointStandard";
 
 type DataType = Record<string, string | number | null>;
 type Props = {
@@ -35,7 +36,7 @@ export default function LBClientWrap({
   const [pie, setPie] = useState([
     <PieChart title={"Points Earned by Staff"} dataset={chartData} />,
   ]);
-
+  const [pointStand, setPointStand] = useState(false);
   const [checked, setChecked] = useState<CheckedItem[]>([]);
   // Code to add additional charts based on selecting a member
   // Props here will be an array of objects with a key: value pairing, sorted data should be x:y values
@@ -141,10 +142,14 @@ export default function LBClientWrap({
         <button className="button-40" onClick={compare}>
           COMPARE SELECTED MEMBERS
         </button>
+        <button
+          className="button-40"
+          onClick={() => setPointStand(!pointStand)}
+        >
+          Point Standards
+        </button>
       </div>
-      <div className="flex w-full justify-center">
-        <span className="newscolor w-1/2 text-center">Detailed Data</span>
-      </div>
+      {pointStand && <LeaderPointStandard />}
     </div>
   );
 }

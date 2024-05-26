@@ -3,32 +3,32 @@ export const performanceData = [
     specialist: {
       promote: 750,
       expected: 500,
-      poor: 350,
-      probation: 180,
+      poor: 180,
+      probation: 0,
     },
   },
   {
     junior: {
       promote: 1000,
       expected: 700,
-      poor: 600,
-      probation: 350,
+      poor: 350,
+      probation: 0,
     },
   },
   {
     officer: {
-      promote: null,
+      promote: 99999,
       expected: 750,
-      poor: 600,
-      probation: 400,
+      poor: 400,
+      probation: 0,
     },
   },
   {
     senior: {
-      promote: null,
+      promote: 99999,
       expected: 1000,
-      poor: 750,
-      probation: 500,
+      poor: 500,
+      probation: 0,
     },
   },
 ];
@@ -40,7 +40,19 @@ export const rankCompare: RankCompare = {
   17: "Council",
   16: "Senior Officer",
   14: "Senior Officer",
-  13: "Community Officer",
-  12: "Junior Officer",
-  11: "Guild Specialist",
+  // The above are "Senior Staff"
+  13: "Community Officer", //officer
+  12: "Junior Officer", //junior
+  11: "Guild Specialist", //specialist
+};
+
+export const rankList: Record<string, string> = {
+  "Guild Master": "senior",
+  "High Council": "senior",
+  Council: "senior",
+  "Senior Officer": "senior",
+  // The above are "Senior Staff"
+  "Community Officer": "officer", //officer
+  "Junior Officer": "junior", //junior
+  "Guild Specialist": "specialist", //specialist
 };

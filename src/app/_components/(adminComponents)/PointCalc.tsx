@@ -3,6 +3,7 @@ import { api } from "~/trpc/server";
 import LBClientWrap from "./LBClientWrap";
 import LBDisplayWrap from "./LBDisplayWrap";
 import { rankCompare } from "../(core)/coreData";
+import LeaderPointStandard from "./LeaderPointStandard";
 type DataType = Record<string, string | number | null>;
 
 export default async function PointCalc({
@@ -190,6 +191,10 @@ export default async function PointCalc({
           startDate={startDate}
           endDate={endDate}
         />
+      </div>
+
+      <div className="flex w-full justify-center">
+        <span className="w-full bg-black text-center">Detailed Data</span>
       </div>
       <div className="">
         <LBDisplayWrap

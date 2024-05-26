@@ -1,6 +1,10 @@
 "use client";
 import React from "react";
+import { performanceData, rankList } from "../(core)/coreData";
 type DataType = Record<string, string | number | null>;
+type PerformanceType =
+  | Record<string, Record<string, number> | undefined>
+  | undefined;
 
 export default function DataDisplayPage({
   records,
@@ -12,6 +16,28 @@ export default function DataDisplayPage({
   if (records.length === 0 ?? !records) {
     return <div>No data to display</div>;
   }
+  console.log("Record:", records[0]);
+
+  function standardCheck(rank: string, points: number) {
+    const rankName = rankList[rank]!;
+    const performance: PerformanceType = performanceData.find(
+      (p) => Object.keys(p)[0] === rankName,
+    );
+    console.log("Performance:", performance);
+    if (!performance) return null;
+
+    const { promote, expected, poor } = performance[rankName]!;
+    console.log("Promote:", promote, "Expected:", expected, "Poor:", poor);
+    if (points >= promote!) {
+      return <p className="text-green-500">Exceeds Expectations</p>;
+    } else if (points >= expected!) {
+      return <p className="text-white">Meets Expectations</p>;
+    } else if (points >= poor!) {
+      return <p className="text-yellow-500">Below Expectations</p>;
+    } else {
+      return <p className="text-red-500">Probation</p>;
+    }
+  }
 
   return (
     <div className="w-full">
@@ -22,6 +48,7 @@ export default function DataDisplayPage({
             <th>Name</th>
             <th>Points</th>
             <th>Rank</th>
+            <th>Standards</th>
           </tr>
         </thead>
         {/*Row Index should be the gmember_id */}
@@ -34,18 +61,20 @@ export default function DataDisplayPage({
                   <input
                     type="checkbox"
                     className="mt-1"
-                    id={row.user_name?.toString()}
+                    id={row.user_name?.toString() ?? ""}
                     onChange={checkBox}
                   ></input>
                 </td>
 
-                {Object.values(row).map((value, index) => {
-                  return (
-                    <td key={index} className="text-center">
-                      {value}
-                    </td>
-                  );
-                })}
+                <td>{row.user_name}</td>
+                <td>{row.points}</td>
+                <td>{row.rank}</td>
+                <td>
+                  {standardCheck(
+                    row.rank?.toString() ?? "",
+                    row.points ? Number(row.points) : 0,
+                  )}
+                </td>
               </tr>
             );
           })}

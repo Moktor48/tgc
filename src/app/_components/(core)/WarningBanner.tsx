@@ -9,6 +9,9 @@ export default function WarningBanner() {
 
       <h1>Latest updates</h1>
       <ul>
+        <li>
+          Added Point Standards to show performance for week in leaderboard
+        </li>
         <li>Added rank to the leaderboard to prep for point comparisons</li>
         <li>Fixed the timezone issue for Snapshots</li>
         <li>
