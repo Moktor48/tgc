@@ -47,7 +47,7 @@ export default function DataDisplayPage({
 
   return (
     <div className="w-full">
-      <table className="newscolor mx-auto w-2/3">
+      <table className="newscolor mx-auto w-2/3 text-center">
         <thead>
           <tr>
             <th>Select User</th>
