@@ -3,7 +3,7 @@ import { api } from "~/trpc/server";
 import LBClientWrap from "./LBClientWrap";
 import LBDisplayWrap from "./LBDisplayWrap";
 import { rankCompare } from "../(core)/coreData";
-import LeaderPointStandard from "./LeaderPointStandard";
+
 type DataType = Record<string, string | number | null>;
 
 export default async function PointCalc({
@@ -206,3 +206,8 @@ export default async function PointCalc({
     </div>
   );
 }
+
+/*
+Calculations:
+if entry is an invite that is preceeded by a kick within 5 minutes, then the invite is nullified
+*/

@@ -23,7 +23,7 @@ export default function DataDisplayPage({
     const performance: PerformanceType = performanceData.find(
       (p) => Object.keys(p)[0] === rankName,
     );
-    console.log("Performance:", performance);
+
     if (!performance) return null;
 
     const { promote, expected, poor } = performance[rankName]!;
@@ -54,7 +54,7 @@ export default function DataDisplayPage({
             <th>Name</th>
             <th>Points</th>
             <th>Rank</th>
-            <th>Standards</th>
+            <th>Performance</th>
           </tr>
         </thead>
         {/*Row Index should be the gmember_id */}
