@@ -34,6 +34,12 @@ export default function DataDisplayPage({
       return <p className="text-white">Meets Expectations</p>;
     } else if (points >= poor!) {
       return <p className="text-yellow-500">Below Expectations</p>;
+    } else if (
+      rank === "Guild Master" ||
+      rank === "High Council" ||
+      rank === "Council"
+    ) {
+      return <p className="text-red-500">Inactive</p>;
     } else {
       return <p className="text-red-500">Probation</p>;
     }
