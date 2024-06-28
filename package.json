@@ -7,10 +7,10 @@
     "build": "next build",
     "db:push": "prisma db push",
     "db:studio": "prisma studio",
-    "dev": "next dev",
+    "dev": "next dev -p 3000",
     "postinstall": "prisma generate",
     "lint": "next lint",
-    "start": "next start",
+    "start": "next start -p 3000",
     "rebuild": "git pull origin main && npm install && npm run build && pm2 restart all"
   },
   "dependencies": {
