@@ -155,6 +155,7 @@ export default async function Home() {
     "504803493396348939": "Raid Leader Core",
     "791378938969718815": "Raid Leader Open",
     "576530924712361986": "Untagged",
+    "1161503594672050206": "Developer",
     "452344937263005696": "ESO", //eso.rank = member
     "715796093983653930": "ESO Staff", //eso.rank = officer
     "379492525964001290": "SWTOR", //swtor.rank = member
@@ -183,6 +184,9 @@ export default async function Home() {
       const role = roleMapping[roleId];
 
       switch (role) {
+        case "Developer":
+          staffEntry.admin = true;
+          break;
         case "ESO":
           esoEntry.rank = "member";
           break;

@@ -84,32 +84,33 @@ export default async function NavBar({
         </div>
       </div>
 
-      {role === "staff" && (
-        <div className="dropdown">
-          <button className="dropbtn">
-            <h2>
-              Staff<span className="triangle-down"></span>
-            </h2>
-          </button>
-          <div className="nav-dropdown-content">
-            <Link href={`/editor/${id}/approve`}>Post Approvals</Link>
-            <Link href={`/editor/${id}`}>Create Post</Link>
-            {admin?.admin && (
-              <Link href={`/dashboard/${id}/staff/stafftracker`}>
-                Staff Tracker
-              </Link>
-            )}
-            {admin?.admin && (
-              <Link href={`/dashboard/${id}/staff/admin`}>Admin</Link>
-            )}
-            {admin?.admin && (
-              <Link href={`/dashboard/${id}/staff/leaderboard`}>
-                Leaderboard
-              </Link>
-            )}
+      {role === "staff" ||
+        (role === "admin" && (
+          <div className="dropdown">
+            <button className="dropbtn">
+              <h2>
+                Staff<span className="triangle-down"></span>
+              </h2>
+            </button>
+            <div className="nav-dropdown-content">
+              <Link href={`/editor/${id}/approve`}>Post Approvals</Link>
+              <Link href={`/editor/${id}`}>Create Post</Link>
+              {admin?.admin && (
+                <Link href={`/dashboard/${id}/staff/stafftracker`}>
+                  Staff Tracker
+                </Link>
+              )}
+              {admin?.admin && (
+                <Link href={`/dashboard/${id}/staff/admin`}>Admin</Link>
+              )}
+              {admin?.admin && (
+                <Link href={`/dashboard/${id}/staff/leaderboard`}>
+                  Leaderboard
+                </Link>
+              )}
+            </div>
           </div>
-        </div>
-      )}
+        ))}
 
       <a href="https://discord.gg/TGC" className="dropbtn" target="_blank">
         <Image

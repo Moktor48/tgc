@@ -27,8 +27,41 @@ export default async function PointCalc({
   // This query pulls all data from staff_duty given two dates
   const points = await api.get.dutyQuery.query({ start, end });
 
+  // Filters----------------------------------------------------------------------------------
+  // Filter out bots
+  const botPoints = points.filter((data) => {
+    return (
+      data.gmember_id !== "1160684450733105283" &&
+      data.gmember_id !== "1159835095994212402"
+    );
+  });
+
+  // Filter out situations where invites were made due to moves, and not fresh invites
+  function isWithinTenMinutes(time1: string, time2: string) {
+    const date1 = new Date(time1);
+    const date2 = new Date(time2);
+    const difference = Math.abs(date1.getTime() - date2.getTime());
+    return difference <= 10 * 60 * 1000; // 4 hours in milliseconds
+  }
+  let moveInvite = botPoints.filter(
+    (data) => data.duty_type >= 89 && data.duty_type <= 95,
+  );
+  const moveKick = botPoints.filter((data) => data.duty_type == 99);
+  moveInvite = moveInvite.filter((itemA) => {
+    return !moveKick.find((itemB) => {
+      return (
+        itemA.gmember_id === itemB.gmember_id &&
+        itemA.eso_target_user === itemB.eso_target_user &&
+        isWithinTenMinutes(
+          itemA.timestamp.toString(),
+          itemB.timestamp.toString(),
+        )
+      );
+    });
+  });
+
   // Raw data HERE [{}{}{}] This is the primary source of data, name/task/points
-  const userPoints = points.map((data) => {
+  const userPoints = moveInvite.map((data) => {
     return {
       user_id: data.gmember_id,
       user_name: data.discord_user.disc_nickname,
@@ -56,7 +89,8 @@ export default async function PointCalc({
         if (!acc[point.user_name]![point.task]) {
           acc[point.user_name]![point.task] = 1;
         } else {
-          acc[point.user_name]![point.task] += 1;
+          // @ts-expect-error There is no reason for this error
+          acc[point.user_name][point.task] += 1;
         }
       } else if (
         point.user_name &&

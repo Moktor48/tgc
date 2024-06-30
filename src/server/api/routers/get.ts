@@ -580,6 +580,8 @@ export const getRouter = createTRPCRouter({
         select: {
           gmember_id: true,
           timestamp: true,
+          duty_type: true,
+          eso_target_user: true,
           staff_point_chart: {
             select: {
               point_value: true,

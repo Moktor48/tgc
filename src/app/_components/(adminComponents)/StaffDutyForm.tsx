@@ -15,7 +15,7 @@ type EntryType = {
   //Tax: string;
 };
 
-export default function StaffDutyForm() {
+export default function StaffDutyForm({ user }: { user: string }) {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [guildInfo, setGuildInfo] = useState<string>("0");
   const [zone, setZone] = useState<string>("0");
@@ -67,8 +67,10 @@ export default function StaffDutyForm() {
             const newEntry = { ...entry };
             const values = line.split("\t");
             const dateTime = values[0]!;
-            const time = moment.tz(dateTime, zone);
-            const utcTime = time.utc().format();
+            const time = moment
+              .tz(dateTime, zone)
+              .tz("America/New_York")
+              .format();
             const name = dumpData?.find(
               (user) => user.ingame_name === values[1],
             );
@@ -141,10 +143,11 @@ export default function StaffDutyForm() {
             } else if (values[2] === "Declined") {
               newEntry.duty_type = 49;
             }
-            newEntry.timestamp = new Date(utcTime);
+            newEntry.timestamp = new Date(time);
             newEntry.eso_target_user = values[5] ?? "";
             parsedData.push(newEntry);
           }); // end of forEach
+          console.log(parsedData);
           formSubmit.mutate(parsedData);
         }
       };
@@ -204,13 +207,15 @@ export default function StaffDutyForm() {
           correct guild!!!!! Once you submit, it makes a permanent entry to the
           database!
         </span>
-        <button
-          className="button-40 text-green-500"
-          onClick={handleFileUpload}
-          disabled={guildInfo === "0" ?? zone === "0"}
-        >
-          Upload
-        </button>
+        {user === "moktor" && (
+          <button
+            className="button-40 text-green-500"
+            onClick={handleFileUpload}
+            disabled={guildInfo === "0" ?? zone === "0"}
+          >
+            Upload
+          </button>
+        )}
       </div>
     </div>
   );
