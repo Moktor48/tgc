@@ -147,7 +147,6 @@ export default function StaffDutyForm({ user }: { user: string }) {
             newEntry.eso_target_user = values[5] ?? "";
             parsedData.push(newEntry);
           }); // end of forEach
-          console.log(parsedData);
           formSubmit.mutate(parsedData);
         }
       };

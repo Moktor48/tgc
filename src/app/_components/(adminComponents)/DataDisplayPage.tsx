@@ -16,7 +16,6 @@ export default function DataDisplayPage({
   if (records.length === 0 ?? !records) {
     return <div>No data to display</div>;
   }
-  console.log("Record:", records[0]);
 
   function standardCheck(rank: string, points: number) {
     const rankName = rankList[rank]!;
@@ -27,7 +26,7 @@ export default function DataDisplayPage({
     if (!performance) return null;
 
     const { promote, expected, poor } = performance[rankName]!;
-    console.log("Promote:", promote, "Expected:", expected, "Poor:", poor);
+
     if (points >= promote!) {
       return <p className="text-green-500">Exceeds Expectations</p>;
     } else if (points >= expected!) {

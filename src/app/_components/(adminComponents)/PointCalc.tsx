@@ -35,9 +35,11 @@ export default async function PointCalc({
       data.gmember_id !== "1159835095994212402"
     );
   });
+
   const unfilteredPoints = botPoints.filter(
-    (data) => data.duty_type < 89 && data.duty_type > 95,
+    (data) => data.duty_type < 89 ?? data.duty_type > 95,
   );
+  console.log("UNFILTERED:", unfilteredPoints);
   // Filter out situations where invites were made due to moves, and not fresh invites
   function isWithinTenMinutes(time1: string, time2: string) {
     const date1 = new Date(time1);
