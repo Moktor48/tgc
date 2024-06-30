@@ -4,11 +4,12 @@ export default function WarningBanner() {
   return (
     <div className="bg-black text-center text-3xl text-red-500">
       <p className="text-3xl text-yellow-500">
-        Latest update: <span className="test-green-500 text-3xl">5/25/24</span>
+        Latest update: <span className="test-green-500 text-3xl">6/29/24</span>
       </p>
 
       <h1>Latest updates</h1>
       <ul>
+        <li>Filters added to leaderboard</li>
         <li>
           Added Point Standards to show performance for week in leaderboard
         </li>
