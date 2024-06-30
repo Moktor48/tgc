@@ -196,7 +196,10 @@ export default function StaffDutyForm({ user }: { user: string }) {
         >
           <option value={0}>Select a Time Zone for SnapShot</option>
           <option value={"America/New_York"}>Eastern</option> {/* -5 */}
-          <option value={"America/Chicago"}>Central</option> {/* -6 */}
+          <option value={"America/Argentina/Buenos_Aires"}>
+            Stupid Fix
+          </option>{" "}
+          {/* -6 */}
           <option value={"America/Denver"}>Mountain</option> {/* -7 */}
           <option value={"America/Los_Angeles"}>Pacific</option> {/* -8 */}
           <option value={"America/Phoenix"}>AZ</option> {/* -7 */}
