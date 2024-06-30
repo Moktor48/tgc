@@ -180,6 +180,9 @@ model staff_duty {
   description       String?           @db.Text
   staff_point_chart staff_point_chart @relation(fields: [duty_type], references: [task_id], onUpdate: Restrict, map: "fk_duty_to_task")
   discord_user      discord_user      @relation(fields: [gmember_id], references: [gmember_id], onUpdate: Restrict, map: "fk_duty_to_user")
+
+  @@index([duty_type], map: "fk_duty_to_task")
+  @@index([gmember_id], map: "fk_duty_to_user")
 }
 
 model guild_names {

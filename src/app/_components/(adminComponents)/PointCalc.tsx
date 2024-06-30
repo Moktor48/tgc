@@ -29,13 +29,15 @@ export default async function PointCalc({
 
   // Filters----------------------------------------------------------------------------------
   // Filter out bots
-  // const botPoints = points.filter((data) => {
-  //   return (
-  //     data.gmember_id !== "1160684450733105283" &&
-  //     data.gmember_id !== "1159835095994212402"
-  //   );
-  // });
-
+  const botPoints = points.filter((data) => {
+    return (
+      data.gmember_id !== "1160684450733105283" &&
+      data.gmember_id !== "1159835095994212402"
+    );
+  });
+  const unfilteredPoints = botPoints.filter(
+    (data) => data.duty_type < 89 && data.duty_type > 95,
+  );
   // Filter out situations where invites were made due to moves, and not fresh invites
   function isWithinTenMinutes(time1: string, time2: string) {
     const date1 = new Date(time1);
@@ -43,10 +45,13 @@ export default async function PointCalc({
     const difference = Math.abs(date1.getTime() - date2.getTime());
     return difference <= 10 * 60 * 1000; // 4 hours in milliseconds
   }
-  let moveInvite = points.filter(
+  //This filters to just the invites
+  let moveInvite = botPoints.filter(
     (data) => data.duty_type >= 89 && data.duty_type <= 95,
   );
-  const moveKick = points.filter((data) => data.duty_type == 99);
+  //This filters to just the kicks
+  const moveKick = botPoints.filter((data) => data.duty_type == 99);
+  //This filters out the invites that were preceeded by a kick within 10 minutes
   moveInvite = moveInvite.filter((itemA) => {
     return !moveKick.find((itemB) => {
       return (
@@ -59,9 +64,9 @@ export default async function PointCalc({
       );
     });
   });
-
+  const smooshPoints = [...unfilteredPoints, ...moveInvite];
   // Raw data HERE [{}{}{}] This is the primary source of data, name/task/points
-  const userPoints = moveInvite.map((data) => {
+  const userPoints = smooshPoints.map((data) => {
     return {
       user_id: data.gmember_id,
       user_name: data.discord_user.disc_nickname,
