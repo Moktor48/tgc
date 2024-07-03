@@ -139,9 +139,9 @@ export default function StaffDutyForm({ user }: { user: string }) {
                               ? (newEntry.duty_type = 957)
                               : null;
             } else if (values[2] === "Accepted") {
-              newEntry.duty_type = 48;
+              newEntry.duty_type = 87;
             } else if (values[2] === "Declined") {
-              newEntry.duty_type = 49;
+              newEntry.duty_type = 88;
             }
             newEntry.timestamp = new Date(time);
             newEntry.eso_target_user = values[5] ?? "";
