@@ -26,12 +26,12 @@ export default function LeaderQuery({ id }: { id: string }) {
     <div className="flex justify-center text-white">
       <div className="newsletter w-2/3">
         <h2>Leaderboard Query: Times are not Zulu, they are EDT.</h2>
-        <form onSubmit={handleSubmit}>
-          <label className="mr-10 w-20" htmlFor="start">
+        <form onSubmit={handleSubmit} className="flex">
+          <label className="mr-10 justify-self-start" htmlFor="start">
             Start Date
           </label>
           <input
-            className="text-white"
+            className="justify-self-end text-white"
             type="datetime"
             name="start"
             value={queryDate.start}
@@ -41,12 +41,12 @@ export default function LeaderQuery({ id }: { id: string }) {
           />
           <br />
 
-          <label className="mr-10 w-20" htmlFor="end">
+          <label className="mr-10 justify-self-start" htmlFor="end">
             End Date
           </label>
 
           <input
-            className="text-white"
+            className="justify-self-end text-white"
             type="datetime"
             name="end"
             value={queryDate.end}
