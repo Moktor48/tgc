@@ -21,8 +21,8 @@ export default async function WeekLeader(params: { id: string }) {
   end.setUTCHours(23, 59, 59, 999); // Set the time to 03:59:59.999Z
 
   return (
-    <div className="flex justify-center text-white">
-      <div className="newsletter w-2/3">
+    <div className="p-15 flex h-full items-center justify-center text-white">
+      <div className="newsletter card flex w-2/3 w-96 items-center justify-center border-4 border-black shadow-xl">
         <Link
           href={`/dashboard/${id}/staff/leaderboard/currentLB?start=${start.toISOString()}&end=${end.toISOString()}`}
         >

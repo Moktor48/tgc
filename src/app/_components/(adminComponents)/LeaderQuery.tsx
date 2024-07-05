@@ -23,40 +23,50 @@ export default function LeaderQuery({ id }: { id: string }) {
   };
 
   return (
-    <div className="flex justify-center text-white">
-      <div className="newsletter w-2/3">
-        <h2>Leaderboard Query: Times are not Zulu, they are EDT.</h2>
-        <form onSubmit={handleSubmit} className="flex">
-          <label className="mr-10 justify-self-start" htmlFor="start">
-            Start Date
-          </label>
-          <input
-            className="justify-self-end text-white"
-            type="datetime"
-            name="start"
-            value={queryDate.start}
-            onChange={(event) => {
-              setQueryDate({ ...queryDate, start: event.target.value });
-            }}
-          />
+    <div className="p-15 flex justify-center text-white">
+      <div className="newsletter card w-2/3 w-96 border-4 border-black shadow-xl">
+        <h2 className="p-5 text-center">
+          Leaderboard Query: Times are not Zulu, they are EDT.
+        </h2>
+        <form onSubmit={handleSubmit}>
+          <div className="mb-4 flex justify-between">
+            {" "}
+            {/* Use div instead of span for block-level container */}
+            <label className="justify-self-start" htmlFor="start">
+              Start Date:{""}
+            </label>
+            <input
+              className="justify-self-end text-white"
+              type="datetime"
+              name="start"
+              value={queryDate.start}
+              onChange={(event) => {
+                setQueryDate({ ...queryDate, start: event.target.value });
+              }}
+            />
+          </div>
+
+          <div className="flex justify-between">
+            {" "}
+            {/* Use div instead of span for block-level container */}
+            <label className="justify-self-start" htmlFor="end">
+              End Date:{""}
+            </label>
+            <input
+              className="justify-self-end text-white"
+              type="datetime"
+              name="end"
+              value={queryDate.end}
+              onChange={(event) => {
+                setQueryDate({ ...queryDate, end: event.target.value });
+              }}
+            />
+          </div>
           <br />
-
-          <label className="mr-10 justify-self-start" htmlFor="end">
-            End Date
-          </label>
-
-          <input
-            className="justify-self-end text-white"
-            type="datetime"
-            name="end"
-            value={queryDate.end}
-            onChange={(event) => {
-              setQueryDate({ ...queryDate, end: event.target.value });
-            }}
-          />
-
+          <div className="flex w-full justify-center">
+            <button className="button-40">Submit</button>
+          </div>
           <br />
-          <button className="button-40">Submit</button>
         </form>
       </div>
     </div>
