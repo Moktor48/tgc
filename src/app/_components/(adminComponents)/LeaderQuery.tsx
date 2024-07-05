@@ -5,7 +5,8 @@ import { useRouter } from "next/navigation";
 export default function LeaderQuery({ id }: { id: string }) {
   const d = new Date();
   const start = d.setDate(d.getDate() - 6);
-  const startDate = new Date(start).toISOString().split("T")[0]!;
+  const startDateX = new Date(start).setUTCHours(0, 0, 0, 0);
+  const startDate = new Date(startDateX).toISOString();
   const endDate = new Date().toISOString();
   const router = useRouter();
 
