@@ -40,7 +40,7 @@ export default function DataDisplayPage({
     ) {
       return <p className="text-red-500">Inactive</p>;
     } else {
-      return <p className="text-red-500">Probation</p>;
+      return <p className="text-red-500">Danger Zone</p>;
     }
   }
 
