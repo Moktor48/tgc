@@ -25,8 +25,9 @@ export default function LeaderQuery({ id }: { id: string }) {
   return (
     <div className="flex justify-center text-white">
       <div className="newsletter w-2/3">
+        <h2>Leaderboard Query: Times are not Zulu, they are EDT.</h2>
         <form onSubmit={handleSubmit}>
-          <label className="mr-10" htmlFor="start">
+          <label className="mr-10 w-20" htmlFor="start">
             Start Date
           </label>
           <input
@@ -40,7 +41,7 @@ export default function LeaderQuery({ id }: { id: string }) {
           />
           <br />
 
-          <label className="mr-10" htmlFor="end">
+          <label className="mr-10 w-20" htmlFor="end">
             End Date
           </label>
 
