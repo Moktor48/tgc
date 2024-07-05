@@ -20,11 +20,10 @@ export default async function page({
   const admin = await api.get.staffPermission.query({ userId: id });
   if (!admin) return <p className="text-red-500">Invalid Permissions</p>;
   const start = new Date(searchParams.start);
-  start.setUTCHours(4, 0, 0, 0); // Set the time to 04:00:00.000Z
+  start.setUTCHours(0, 0, 0, 0); // Set the time to 04:00:00.000Z
 
   const end = new Date(searchParams.end);
-  end.setUTCDate(end.getUTCDate() + 1); // Add 1 day
-  end.setUTCHours(3, 59, 59, 999); // Set the time to 03:59:59.999Z
+  end.setUTCHours(23, 59, 59, 999); // Set the time to 03:59:59.999Z
 
   return (
     <>

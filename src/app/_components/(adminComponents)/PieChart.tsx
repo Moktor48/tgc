@@ -32,27 +32,6 @@ export default function PieChart(props: Props) {
       },
     ],
   };
-  /*
-  // Define an array of labels.
-  const labels = ["January", "February", "March", "April", "May", "June"];
-
-  // Defined an object.
-  const data = {
-    labels: labels,
-    datasets: [
-      {
-        label: "My First dataset",
-        backgroundColor: "rgb(255, 99, 132)",
-        borderColor: "rgb(0,0,255)",
-        data: [0, 10, 5, 2, 20, 30, 45],
-      },
-    ],
-  };
-
-  /**
-   * Define a functional component named PieChart
-   * that returns a Pie component from react-chartjs-2,
-   */
 
   return (
     <div key={title} className="bg-slate-900">

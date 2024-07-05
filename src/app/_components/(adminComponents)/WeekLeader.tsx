@@ -17,8 +17,8 @@ export default async function WeekLeader(params: { id: string }) {
   const end = today;
   const start = new Date(end);
   start.setDate(end.getDate() - 7);
-  start.setUTCHours(4, 0, 0, 0); // Set the time to 04:00:00.000Z
-  end.setUTCHours(3, 59, 59, 999); // Set the time to 03:59:59.999Z
+  start.setUTCHours(0, 0, 0, 0); // Set the time to 04:00:00.000Z
+  end.setUTCHours(23, 59, 59, 999); // Set the time to 03:59:59.999Z
 
   return (
     <div className="flex justify-center text-white">

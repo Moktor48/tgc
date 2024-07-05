@@ -134,7 +134,8 @@ export default function LBClientWrap({
       </div>
       <div>
         <h1 className="newscolor text-center">
-          Points Earned from {startDate} to {endDate}
+          Points Earned from Midnight {startDate} to 23:59 {endDate}, Eastern
+          time.
         </h1>
         <DataWrapper rankedList={rankedList} checkBox={checkBox} />
       </div>

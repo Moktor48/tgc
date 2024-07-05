@@ -30,7 +30,7 @@ export default function LeaderQuery({ id }: { id: string }) {
           </label>
           <input
             className="text-white"
-            type="date"
+            type="datetime"
             name="start"
             value={queryDate.start}
             onChange={(event) => {
@@ -45,7 +45,7 @@ export default function LeaderQuery({ id }: { id: string }) {
 
           <input
             className="text-white"
-            type="date"
+            type="datetime"
             name="end"
             value={queryDate.end}
             onChange={(event) => {
