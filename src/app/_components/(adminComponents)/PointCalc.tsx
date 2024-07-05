@@ -36,10 +36,11 @@ export default async function PointCalc({
     );
   });
 
+  // This filters out the basic invites so that all duty that is not an invite should be caught
   const unfilteredPoints = botPoints.filter(
-    (data) => data.duty_type < 89 ?? data.duty_type > 95,
+    (data) => data.duty_type < 89 || data.duty_type > 95,
   );
-  console.log("UNFILTERED:", unfilteredPoints);
+
   // Filter out situations where invites were made due to moves, and not fresh invites
   function isWithinTenMinutes(time1: string, time2: string) {
     const date1 = new Date(time1);
@@ -51,8 +52,10 @@ export default async function PointCalc({
   let moveInvite = botPoints.filter(
     (data) => data.duty_type >= 89 && data.duty_type <= 95,
   );
+
   //This filters to just the kicks
   const moveKick = botPoints.filter((data) => data.duty_type == 99);
+
   //This filters out the invites that were preceeded by a kick within 10 minutes
   moveInvite = moveInvite.filter((itemA) => {
     return !moveKick.find((itemB) => {
@@ -66,7 +69,9 @@ export default async function PointCalc({
       );
     });
   });
+
   const smooshPoints = [...unfilteredPoints, ...moveInvite];
+
   // Raw data HERE [{}{}{}] This is the primary source of data, name/task/points
   const userPoints = smooshPoints.map((data) => {
     return {
@@ -141,7 +146,7 @@ export default async function PointCalc({
   const taskPointsWithOther = Object.entries(taskPoints).reduce<
     Record<string, number>
   >((acc, [task, points]) => {
-    if (points < 100) {
+    if (points < 400) {
       if (acc.other) {
         acc.other += points;
       } else {
