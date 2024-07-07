@@ -222,6 +222,7 @@ export default async function GuildCheck({ userId }: { userId: string }) {
   await api.put.updateUserEso.mutate(esoEntry);
   await api.put.updateUserFfxiv.mutate(ffxivEntry);
   await api.put.updateUserSwtor.mutate(swtorEntry);
+  console.log(staffEntry);
   await api.put.updateUserStaff.mutate(staffEntry);
 
   if (guildStaff) {
