@@ -342,14 +342,14 @@ export const getRouter = createTRPCRouter({
     });
     return posts;
   }),
-
+  //all posts
   publishedPostsMod: protectedProcedure
     .input(
       z.object({
         eso: z.boolean(),
         ffxiv: z.boolean(),
         swtor: z.boolean(),
-        type: z.string(),
+        type: z.string().optional(),
       }),
     )
     .query(async ({ input }) => {
@@ -383,7 +383,7 @@ export const getRouter = createTRPCRouter({
       });
       return posts;
     }),
-
+  //public posts
   publishedPostsModPub: publicProcedure
     .input(
       z.object({
@@ -391,7 +391,7 @@ export const getRouter = createTRPCRouter({
         eso: z.boolean(),
         ffxiv: z.boolean(),
         swtor: z.boolean(),
-        type: z.string(),
+        type: z.string().optional(),
       }),
     )
     .query(async ({ input }) => {
