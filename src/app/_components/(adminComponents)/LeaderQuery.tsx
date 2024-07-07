@@ -48,7 +48,6 @@ export default function LeaderQuery({ id }: { id: string }) {
 
           <div className="flex justify-between">
             {" "}
-            {/* Use div instead of span for block-level container */}
             <label className="justify-self-start" htmlFor="end">
               End Date:{""}
             </label>

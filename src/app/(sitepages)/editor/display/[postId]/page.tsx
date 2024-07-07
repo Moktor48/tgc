@@ -1,7 +1,6 @@
 import React from "react";
 import { api } from "~/trpc/server";
-
-import EditApproveStateWrap from "~/app/_components/(tinymce)/EditApproveStateWrap";
+import DisplayPost from "~/app/_components/(tinymce)/DisplayPost";
 
 export default async function page({
   params,
@@ -13,7 +12,7 @@ export default async function page({
   if (!display) return <p>No Data!</p>;
   return (
     <div>
-      <EditApproveStateWrap data={display} params={params} />
+      <DisplayPost data={display} params={params} />
     </div>
   );
 }

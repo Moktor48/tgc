@@ -7,10 +7,10 @@ export default async function page({ params }: { params: { id: string } }) {
   const session = await getServerAuthSession();
   if (!session) return <div>You must be logged in to view this page.</div>;
   const id = params.id;
-  const perm = await api.get.staffPermission.query({
+  const postContent = await api.get.staffPermission.query({
     userId: id,
   });
-  if (!perm?.admin) return <p>You aren't allowed to be here!</p>;
+  if (!postContent?.admin) return <p>You aren't allowed to be here!</p>;
 
   return (
     <>
@@ -19,7 +19,7 @@ export default async function page({ params }: { params: { id: string } }) {
           <p className="w-full bg-black text-center">
             If I did this right, you are {session.user.name}, are set as{" "}
             {session.user.role}, and have access as{" "}
-            {perm.admin && "Administrator"}
+            {postContent.admin && "Administrator"}
           </p>
           <br />
 

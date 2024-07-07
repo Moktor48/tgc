@@ -12,11 +12,11 @@ export default async function UserManage({
   const searchId = params.searchId;
   const session = await getServerAuthSession();
   if (!session) return <div>You must be logged in to view this page.</div>;
-  const perm = await api.get.staffPermission.query({
+  const postContent = await api.get.staffPermission.query({
     userId: userId,
   });
 
-  if (!perm?.admin) return <p>You aren't allowed to be here!</p>;
+  if (!postContent?.admin) return <p>You aren't allowed to be here!</p>;
   const user = await api.get.userProfile.query({ userId: searchId });
   const userStaff = await api.get.staffPermission.query({ userId: searchId });
   return (

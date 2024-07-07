@@ -66,7 +66,7 @@ model post {
   id          String             @id @default(cuid())
   title       String
   summary     String             @db.Text
-  content     String             @db.Text
+  content     String             @db.LongText
   image       String?            @db.VarChar(255)
   timestamp   DateTime           @default(now())
   updatedAt   DateTime           @updatedAt
@@ -99,16 +99,16 @@ model post_permission {
 }
 
 model post_modification {
-  id        String  @id @default(cuid())
-  title     String
-  summary   String  @db.Text
-  content   String  @db.Text
-  image     String? @db.Text
-  postId    String  @unique
-  published String
-  modById   String
-  modBy     User    @relation(fields: [modById], references: [id])
-  postRef   post    @relation(fields: [postId], references: [id], onDelete: Cascade)
+  id          String  @id @default(cuid())
+  ori_title   String
+  ori_summary String  @db.Text
+  ori_content String  @db.Text
+  image       String? @db.Text
+  postId      String  @unique
+  published   String  @default("Published by modById")
+  modById     String
+  modBy       User    @relation(fields: [modById], references: [id])
+  postRef     post    @relation(fields: [postId], references: [id], onDelete: Cascade)
 
   @@index([modById], map: "post_modification_modById_fkey")
 }

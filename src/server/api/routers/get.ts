@@ -96,6 +96,7 @@ export const getRouter = createTRPCRouter({
               intermediate: true,
               advanced: true,
               member: true,
+              type: true,
             },
           },
         },

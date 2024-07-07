@@ -202,11 +202,11 @@ export const postRouter = createTRPCRouter({
       const post = await db.post_modification.create({
         data: {
           postId: input.postId,
-          title: input.title,
-          content: input.post,
+          ori_title: input.title,
+          ori_content: input.post,
           published: input.published,
           modById: input.modById,
-          summary: input.summary,
+          ori_summary: input.summary,
         },
       });
       return post;

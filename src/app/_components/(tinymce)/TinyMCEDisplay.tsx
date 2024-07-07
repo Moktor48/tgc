@@ -1,15 +1,9 @@
 "use client";
-import { api } from "~/trpc/react";
 import parse from "html-react-parser";
 import { Element } from "html-react-parser";
 import type { HTMLReactParserOptions } from "html-react-parser";
-
-export default function TinyMCEDisplay({
-  postId,
-}: {
-  id: string;
-  postId: string;
-}) {
+import type { DisplayType } from "~/type";
+export default function TinyMCEDisplay({ data }: { data: DisplayType }) {
   const options: HTMLReactParserOptions = {
     replace(domNode) {
       if (domNode instanceof Element && domNode.attribs) {
@@ -17,17 +11,13 @@ export default function TinyMCEDisplay({
       }
     },
   };
-  //Read-Only Display logic
-  const display = api.get.getPost.useQuery({ postId: postId });
-
-  if (!display) return <p>No Data!</p>;
 
   return (
     <div>
-      <h1>{display.data?.title}</h1>
-      <h2>{display.data?.summary}</h2>
+      <h1>Title: {data?.title}</h1>
+      <h2>Summary: {data?.summary}</h2>
       <div className="w-full bg-white text-black">
-        {display.data?.content ? parse(display.data.content, options) : null}
+        {data?.content ? parse(data.content, options) : null}
       </div>
     </div>
   );

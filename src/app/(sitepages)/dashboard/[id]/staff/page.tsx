@@ -11,7 +11,7 @@ export default async function StaffPage({
   const session = await getServerAuthSession();
   if (!session) return <div>You must be logged in to view this page.</div>;
   const id = params.id;
-  const perm = await api.get.staffPermission.query({ userId: id });
+  const postContent = await api.get.staffPermission.query({ userId: id });
   if (session.user.role != "staff")
     return (
       <p className="text-3xl text-white">
@@ -25,18 +25,29 @@ export default async function StaffPage({
         <div className="newsletter flex w-1/2 text-white">
           <p>
             Clearly you are a staff member, {session?.user.name}, permissions
-            include {perm?.specialist && "specialist "}{" "}
-            {perm?.representative && "representative "}{" "}
-            {perm?.admin && "admin "} {perm?.highcouncil && "high council "}{" "}
-            {perm?.guildmaster && "guildmaster"}.
+            include {postContent?.specialist && "specialist "}{" "}
+            {postContent?.representative && "representative "}{" "}
+            {postContent?.admin && "admin "}{" "}
+            {postContent?.highcouncil && "high council "}{" "}
+            {postContent?.guildmaster && "guildmaster"}.
           </p>
-          {perm?.admin && (
+          {postContent?.admin && (
             <div className="bg-slate-900">
               <Link href={`/dashboard/${id}/staff/leaderboard`}>
                 <button className="button-40">Leaderboard</button>
               </Link>
             </div>
           )}
+          <div>
+            <Link href={`/editor/${id}`}>
+              <button className="button-40">Create Post</button>
+            </Link>
+          </div>
+          <div>
+            <Link href={`/editor/${id}/approve`}>
+              <button className="button-40">Approve Post</button>
+            </Link>
+          </div>
         </div>
       </div>
     </>

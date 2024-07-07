@@ -39,7 +39,8 @@
     ".next/types/**/*.ts",
     "prisma/tgc_hold.info",
     "src/server/discord.ts",
-    "src/app/_components/(discordBot)/(DiscordBot.tsx)"
+    "src/app/_components/(discordBot)/(DiscordBot.tsx)",
+    "src/app/_components/(tinymce)/TinyMCEApprove.tsx.hold"
   ],
   "exclude": ["node_modules"]
 }

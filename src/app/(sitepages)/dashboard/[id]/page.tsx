@@ -8,7 +8,9 @@ import { api } from "~/trpc/server";
 export default async function AccountPage() {
   const session = await getServerAuthSession();
   if (!session) return <div>You must be logged in to view this page.</div>;
-  const perm = await api.get.staffPermission.query({ userId: session.user.id });
+  const postContent = await api.get.staffPermission.query({
+    userId: session.user.id,
+  });
   return (
     <>
       <div className="flex w-full justify-center">
@@ -21,7 +23,7 @@ export default async function AccountPage() {
               <button className="button-40">Staff Page</button>
             </Link>
           )}
-          {perm?.admin && (
+          {postContent?.admin && (
             <Link href={`/dashboard/${session.user.id}/staff/admin`}>
               <button className="button-40">Admin Page</button>
             </Link>
