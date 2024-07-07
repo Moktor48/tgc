@@ -349,6 +349,7 @@ export const getRouter = createTRPCRouter({
         eso: z.boolean(),
         ffxiv: z.boolean(),
         swtor: z.boolean(),
+        general: z.boolean().optional(),
         type: z.string().optional(),
       }),
     )
@@ -374,6 +375,7 @@ export const getRouter = createTRPCRouter({
           },
           permissions: {
             select: {
+              general: input.general,
               eso: input.eso,
               ffxiv: input.ffxiv,
               swtor: input.swtor,
@@ -472,6 +474,23 @@ export const getRouter = createTRPCRouter({
       });
       return posts;
     }),
+  fullPostCount: protectedProcedure.query(async () => {
+    const count = await db.post.findMany({
+      select: {
+        permissions: {
+          select: {
+            published: true,
+            eso: true,
+            ffxiv: true,
+            swtor: true,
+            general: true,
+            type: true,
+          },
+        },
+      },
+    });
+    return count;
+  }),
 
   //Query Permissions
   staffPermission: protectedProcedure

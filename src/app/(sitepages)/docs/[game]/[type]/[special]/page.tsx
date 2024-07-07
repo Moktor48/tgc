@@ -1,3 +1,4 @@
+import Link from "next/link";
 import React from "react";
 import { getServerAuthSession } from "~/server/auth";
 import { api } from "~/trpc/server";
@@ -41,10 +42,12 @@ export default async function page({
         Published Posts for {params.game} - {params.type}
       </h1>
       {data.map((post) => (
-        <div>
-          <p>Title: {post.title}</p>
-          <p>Author: {post.createdBy.name}</p>
-        </div>
+        <Link href={`/editor/display/${post.id}`}>
+          <div className="card card-bordered w-96 border-red-900 bg-base-100 shadow-xl">
+            <p className="p-1">Title: {post.title}</p>
+            <p className="p-1">Author: {post.createdBy.name}</p>
+          </div>
+        </Link>
       ))}
     </div>
   );

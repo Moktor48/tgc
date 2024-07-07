@@ -1,6 +1,7 @@
 import React from "react";
 import { api } from "~/trpc/server";
-import DisplayPost from "~/app/_components/(tinymce)/DisplayPost";
+
+import TinyMCEDisplay from "~/app/_components/(tinymce)/TinyMCEDisplay";
 
 export default async function page({
   params,
@@ -12,7 +13,7 @@ export default async function page({
   if (!display) return <p>No Data!</p>;
   return (
     <div>
-      <DisplayPost data={display} params={params} />
+      <TinyMCEDisplay data={display} />
     </div>
   );
 }

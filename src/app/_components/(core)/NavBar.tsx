@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { api } from "~/trpc/server";
-
+import docCount from "../(adminComponents)/DocCount";
 export default async function NavBar({
   role,
   id,
@@ -11,7 +11,7 @@ export default async function NavBar({
 }) {
   if (!id) return null;
   const admin = await api.get.staffPermission.query({ userId: id });
-
+  const docResults = await docCount();
   return (
     <div className="navbar" id="navbar">
       <div className="dropdown">
@@ -31,14 +31,14 @@ export default async function NavBar({
           </h2>
         </button>
         <div className="nav-dropdown-content">
-          <Link href={`/editor/${id}/display/private/eso/general/build`}>
-            ESO
+          <Link href={`/docs/eso/build`}>
+            ESO {`(${docResults.eso_build})`}
           </Link>
-          <Link href={`/editor/${id}/display/private/ffxiv/general/build`}>
-            FFXIV
+          <Link href={`/docs/ffxiv/build`}>
+            FFXIV {`(${docResults.ffxiv_build})`}
           </Link>
-          <Link href={`/editor/${id}/display/private/swtor/general/build`}>
-            SWTOR
+          <Link href={`/docs/swtor/build`}>
+            SWTOR {`(${docResults.swtor_build})`}
           </Link>
         </div>
       </div>
@@ -50,14 +50,14 @@ export default async function NavBar({
           </h2>
         </button>
         <div className="nav-dropdown-content">
-          <Link href={`/editor/${id}/display/private/eso/general/guide`}>
-            ESO
+          <Link href={`/docs/eso/guide`}>
+            ESO {`(${docResults.eso_guide})`}
           </Link>
-          <Link href={`/editor/${id}/display/private/ffxiv/general/guide`}>
-            FFXIV
+          <Link href={`/docs/ffxiv/guide`}>
+            FFXIV {`(${docResults.ffxiv_guide})`}
           </Link>
-          <Link href={`/editor/${id}/display/private/swtor/general/guide`}>
-            SWTOR
+          <Link href={`/docs/swtor/guide`}>
+            SWTOR {`(${docResults.swtor_guide})`}
           </Link>
         </div>
       </div>
@@ -69,48 +69,40 @@ export default async function NavBar({
           </h2>
         </button>
         <div className="nav-dropdown-content">
-          <Link href={`/editor/${id}/display/private/eso/general/article`}>
-            ESO
+          <Link href={`/docs/eso/article`}>
+            ESO {`(${docResults.eso_article})`}
           </Link>
-          <Link href={`/editor/${id}/display/private/ffxiv/general/article`}>
-            FFXIV
+          <Link href={`/docs/ffxiv/article`}>
+            FFXIV {`(${docResults.ffxiv_article})`}
           </Link>
-          <Link href={`/editor/${id}/display/private/swtor/general/article`}>
-            SWTOR
+          <Link href={`/docs/swtor/article`}>
+            SWTOR {`(${docResults.swtor_article})`}
           </Link>
-          <Link href={`/editor/${id}/display/private/general/general/article`}>
-            General Guild Articles
+          <Link href={`/docs/general/article`}>
+            General Guild Articles {`(${docResults.general_article})`}
           </Link>
         </div>
       </div>
 
-      {role === "staff" ||
-        (role === "admin" && (
-          <div className="dropdown">
-            <button className="dropbtn">
-              <h2>
-                Staff<span className="triangle-down"></span>
-              </h2>
-            </button>
-            <div className="nav-dropdown-content">
-              <Link href={`/editor/${id}/approve`}>Post Approvals</Link>
-              <Link href={`/editor/${id}`}>Create Post</Link>
-              {admin?.admin && (
-                <Link href={`/dashboard/${id}/staff/stafftracker`}>
-                  Staff Tracker
-                </Link>
-              )}
-              {admin?.admin && (
-                <Link href={`/dashboard/${id}/staff/admin`}>Admin</Link>
-              )}
-              {admin?.admin && (
-                <Link href={`/dashboard/${id}/staff/leaderboard`}>
-                  Leaderboard
-                </Link>
-              )}
-            </div>
+      {role === "staff" && (
+        <div className="dropdown">
+          <button className="dropbtn">
+            <h2>
+              Staff<span className="triangle-down"></span>
+            </h2>
+          </button>
+          <div className="nav-dropdown-content">
+            <Link href={`/dashboard/${id}/staff/leaderboard`}>Leaderboard</Link>
+            <Link href={`/editor/${id}/approve`}>Post Approvals</Link>
+            <Link href={`/editor/${id}`}>Create Post</Link>
+            {admin?.admin && (
+              <Link href={`/dashboard/${id}/staff/stafftracker`}>
+                Staff Tracker
+              </Link>
+            )}
           </div>
-        ))}
+        </div>
+      )}
 
       <a href="https://discord.gg/TGC" className="dropbtn" target="_blank">
         <Image
