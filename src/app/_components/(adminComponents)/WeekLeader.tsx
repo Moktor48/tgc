@@ -12,21 +12,17 @@ export default async function WeekLeader(params: { id: string }) {
   if (!admin) return <p className="text-red-500">Invalid Permissions</p>;
 
   const today = new Date();
-  const currentDayOfWeek = today.getDay(); // Sunday - 0, Monday - 1, ..., Saturday - 6
-  let start;
+  const currentDayOfWeek = today.getDay(); // Sunday = 0, Monday = 1, ..., Saturday = 6
 
-  // If today is Sunday, set start to today, else calculate the previous Sunday
-  if (currentDayOfWeek === 0) {
-    start = new Date(today);
-  } else {
-    start = new Date(today.setDate(today.getDate() - currentDayOfWeek));
-  }
-  start.setUTCHours(0, 0, 0, 0); // Set the start time to 00:00:00.000Z
+  // Adjust today's date to get to the previous Sunday
+  const start = new Date(today);
+  start.setDate(today.getDate() - 6 - currentDayOfWeek); // If today is Sunday, currentDayOfWeek is 0, so no change
+  start.setUTCHours(0, 0, 0, 0); // Set start time to midnight
 
-  // Calculate end (Saturday) based on the start date
+  // Calculate the end date (Saturday) by adding 6 days to the start date
   const end = new Date(start);
-  end.setDate(end.getDate() + 6);
-  end.setUTCHours(23, 59, 59, 999); // Set the end time to 23:59:59.999Z
+  end.setDate(start.getDate() + 5);
+  end.setUTCHours(23, 59, 59, 999); // Set end time to just before midnight
 
   return (
     <div className="p-15 flex h-full items-center justify-center text-white">
