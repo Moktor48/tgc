@@ -4,11 +4,15 @@ export default function WarningBanner() {
   return (
     <div className="bg-black text-center text-3xl text-red-500">
       <p className="text-3xl text-yellow-500">
-        Latest update: <span className="test-green-500 text-3xl">7/6/24</span>
+        Latest update: <span className="test-green-500 text-3xl">7/7/24</span>
       </p>
 
       <h1>Latest updates</h1>
       <ul>
+        <li>
+          Editor no longer allows guides or builds for the general guild, those
+          are aimed at specific games now
+        </li>
         <li>Editor is online... again! Dashboard, staff, create post.</li>
         <li>
           *Leaderboard should give accurate results based on the times currently

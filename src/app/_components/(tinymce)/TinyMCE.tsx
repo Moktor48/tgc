@@ -7,12 +7,12 @@ type FormData = {
   eso: boolean;
   ffxiv: boolean;
   swtor: boolean;
-  general: boolean;
+  tgc_guild: boolean;
   staff: boolean;
   raid: boolean;
   officer: boolean;
   guild_public: boolean;
-  member: boolean;
+  tgc_member: boolean;
   beginner: boolean;
   intermediate: boolean;
   advanced: boolean;
@@ -41,12 +41,12 @@ export default function TinyMCE({ id }: { id: string }) {
     eso: false,
     ffxiv: false,
     swtor: false,
-    general: false,
+    tgc_guild: false,
     staff: false,
     raid: false,
     officer: false,
     guild_public: false,
-    member: false,
+    tgc_member: false,
     beginner: false,
     intermediate: false,
     advanced: false,
@@ -55,7 +55,7 @@ export default function TinyMCE({ id }: { id: string }) {
 
   const [perm, setPerm] = useState({
     priv: "general",
-    game: "member",
+    game: "tgc_guild",
     aud: "",
   });
 
@@ -67,7 +67,7 @@ export default function TinyMCE({ id }: { id: string }) {
       const PD = { ...permissionData, postId };
       postPermissions.mutate(PD);
       alert("Post Submitted!");
-      location.reload();
+      location.href = `/dashboard/${id}/staff`;
     },
   });
 
@@ -120,17 +120,20 @@ export default function TinyMCE({ id }: { id: string }) {
           />
           <label htmlFor="article_type">Article</label>
           <br />
+
           <input
             type="radio"
             id="guide_type"
             name="type"
             value="guide"
             checked={permissionData.type === "guide"}
+            disabled={perm.game === "tgc_guild"}
             onChange={() =>
               setPermissionData({ ...permissionData, type: "guide" })
             }
           />
           <label htmlFor="guide_type">Guide</label>
+
           <br />
 
           <input
@@ -139,12 +142,15 @@ export default function TinyMCE({ id }: { id: string }) {
             name="type"
             value="build"
             checked={permissionData.type === "build"}
+            disabled={perm.game === "tgc_guild"}
             onChange={() =>
               setPermissionData({ ...permissionData, type: "build" })
             }
           />
           <label htmlFor="build_type">Build</label>
+
           <br />
+
           <input
             type="radio"
             id="policy_type"
@@ -165,13 +171,13 @@ export default function TinyMCE({ id }: { id: string }) {
         <div className="accessPrivileges">
           <input
             type="radio"
-            id="general_type"
+            id="TGC_member"
             name="priv"
-            value="general"
-            checked={perm.priv === "general"}
-            onChange={() => setPerm({ ...perm, priv: "general" })}
+            value="tgc_member"
+            checked={perm.priv === "tgc_member"}
+            onChange={() => setPerm({ ...perm, priv: "tgc_member" })}
           />
-          <label htmlFor="general_type">Guild Members</label>
+          <label htmlFor="TGC_member">Guild Members</label>
           <br />
           <input
             type="radio"
@@ -212,13 +218,17 @@ export default function TinyMCE({ id }: { id: string }) {
         <div className="Category">
           <input
             type="radio"
-            id="Other"
+            id="TGC_guild"
             name="game"
-            value="member"
-            checked={perm.game === "member"}
-            onChange={() => setPerm({ ...perm, game: "member" })}
+            value="tgc_guild"
+            checked={perm.game === "tgc_guild"}
+            disabled={
+              permissionData.type === "guide" || permissionData.type === "build"
+            }
+            onChange={() => setPerm({ ...perm, game: "tgc_guild" })}
           />
-          <label htmlFor="Other">General Guild Members</label>
+          <label htmlFor="TGC_guild">All TGC Guild Members</label>
+
           <br />
           <input
             type="radio"
@@ -319,8 +329,6 @@ export default function TinyMCE({ id }: { id: string }) {
         >
           Submit!
         </button>
-
-        {dirty && <p>Submit when ready!</p>}
       </form>
     </div>
   );

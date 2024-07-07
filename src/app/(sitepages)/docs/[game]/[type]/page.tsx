@@ -2,13 +2,7 @@ import Link from "next/link";
 import React from "react";
 import { getServerAuthSession } from "~/server/auth";
 import { api } from "~/trpc/server";
-type Guild = {
-  eso: boolean;
-  swtor: boolean;
-  ffxiv: boolean;
-  general: boolean;
-  type: string;
-};
+import type { PubPost, Guild } from "~/type";
 
 export default async function page({
   params,
@@ -16,13 +10,14 @@ export default async function page({
   params: { game: string; type: string };
 }) {
   const session = await getServerAuthSession();
+  // NOT LOGGED IN
   if (!session) {
     if (!params) return <p>No Data!</p>;
     const guild: Guild = {
       eso: false,
       swtor: false,
       ffxiv: false,
-      general: false,
+      tgc_guild: false,
       type: "article",
     };
     const select = params.game;
@@ -30,12 +25,12 @@ export default async function page({
       select != "eso" &&
       select != "swtor" &&
       select != "ffxiv" &&
-      select != "general"
+      select != "tgc_guild"
     )
       return <p>No Data!</p>;
     guild[select] = true;
 
-    const data = await api.get.publishedPostsModPub.query(guild);
+    const data = (await api.get.publishedPostsModPub.query(guild)) as PubPost[];
     return (
       <div>
         {data.map((post) => (
@@ -47,12 +42,13 @@ export default async function page({
       </div>
     );
   }
+  // LOGGED IN
   if (!params) return <p>No Data!</p>;
   const guild: Guild = {
     eso: false,
     swtor: false,
     ffxiv: false,
-    general: false,
+    tgc_guild: false,
     type: "article",
   };
   const select = params.game;
@@ -60,12 +56,12 @@ export default async function page({
     select != "eso" &&
     select != "swtor" &&
     select != "ffxiv" &&
-    select != "general"
+    select != "tgc_guild"
   )
     return <p>No Data!</p>;
   guild[select] = true;
   guild.type = params.type;
-  const data = await api.get.publishedPostsMod.query(guild);
+  const data = (await api.get.publishedPostsMod.query(guild)) as PubPost[];
   return (
     <div>
       <h1>

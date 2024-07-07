@@ -2,12 +2,7 @@ import Link from "next/link";
 import React from "react";
 import { getServerAuthSession } from "~/server/auth";
 import { api } from "~/trpc/server";
-type Guild = {
-  eso: boolean;
-  swtor: boolean;
-  ffxiv: boolean;
-  general: boolean;
-};
+import type { PubPost, Guild } from "~/type";
 
 export default async function page({ params }: { params: { game: string } }) {
   const session = await getServerAuthSession();
@@ -17,19 +12,20 @@ export default async function page({ params }: { params: { game: string } }) {
       eso: false,
       swtor: false,
       ffxiv: false,
-      general: false,
+      tgc_guild: false,
+      type: "article",
     };
     const select = params.game;
     if (
       select != "eso" &&
       select != "swtor" &&
       select != "ffxiv" &&
-      select != "general"
+      select != "tgc_guild"
     )
       return <p>No Data!</p>;
     guild[select] = true;
 
-    const data = await api.get.publishedPostsModPub.query(guild);
+    const data = (await api.get.publishedPostsModPub.query(guild)) as PubPost[];
     return (
       <div>
         {data.map((post) => (
@@ -46,19 +42,20 @@ export default async function page({ params }: { params: { game: string } }) {
     eso: false,
     swtor: false,
     ffxiv: false,
-    general: false,
+    tgc_guild: false,
+    type: "article",
   };
   const select = params.game;
   if (
     select != "eso" &&
     select != "swtor" &&
     select != "ffxiv" &&
-    select != "general"
+    select != "tgc_guild"
   )
     return <p>No Data!</p>;
   guild[select] = true;
 
-  const data = await api.get.publishedPostsMod.query(guild);
+  const data = (await api.get.publishedPostsMod.query(guild)) as PubPost[];
   return (
     <div>
       <h1>Published Posts for {params.game}</h1>

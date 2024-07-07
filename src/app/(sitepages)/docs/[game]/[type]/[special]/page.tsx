@@ -2,13 +2,15 @@ import Link from "next/link";
 import React from "react";
 import { getServerAuthSession } from "~/server/auth";
 import { api } from "~/trpc/server";
+import type { PubPost } from "~/type";
 type Guild = {
   eso: boolean;
   swtor: boolean;
   ffxiv: boolean;
-  general: boolean;
+  tgc_guild: boolean;
   type: string;
 };
+
 // Under Construction for special permissions: new query needed
 export default async function page({
   params,
@@ -22,7 +24,7 @@ export default async function page({
     eso: false,
     swtor: false,
     ffxiv: false,
-    general: false,
+    tgc_guild: false,
     type: "article",
   };
   const select = params.game;
@@ -30,12 +32,12 @@ export default async function page({
     select != "eso" &&
     select != "swtor" &&
     select != "ffxiv" &&
-    select != "general"
+    select != "tgc_guild"
   )
     return <p>No Data!</p>;
   guild[select] = true;
   guild.type = params.type;
-  const data = await api.get.publishedPostsMod.query(guild);
+  const data = (await api.get.publishedPostsMod.query(guild)) as PubPost[];
   return (
     <div>
       <h1>

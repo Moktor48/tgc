@@ -18,7 +18,7 @@ export default function EditApproveStateWrap({
   const approveDisplay = api.put.publish.useMutation({
     onSuccess: () => {
       alert("Post Published!");
-      location.reload();
+      location.href = `/editor/${params.id}/approve`;
     },
   });
   const check = () => {

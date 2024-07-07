@@ -86,7 +86,7 @@ export const getRouter = createTRPCRouter({
               eso: true,
               ffxiv: true,
               swtor: true,
-              general: true,
+              tgc_guild: true,
               published: true,
               guild_public: true,
               beginner: true,
@@ -95,7 +95,7 @@ export const getRouter = createTRPCRouter({
               staff: true,
               intermediate: true,
               advanced: true,
-              member: true,
+              tgc_member: true,
               type: true,
             },
           },
@@ -120,7 +120,7 @@ export const getRouter = createTRPCRouter({
             eso: true,
             ffxiv: true,
             swtor: true,
-            general: true,
+            tgc_guild: true,
           },
         },
       },
@@ -150,7 +150,7 @@ export const getRouter = createTRPCRouter({
         },
         permissions: {
           select: {
-            general: true,
+            tgc_guild: true,
           },
         },
       },
@@ -245,7 +245,7 @@ export const getRouter = createTRPCRouter({
       where: {
         permissions: {
           published: true,
-          general: true,
+          tgc_guild: true,
         },
       },
       select: {
@@ -259,7 +259,7 @@ export const getRouter = createTRPCRouter({
         },
         permissions: {
           select: {
-            general: true,
+            tgc_guild: true,
           },
         },
       },
@@ -349,7 +349,7 @@ export const getRouter = createTRPCRouter({
         eso: z.boolean(),
         ffxiv: z.boolean(),
         swtor: z.boolean(),
-        general: z.boolean().optional(),
+        tgc_guild: z.boolean().optional(),
         type: z.string().optional(),
       }),
     )
@@ -375,7 +375,7 @@ export const getRouter = createTRPCRouter({
           },
           permissions: {
             select: {
-              general: input.general,
+              tgc_guild: input.tgc_guild,
               eso: input.eso,
               ffxiv: input.ffxiv,
               swtor: input.swtor,
@@ -389,7 +389,7 @@ export const getRouter = createTRPCRouter({
   publishedPostsModPub: publicProcedure
     .input(
       z.object({
-        general: z.boolean(),
+        tgc_guild: z.boolean(),
         eso: z.boolean(),
         ffxiv: z.boolean(),
         swtor: z.boolean(),
@@ -402,7 +402,7 @@ export const getRouter = createTRPCRouter({
           permissions: {
             published: true,
             guild_public: true,
-            general: input.general,
+            tgc_guild: input.tgc_guild,
             eso: input.eso,
             ffxiv: input.ffxiv,
             swtor: input.swtor,
@@ -420,7 +420,7 @@ export const getRouter = createTRPCRouter({
           },
           permissions: {
             select: {
-              general: input.general,
+              tgc_guild: input.tgc_guild,
               eso: input.eso,
               ffxiv: input.ffxiv,
               swtor: input.swtor,
@@ -434,7 +434,7 @@ export const getRouter = createTRPCRouter({
   motherOfAllPosts: protectedProcedure
     .input(
       z.object({
-        general: z.boolean(),
+        tgc_guild: z.boolean(),
         eso: z.boolean(),
         ffxiv: z.boolean(),
         swtor: z.boolean(),
@@ -451,7 +451,7 @@ export const getRouter = createTRPCRouter({
           permissions: {
             published: true,
             guild_public: input.public,
-            general: input.general,
+            tgc_guild: input.tgc_guild,
             eso: input.eso,
             ffxiv: input.ffxiv,
             swtor: input.swtor,
@@ -476,6 +476,12 @@ export const getRouter = createTRPCRouter({
     }),
   fullPostCount: protectedProcedure.query(async () => {
     const count = await db.post.findMany({
+      where: {
+        permissions: {
+          published: true,
+        },
+      },
+
       select: {
         permissions: {
           select: {
@@ -483,7 +489,7 @@ export const getRouter = createTRPCRouter({
             eso: true,
             ffxiv: true,
             swtor: true,
-            general: true,
+            tgc_guild: true,
             type: true,
           },
         },

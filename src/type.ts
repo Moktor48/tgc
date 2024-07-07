@@ -1,13 +1,13 @@
-type Permissions = {
+export type Permissions = {
   eso: boolean;
   ffxiv: boolean;
   swtor: boolean;
-  general: boolean;
+  tgc_guild: boolean;
   staff: boolean;
   raid: boolean;
   officer: boolean;
   guild_public: boolean;
-  member: boolean;
+  tgc_member: boolean;
   beginner: boolean;
   intermediate: boolean;
   advanced: boolean;
@@ -58,3 +58,26 @@ export type GuildMember = {
 };
 
 export type RoleMapping = Record<string, string>;
+
+export type PubPost = {
+  title: string;
+  id: string;
+  createdBy: {
+    name: string;
+    id: string;
+  };
+  permissions: {
+    eso: boolean;
+    swtor: boolean;
+    ffxiv: boolean;
+    tgc_guild: boolean;
+  } | null;
+};
+
+export type Guild = {
+  eso: boolean;
+  swtor: boolean;
+  ffxiv: boolean;
+  tgc_guild: boolean;
+  type: string;
+};

@@ -82,8 +82,8 @@ model post_permission {
   id           String  @id @default(cuid())
   postId       String  @unique
   guild_public Boolean @default(false)
-  general      Boolean @default(false)
-  member       Boolean @default(false)
+  tgc_guild    Boolean @default(false) //Remove this and 
+  tgc_member   Boolean @default(false) //make this tgc_member to remove confusion
   eso          Boolean @default(false)
   ffxiv        Boolean @default(false)
   swtor        Boolean @default(false)

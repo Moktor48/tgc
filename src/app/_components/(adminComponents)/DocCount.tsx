@@ -40,7 +40,7 @@ export default async function docCount() {
   ).length;
   const generalArticleCount = data.filter(
     (post) =>
-      post?.permissions?.general == true &&
+      post?.permissions?.tgc_guild == true &&
       post?.permissions?.type == "article",
   ).length;
   const results = {

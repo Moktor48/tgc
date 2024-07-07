@@ -60,7 +60,7 @@ export default async function RootLayout({
             <BottomComp />
           </TRPCReactProvider>
         </Provider>
-        <span className="text-white">Version 24.7.6</span>
+        <span className="text-white">Version 24.7.7</span>
       </body>
     </html>
   );

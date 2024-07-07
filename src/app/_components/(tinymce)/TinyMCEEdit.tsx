@@ -1,5 +1,5 @@
 "use client";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Editor } from "@tinymce/tinymce-react";
 import type { Editor as TinyMCEEditor } from "tinymce";
 import { api } from "~/trpc/react";
@@ -13,6 +13,7 @@ export default function TinyMCEEdit({
   modById: string;
 }) {
   const oriData = data;
+
   const [postContent, setPostContent] = useState({
     postId: data!.id,
     title: data!.title,
@@ -26,12 +27,12 @@ export default function TinyMCEEdit({
     eso: data?.permissions?.eso ?? false,
     ffxiv: data?.permissions?.ffxiv ?? false,
     swtor: data?.permissions?.swtor ?? false,
-    general: data?.permissions?.general ?? false,
+    tgc_guild: data?.permissions?.tgc_guild ?? false,
     staff: data?.permissions?.staff ?? false,
     raid: data?.permissions?.raid ?? false,
     officer: data?.permissions?.officer ?? false,
     guild_public: data?.permissions?.guild_public ?? false,
-    member: data?.permissions?.member ?? false,
+    tgc_member: data?.permissions?.tgc_member ?? false,
     beginner: data?.permissions?.beginner ?? false,
     intermediate: data?.permissions?.intermediate ?? false,
     advanced: data?.permissions?.advanced ?? false,
@@ -43,14 +44,14 @@ export default function TinyMCEEdit({
         ? "guild_public"
         : data?.permissions?.staff
           ? "staff"
-          : "general",
+          : "tgc_member",
     game: data?.permissions?.eso
       ? "eso"
       : data?.permissions?.ffxiv
         ? "ffxiv"
         : data?.permissions?.swtor
           ? "swtor"
-          : "member",
+          : "tgc_guild",
     aud: data?.permissions?.beginner
       ? "beginner"
       : data?.permissions?.intermediate
@@ -60,6 +61,7 @@ export default function TinyMCEEdit({
 
   const editorRef = useRef<TinyMCEEditor | null>(null);
   const [dirty, setDirty] = useState(false);
+  useEffect(() => setDirty(false), []);
 
   function handleChangeText(e: React.ChangeEvent<HTMLInputElement>) {
     const { name, value } = e.target;
@@ -70,7 +72,7 @@ export default function TinyMCEEdit({
   const post = api.put.updatePost.useMutation({
     onSuccess: () => {
       alert("Modified Post Published!");
-      location.reload();
+      location.href = `/editor/${modById}/approve`;
     },
   });
 
@@ -112,15 +114,18 @@ export default function TinyMCEEdit({
           />
           <label htmlFor="article_type">Article</label>
           <br />
+
           <input
             type="radio"
             id="guide_type"
             name="type"
             value="guide"
             checked={postContent.type === "guide"}
+            disabled={postContent.game === "tgc_guild"}
             onChange={() => setPostContent({ ...postContent, type: "guide" })}
           />
           <label htmlFor="guide_type">Guide</label>
+
           <br />
 
           <input
@@ -129,10 +134,13 @@ export default function TinyMCEEdit({
             name="type"
             value="build"
             checked={postContent.type === "build"}
+            disabled={postContent.game === "tgc_guild"}
             onChange={() => setPostContent({ ...postContent, type: "build" })}
           />
           <label htmlFor="build_type">Build</label>
+
           <br />
+
           <input
             type="radio"
             id="policy_type"
@@ -151,13 +159,15 @@ export default function TinyMCEEdit({
         <div className="accessPrivileges">
           <input
             type="radio"
-            id="general_type"
+            id="TGC_member"
             name="priv"
-            value="general"
-            checked={postContent.priv === "general"}
-            onChange={() => setPostContent({ ...postContent, priv: "general" })}
+            value="tgc_member"
+            checked={postContent.priv === "tgc_member"}
+            onChange={() =>
+              setPostContent({ ...postContent, priv: "tgc_member" })
+            }
           />
-          <label htmlFor="general_type">Guild Members</label>
+          <label htmlFor="TGC_member">Guild Members</label>
           <br />
           <input
             type="radio"
@@ -200,13 +210,19 @@ export default function TinyMCEEdit({
         <div className="Category">
           <input
             type="radio"
-            id="Other"
+            id="TGC_guild"
             name="game"
-            value="member"
-            checked={postContent.game === "member"}
-            onChange={() => setPostContent({ ...postContent, game: "member" })}
+            value="tgc_guild"
+            checked={postContent.game === "tgc_guild"}
+            disabled={
+              postContent.type === "guide" || postContent.type === "build"
+            }
+            onChange={() =>
+              setPostContent({ ...postContent, game: "tgc_guild" })
+            }
           />
-          <label htmlFor="Other">General Guild Members</label>
+          <label htmlFor="TGC_guild">All TGC Guild Members</label>
+
           <br />
           <input
             type="radio"
@@ -314,8 +330,6 @@ export default function TinyMCEEdit({
         >
           Publish Modified Post
         </button>
-
-        {dirty && <p>Submit when ready!</p>}
       </form>
     </div>
   );

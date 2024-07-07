@@ -27,7 +27,7 @@ export default async function GenPosts() {
             id: string;
           };
           permissions: {
-            general: boolean;
+            tgc_guild: boolean;
           } | null;
         }) => {
           return (
