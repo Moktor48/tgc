@@ -93,7 +93,9 @@ export default async function NavBar({
           </button>
           <div className="nav-dropdown-content">
             <Link href={`/dashboard/${id}/staff/leaderboard`}>Leaderboard</Link>
-            <Link href={`/editor/${id}/approve`}>Post Approvals</Link>
+            <Link href={`/editor/${id}/approve`}>
+              Post Approvals {`(${docResults.unpub_count})`}
+            </Link>
             <Link href={`/editor/${id}`}>Create Post</Link>
             {admin?.admin && (
               <Link href={`/dashboard/${id}/staff/stafftracker`}>

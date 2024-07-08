@@ -497,7 +497,29 @@ export const getRouter = createTRPCRouter({
     });
     return count;
   }),
+  unpubPostCount: protectedProcedure.query(async () => {
+    const count = await db.post.findMany({
+      where: {
+        permissions: {
+          published: false,
+        },
+      },
 
+      select: {
+        permissions: {
+          select: {
+            published: true,
+            eso: true,
+            ffxiv: true,
+            swtor: true,
+            tgc_guild: true,
+            type: true,
+          },
+        },
+      },
+    });
+    return count;
+  }),
   //Query Permissions
   staffPermission: protectedProcedure
     .input(z.object({ userId: z.string() }))
