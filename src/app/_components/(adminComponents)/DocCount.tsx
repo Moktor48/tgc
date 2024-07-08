@@ -40,7 +40,7 @@ export default async function docCount() {
     (post) =>
       post?.permissions?.ffxiv == true && post?.permissions?.type == "article",
   ).length;
-  const generalArticleCount = data.filter(
+  const tgcGuildArticleCount = data.filter(
     (post) =>
       post?.permissions?.tgc_guild == true &&
       post?.permissions?.type == "article",
@@ -55,7 +55,7 @@ export default async function docCount() {
     ffxiv_build: ffxivBuildCount,
     ffxiv_guide: ffxivGuideCount,
     ffxiv_article: ffxivArticleCount,
-    general_article: generalArticleCount,
+    tgc_guild_article: tgcGuildArticleCount,
     bug_count: bugReportCount,
   };
   return results;

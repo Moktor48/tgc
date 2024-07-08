@@ -78,8 +78,8 @@ export default async function NavBar({
           <Link href={`/docs/swtor/article`}>
             SWTOR {`(${docResults.swtor_article})`}
           </Link>
-          <Link href={`/docs/general/article`}>
-            General Guild Articles {`(${docResults.general_article})`}
+          <Link href={`/docs/tgc_guild/article`}>
+            General Guild Articles {`(${docResults.tgc_guild_article})`}
           </Link>
         </div>
       </div>

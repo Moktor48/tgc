@@ -46,13 +46,13 @@ model User {
   tgc_guild_member Boolean             @default(false)
   accounts         Account?
   sessions         Session[]
+  bug              bug[]
   eso              eso?
   ffxiv            ffxiv?
   posts            post[]
   post_mod         post_modification[]
   staff            staff?
   swtor            swtor?
-  bug              bug[]
 }
 
 model VerificationToken {
@@ -86,14 +86,14 @@ model bug {
   timestamp   DateTime @default(now())
   createdById String
   createdBy   User     @relation(fields: [createdById], references: [id])
+
+  @@index([createdById], map: "bug_createdById_fkey")
 }
 
 model post_permission {
   id           String  @id @default(cuid())
   postId       String  @unique
   guild_public Boolean @default(false)
-  tgc_guild    Boolean @default(false) //Remove this and 
-  tgc_member   Boolean @default(false) //make this tgc_member to remove confusion
   eso          Boolean @default(false)
   ffxiv        Boolean @default(false)
   swtor        Boolean @default(false)
@@ -105,18 +105,20 @@ model post_permission {
   advanced     Boolean @default(false)
   published    Boolean @default(false)
   type         String
+  tgc_guild    Boolean @default(false)
+  tgc_member   Boolean @default(false)
   post         post    @relation(fields: [postId], references: [id], onDelete: Cascade)
 }
 
 model post_modification {
   id          String  @id @default(cuid())
-  ori_title   String
-  ori_summary String  @db.Text
-  ori_content String  @db.Text
   image       String? @db.Text
   postId      String  @unique
   published   String  @default("Published by modById")
   modById     String
+  ori_content String  @db.Text
+  ori_summary String  @db.Text
+  ori_title   String
   modBy       User    @relation(fields: [modById], references: [id])
   postRef     post    @relation(fields: [postId], references: [id], onDelete: Cascade)
 
