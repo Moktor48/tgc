@@ -259,15 +259,19 @@ header {
 .nav-dropdown-content {
   display: none;
   position: absolute;
-  background: linear-gradient(to bottom, #c5c5c5 65%, rgba(255, 255, 255, 0));
+  background: linear-gradient(
+    to bottom,
+    #000000e7 65%,
+    rgba(143, 12, 12, 0.349)
+  );
   width: 10vw;
-  min-height: 30vh;
+  min-height: 35vh;
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
   z-index: 501;
 }
 
 .nav-dropdown-content a {
-  color: black;
+  color: white;
   padding: 12px 16px;
   text-decoration: none;
   display: block;
