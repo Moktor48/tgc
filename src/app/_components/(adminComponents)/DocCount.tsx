@@ -1,7 +1,9 @@
 import { api } from "~/trpc/server";
 
 export default async function docCount() {
+  const bugCount = await api.get.getBugs.query();
   const data = await api.get.fullPostCount.query();
+  const bugReportCount = bugCount.length;
   const esoBuildCount = data.filter(
     (post) =>
       post?.permissions?.eso == true && post?.permissions?.type == "build",
@@ -54,6 +56,7 @@ export default async function docCount() {
     ffxiv_guide: ffxivGuideCount,
     ffxiv_article: ffxivArticleCount,
     general_article: generalArticleCount,
+    bug_count: bugReportCount,
   };
   return results;
 }

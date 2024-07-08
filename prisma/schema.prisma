@@ -52,6 +52,7 @@ model User {
   post_mod         post_modification[]
   staff            staff?
   swtor            swtor?
+  bug              bug[]
 }
 
 model VerificationToken {
@@ -76,6 +77,15 @@ model post {
   permissions post_permission?
 
   @@index([createdById], map: "post_createdById_fkey")
+}
+
+model bug {
+  id          String   @id @default(cuid())
+  title       String
+  content     String   @db.LongText
+  timestamp   DateTime @default(now())
+  createdById String
+  createdBy   User     @relation(fields: [createdById], references: [id])
 }
 
 model post_permission {

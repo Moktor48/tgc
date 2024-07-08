@@ -10,6 +10,10 @@ export default function WarningBanner() {
       <h1>Latest updates</h1>
       <ul>
         <li>
+          Bug reporting! Check your dashboard, report bugs, suggestions, or...
+          whatever...?
+        </li>
+        <li>
           Editor no longer allows guides or builds for the general guild, those
           are aimed at specific games now
         </li>

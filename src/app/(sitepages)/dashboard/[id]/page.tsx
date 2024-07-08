@@ -18,6 +18,9 @@ export default async function AccountPage() {
           <p className="text-center text-5xl text-white">
             Private Account Page for {session?.user.name}
           </p>
+          <Link href={`/dashboard/${session.user.id}/staff/bug`}>
+            <button className="button-40">Bug Reports</button>
+          </Link>
           {session.user.role === "staff" && (
             <Link href={`/dashboard/${session.user.id}/staff`}>
               <button className="button-40">Staff Page</button>

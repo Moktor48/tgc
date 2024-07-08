@@ -645,6 +645,42 @@ export const getRouter = createTRPCRouter({
     return raiders;
   }),
 
+  getBugs: protectedProcedure.query(async () => {
+    const bugs = await db.bug.findMany({
+      select: {
+        id: true,
+        title: true,
+        content: true,
+        createdBy: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+      },
+    });
+    return bugs;
+  }),
+
+  getBug: protectedProcedure
+    .input(z.object({ postId: z.string() }))
+    .query(async ({ input }) => {
+      const bug = await db.bug.findUnique({
+        where: { id: input.postId },
+        select: {
+          id: true,
+          title: true,
+          content: true,
+          createdBy: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+        },
+      });
+      return bug;
+    }),
   /*trials: protectedProcedure.query(async () => {
     const trials = await db.trials.findMany({});
     return trials;

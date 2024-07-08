@@ -229,6 +229,25 @@ export const postRouter = createTRPCRouter({
       });
       return staff;
     }),
+
+  bug: protectedProcedure
+    .input(
+      z.object({
+        title: z.string(),
+        content: z.string(),
+        createdById: z.string(),
+      }),
+    )
+    .mutation(async ({ input }) => {
+      const bug = await db.bug.create({
+        data: {
+          title: input.title,
+          content: input.content,
+          createdById: input.createdById,
+        },
+      });
+      return bug;
+    }),
 }); // This is the end, lawlz.
 /*
   uploadImage: protectedProcedure

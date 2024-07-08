@@ -108,6 +108,11 @@ export default async function NavBar({
                 Staff Tracker
               </Link>
             )}
+            {admin?.admin && (
+              <Link href={`/dashboard/${id}/staff/bug/display`}>
+                Bug Reports {`(${docResults.bug_count})`}
+              </Link>
+            )}
           </div>
         </div>
       )}
