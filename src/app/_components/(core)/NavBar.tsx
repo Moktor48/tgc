@@ -40,10 +40,6 @@ export default async function NavBar({
           <Link href={`/docs/swtor/build`}>
             SWTOR {`(${docResults.swtor_build})`}
           </Link>
-          <Link href={`/docs/general/build`}>
-            General Guild Builds (don't exist){" "}
-            {`(${docResults.general_article})`}
-          </Link>
         </div>
       </div>
 
@@ -62,10 +58,6 @@ export default async function NavBar({
           </Link>
           <Link href={`/docs/swtor/guide`}>
             SWTOR {`(${docResults.swtor_guide})`}
-          </Link>
-          <Link href={`/docs/general/guide`}>
-            General Guild Guides (don't exist){" "}
-            {`(${docResults.general_article})`}
           </Link>
         </div>
       </div>
