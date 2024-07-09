@@ -16,12 +16,12 @@ export default async function WeekLeader(params: { id: string }) {
 
   // Adjust today's date to get to the previous Sunday
   const start = new Date(today);
-  start.setDate(today.getDate() - 6 - currentDayOfWeek); // If today is Sunday, currentDayOfWeek is 0, so no change
+  start.setDate(today.getDate() - 7 - currentDayOfWeek); // If today is Sunday, currentDayOfWeek is 0, so no change
   start.setUTCHours(0, 0, 0, 0); // Set start time to midnight
 
   // Calculate the end date (Saturday) by adding 6 days to the start date
   const end = new Date(start);
-  end.setDate(start.getDate() + 5);
+  end.setDate(start.getDate() + 6);
   end.setUTCHours(23, 59, 59, 999); // Set end time to just before midnight
 
   return (

@@ -615,6 +615,9 @@ export const getRouter = createTRPCRouter({
   dutyQuery: protectedProcedure
     .input(z.object({ start: z.date(), end: z.date() }))
     .query(async ({ input }) => {
+      const lte = new Date(input.end).toISOString();
+      const gte = new Date(input.start).toISOString();
+      console.log("lte:", lte, "and gte:", gte);
       const points = await db.staff_duty.findMany({
         where: {
           timestamp: {
