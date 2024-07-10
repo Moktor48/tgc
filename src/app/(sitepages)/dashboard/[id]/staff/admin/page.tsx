@@ -1,5 +1,5 @@
+import Link from "next/link";
 import React from "react";
-import UserSearch from "~/app/_components/(adminComponents)/UserSearch";
 import { getServerAuthSession } from "~/server/auth";
 import { api } from "~/trpc/server";
 
@@ -22,9 +22,10 @@ export default async function page({ params }: { params: { id: string } }) {
             {postContent.admin && "Administrator"}
           </p>
           <br />
+          <Link href="admin/database">
+            <p>Database Interaction</p>
+          </Link>
 
-          <h1 className="text-yellow-500">Grant Admin Access</h1>
-          <UserSearch id={id} />
           <br />
         </div>
       </div>

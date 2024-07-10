@@ -4,11 +4,12 @@ export default function WarningBanner() {
   return (
     <div className="bg-black text-center text-3xl text-red-500">
       <p className="text-3xl text-yellow-500">
-        Latest update: <span className="test-green-500 text-3xl">7/7/24</span>
+        Latest update: <span className="test-green-500 text-3xl">7/10/24</span>
       </p>
 
       <h1>Latest updates</h1>
       <ul>
+        <li>Pre-Drizzle conversion</li>
         <li>
           Bug reporting! Check your dashboard, report bugs, suggestions, or...
           whatever...?
