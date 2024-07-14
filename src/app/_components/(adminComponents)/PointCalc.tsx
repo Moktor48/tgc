@@ -26,9 +26,6 @@ export default async function PointCalc({
 
   // This query pulls all data from staff_duty given two dates
   const points = await api.get.dutyQuery.query({ start, end });
-  const eze = points.filter((data) => data.gmember_id === "263848456706064385");
-  console.log("Ezekiel:", eze);
-  console.log("Points, number of records", points.length);
   // Filters----------------------------------------------------------------------------------
   // Filter out bots
   const botPoints = points.filter((data) => {

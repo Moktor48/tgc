@@ -81,3 +81,17 @@ export type Guild = {
   tgc_guild: boolean;
   type: string;
 };
+
+export type JoinData = {
+  discord_user: {
+    disc_nickname: string;
+  };
+  staff_point_chart: {
+    point_value: number;
+    task_description: string | null;
+  };
+  gmember_id: string;
+  duty_type: number;
+  timestamp: Date;
+  eso_target_user: string | null;
+}[];

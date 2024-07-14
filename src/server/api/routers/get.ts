@@ -649,6 +649,49 @@ export const getRouter = createTRPCRouter({
       });
       return points;
     }),
+  dataQuery: protectedProcedure
+    .input(z.object({ start: z.date() }))
+    .query(async ({ input }) => {
+      console.log("Query Start:", input.start);
+      const points = await db.staff_duty.findMany({
+        where: {
+          timestamp: {
+            gte: new Date(input.start).toISOString(),
+          },
+          OR: [
+            { duty_type: 99 },
+            {
+              duty_type: {
+                gte: 951,
+                lte: 967,
+              },
+            },
+          ],
+        },
+        orderBy: {
+          timestamp: "asc",
+        },
+        select: {
+          gmember_id: true,
+          timestamp: true,
+          duty_type: true,
+          eso_target_user: true,
+          staff_point_chart: {
+            select: {
+              point_value: true,
+              task_description: true,
+            },
+          },
+          discord_user: {
+            select: {
+              disc_nickname: true,
+            },
+          },
+        },
+      });
+      return points;
+    }),
+
   trialLeader: protectedProcedure.query(async () => {
     const leaders = await db.user.findMany({
       where: {

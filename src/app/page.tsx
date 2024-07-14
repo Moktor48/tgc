@@ -4,6 +4,7 @@ import WarningBanner from "./_components/(core)/WarningBanner";
 import React from "react";
 import { getServerAuthSession } from "~/server/auth";
 import GuildCheck from "./_components/(core)/GuildCheck";
+import Link from "next/link";
 
 export default async function Home() {
   const session = await getServerAuthSession();
@@ -24,6 +25,11 @@ export default async function Home() {
         <div className="header">
           <h3>MMO Updates</h3>
         </div>
+      </div>
+      <div>
+        <Link href={`/dashboard/${session.user.id}/staff/admin/data`}>
+          <button>Go to Data Page</button>
+        </Link>
       </div>
       <FrontContent />
       <WarningBanner />
