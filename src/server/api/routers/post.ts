@@ -1,7 +1,8 @@
 import { z } from "zod";
 import { db } from "~/server/db";
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
-
+import axios from "axios";
+import * as cheerio from "cheerio";
 export const postRouter = createTRPCRouter({
   //creates a new post for approval
   post: protectedProcedure
@@ -248,14 +249,16 @@ export const postRouter = createTRPCRouter({
       });
       return bug;
     }),
-}); // This is the end, lawlz.
-/*
-  uploadImage: protectedProcedure
-  .input(
-    z.object({
-      dataUrl: z.string(),
-      filename: z.string(),
-    }))
+  scrape: protectedProcedure
+    .input(
+      z.object({
+        url: z.string(),
+      }),
+    )
     .mutation(async ({ input }) => {
-
-*/
+      const { data } = await axios.get<string>(input.url);
+      const $ = cheerio.load(data);
+      const pageTitle = $("td").text();
+      return { title: pageTitle };
+    }),
+}); // This is the end, lawlz.
