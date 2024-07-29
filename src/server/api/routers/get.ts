@@ -649,6 +649,7 @@ export const getRouter = createTRPCRouter({
       });
       return points;
     }),
+
   dataQuery: protectedProcedure
     .input(z.object({ start: z.date() }))
     .query(async ({ input }) => {

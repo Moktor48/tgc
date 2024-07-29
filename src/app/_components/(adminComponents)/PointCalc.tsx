@@ -3,6 +3,7 @@ import { api } from "~/trpc/server";
 import LBClientWrap from "./LBClientWrap";
 import LBDisplayWrap from "./LBDisplayWrap";
 import { rankCompare } from "../(core)/coreData";
+import PointCalcParseView from "./PointCalcParseView";
 
 type DataType = Record<string, string | number | null>;
 
@@ -26,6 +27,7 @@ export default async function PointCalc({
 
   // This query pulls all data from staff_duty given two dates
   const points = await api.get.dutyQuery.query({ start, end });
+
   // Filters----------------------------------------------------------------------------------
   // Filter out bots
   const botPoints = points.filter((data) => {
@@ -35,8 +37,12 @@ export default async function PointCalc({
     );
   });
 
+  const joinLeave = botPoints.filter(
+    (data) => data.duty_type < 900 || data.duty_type > 999,
+  );
+
   // This filters out the basic invites so that all duty that is not an invite should be caught
-  const unfilteredPoints = botPoints.filter(
+  const unfilteredPoints = joinLeave.filter(
     (data) => data.duty_type < 89 || data.duty_type > 95,
   );
 
@@ -45,7 +51,7 @@ export default async function PointCalc({
     const date1 = new Date(time1);
     const date2 = new Date(time2);
     const difference = Math.abs(date1.getTime() - date2.getTime());
-    return difference <= 10 * 60 * 1000; // 4 hours in milliseconds
+    return difference <= 10 * 60 * 1000;
   }
   //This filters to just the invites
   let moveInvite = botPoints.filter(
@@ -72,7 +78,7 @@ export default async function PointCalc({
   const smooshPoints = [...unfilteredPoints, ...moveInvite];
 
   // Raw data HERE [{}{}{}] This is the primary source of data, name/task/points
-  const userPoints = smooshPoints.map((data) => {
+  const userPointsx = smooshPoints.map((data) => {
     return {
       user_id: data.gmember_id,
       user_name: data.discord_user.disc_nickname,
@@ -81,11 +87,20 @@ export default async function PointCalc({
       rank: rankCompare[data.discord_user.highest_rank_role]!,
     };
   });
+  const userPoints = userPointsx.map((data) => {
+    if (data.task === "") {
+      return {
+        ...data,
+        task: "Bonus",
+      };
+    }
+    return data;
+  });
 
   //---------------------------------------Task Count per User---------------------------------------
   // Counting tasks per user
   const filteredUsers: Record<string, Record<string, number>> = {};
-
+  const excludedPoints: typeof userPoints = [];
   const userTasks = userPoints.reduce<Record<string, Record<string, number>>>(
     (acc, point) => {
       if (
@@ -115,6 +130,8 @@ export default async function PointCalc({
         } else {
           filteredUsers[point.user_name]![point.task] += 1;
         }
+      } else {
+        excludedPoints.push(point);
       }
       return acc;
     },

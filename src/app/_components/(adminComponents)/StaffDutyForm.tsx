@@ -72,7 +72,8 @@ export default function StaffDutyForm({ user }: { user: string }) {
               .tz("America/New_York")
               .format();
             const name = dumpData?.find(
-              (user) => user.ingame_name === values[1],
+              (user) =>
+                user.ingame_name.toLowerCase() === values[1]?.toLowerCase(),
             );
             if (name) {
               newEntry.gmember_id = name.gmember_id;
