@@ -3,7 +3,6 @@ import { api } from "~/trpc/server";
 import LBClientWrap from "./LBClientWrap";
 import LBDisplayWrap from "./LBDisplayWrap";
 import { rankCompare } from "../(core)/coreData";
-import PointCalcParseView from "./PointCalcParseView";
 
 type DataType = Record<string, string | number | null>;
 
