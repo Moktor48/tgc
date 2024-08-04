@@ -176,13 +176,14 @@ model member_link {
 }
 
 model discord_user {
-  gmember_id        String        @id @db.VarChar(255)
-  disc_nickname     String        @db.VarChar(255)
-  ingame_name       String        @db.VarChar(255)
+  gmember_id        String            @id @db.VarChar(255)
+  disc_nickname     String            @db.VarChar(255)
+  ingame_name       String            @db.VarChar(255)
   highest_rank_role Int
   staff_duty        staff_duty[]
   eso_raid          eso_raid[]
   member_link       member_link[]
+  attend            eso_raid_attend[]
 }
 
 model staff_point_chart {
@@ -321,16 +322,15 @@ model eso_event_unqiue {
 model eso_raid {
   gmember_id  String
   trial_name  String
-  clears      Int
-  wipes       Int
-  hard_mode   Boolean         @default(false)
-  veteran     Boolean         @default(false)
-  diff_option String          @default("normal") @db.VarChar(255)
-  start_time  DateTime        @db.DateTime(0)
-  end_time    DateTime        @db.DateTime(0)
-  raid_uid    String          @id @default(cuid())
-  trial_names eso_trial_names @relation(fields: [trial_name], references: [trial_name], onUpdate: Restrict, map: "fk_raid_to_trial")
-  gmember     discord_user    @relation(fields: [gmember_id], references: [gmember_id], onUpdate: Restrict, map: "fk_raid_to_user")
+  diff_option String            @default("normal") @db.VarChar(255)
+  points      Int               @default(0)
+  vitality    Int               @default(0)
+  start_time  DateTime          @db.DateTime(0)
+  end_time    DateTime          @db.DateTime(0)
+  raid_uid    String            @id @default(cuid())
+  trial_names eso_trial_names   @relation(fields: [trial_name], references: [trial_name], onUpdate: Restrict, map: "fk_raid_to_trial")
+  gmember     discord_user      @relation(fields: [gmember_id], references: [gmember_id], onUpdate: Restrict, map: "fk_raid_to_user")
+  attend      eso_raid_attend[]
 }
 
 model eso_trial_names {
@@ -343,6 +343,8 @@ model eso_trial_names {
 model eso_raid_attend {
   gmember_id String
   raid_uid   String
+  raidId     eso_raid     @relation(fields: [raid_uid], references: [raid_uid])
+  userId     discord_user @relation(fields: [gmember_id], references: [gmember_id])
 
   @@id([gmember_id, raid_uid])
 }

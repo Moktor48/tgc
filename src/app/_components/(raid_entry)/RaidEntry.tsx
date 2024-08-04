@@ -24,7 +24,8 @@ export default function RaidEntry({
   const dungeons = trialNames?.filter((trial) => trial.type === "dlc") ?? [];
   const trials = trialNames?.filter((trial) => trial.type === "trial") ?? [];
   const { data: users, isLoading } = api.get.discordUsers.useQuery();
-
+  const submitTrial = api.post.raid_entry.useMutation();
+  const submitAttendance = api.post.raid_attend.useMutation();
   const [searchQuery, setSearchQuery] = useState("");
   const [inputValue, setInputValue] = useState(""); // New state for input value
 
@@ -72,12 +73,36 @@ export default function RaidEntry({
     setSearchQuery("");
     setInputValue(""); // Clear input value
   };
+
   const handleSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedTrial(e.target.value);
   };
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    submitTrial.mutate(
+      {
+        gmember_id: leader,
+        trial_name: selectedTrial,
+        diff_option: JSON.stringify(options),
+        start_time: new Date(times.start_time),
+        end_time: new Date(times.end_time),
+        score: scores.points,
+        vitality: scores.vitality,
+      },
+      {
+        onSuccess: (res) => {
+          const raid_uid = res.raid_uid;
+          const attendanceEntries = selectedUsers.map((user) => ({
+            raid_uid,
+            gmember_id: user.gmember_id,
+          }));
+          submitAttendance.mutate(attendanceEntries);
+        },
+      },
+    );
   };
+
   const handleOptions = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const newOptions = {
       veteran: false,

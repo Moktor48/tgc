@@ -756,10 +756,27 @@ export const getRouter = createTRPCRouter({
       });
       return bug;
     }),
-  /*trials: protectedProcedure.query(async () => {
-    const trials = await db.trials.findMany({});
-    return trials;
-  }),*/
+  trials: protectedProcedure.query(async () => {
+    const raid = await db.eso_raid.findMany({
+      select: {
+        raid_uid: true,
+        trial_name: true,
+        start_time: true,
+        end_time: true,
+        gmember_id: true,
+        points: true,
+        vitality: true,
+        diff_option: true,
+        attend: {
+          select: {
+            raid_uid: true,
+            gmember_id: true,
+          },
+        },
+      },
+    });
+    return raid;
+  }),
 });
 
 // This is the end, lawlz.

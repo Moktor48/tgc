@@ -296,4 +296,40 @@ export const postRouter = createTRPCRouter({
         })),
       });
     }),
+
+  raid_entry: protectedProcedure
+    .input(
+      z.object({
+        gmember_id: z.string(),
+        trial_name: z.string(),
+        diff_option: z.string(),
+        start_time: z.date(),
+        end_time: z.date(),
+        score: z.number(),
+        vitality: z.number(),
+      }),
+    )
+    .mutation(async ({ input }) => {
+      const raid = await db.eso_raid.create({
+        data: {
+          gmember_id: input.gmember_id,
+          trial_name: input.trial_name,
+          diff_option: input.diff_option,
+          start_time: input.start_time,
+          end_time: input.end_time,
+          points: input.score,
+          vitality: input.vitality,
+        },
+      });
+      return raid;
+    }),
+
+  raid_attend: protectedProcedure
+    .input(z.array(z.object({ raid_uid: z.string(), gmember_id: z.string() })))
+    .mutation(async ({ input }) => {
+      const raid = await db.eso_raid_attend.createMany({
+        data: input,
+      });
+      return raid;
+    }),
 }); // This is the end, lawlz.
