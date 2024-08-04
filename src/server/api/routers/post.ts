@@ -261,4 +261,39 @@ export const postRouter = createTRPCRouter({
       const pageTitle = $("td").text();
       return { title: pageTitle };
     }),
+  trial_default: protectedProcedure
+    .input(
+      z.object({
+        coreDungeons: z.array(z.string()),
+        dlcDungeons: z.array(z.string()),
+        trials: z.array(z.string()),
+      }),
+    )
+    .mutation(async ({ input }) => {
+      const { coreDungeons, dlcDungeons, trials } = input;
+      await db.eso_trial_names.deleteMany();
+      // Insert core dungeons
+      await db.eso_trial_names.createMany({
+        data: coreDungeons.map((name) => ({
+          trial_name: name,
+          type: "core",
+        })),
+      });
+
+      // Insert dlc dungeons
+      await db.eso_trial_names.createMany({
+        data: dlcDungeons.map((name) => ({
+          trial_name: name,
+          type: "dlc",
+        })),
+      });
+
+      // Insert trials
+      await db.eso_trial_names.createMany({
+        data: trials.map((name) => ({
+          trial_name: name,
+          type: "trial",
+        })),
+      });
+    }),
 }); // This is the end, lawlz.

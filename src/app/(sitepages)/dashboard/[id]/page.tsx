@@ -26,6 +26,11 @@ export default async function AccountPage() {
               <button className="button-40">Staff Page</button>
             </Link>
           )}
+          {session.user.role === "staff" && (
+            <Link href={`/dashboard/${session.user.id}/raid`}>
+              <button className="button-40">Raid Page</button>
+            </Link>
+          )}
           {postContent?.admin && (
             <Link href={`/dashboard/${session.user.id}/staff/admin`}>
               <button className="button-40">Admin Page</button>

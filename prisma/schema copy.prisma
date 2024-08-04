@@ -53,7 +53,6 @@ model User {
   post_mod         post_modification[]
   staff            staff?
   swtor            swtor?
-  member_link      member_link[]
 }
 
 model VerificationToken {
@@ -166,23 +165,13 @@ model staff {
   user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
-model member_link {
-  userId    String
-  discordId String
-  user      User         @relation(fields: [userId], references: [id])
-  discord   discord_user @relation(fields: [discordId], references: [gmember_id])
-
-  @@id([userId, discordId])
-}
-
 model discord_user {
-  gmember_id        String        @id @db.VarChar(255)
-  disc_nickname     String        @db.VarChar(255)
-  ingame_name       String        @db.VarChar(255)
+  gmember_id        String       @id
+  disc_nickname     String       @db.VarChar(255)
+  ingame_name       String       @db.VarChar(255)
   highest_rank_role Int
   staff_duty        staff_duty[]
-  eso_raid          eso_raid[]
-  member_link       member_link[]
+  trials            eso_raid[]
 }
 
 model staff_point_chart {
@@ -319,32 +308,23 @@ model eso_event_unqiue {
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 model eso_raid {
-  gmember_id  String
-  trial_name  String
-  clears      Int
-  wipes       Int
-  hard_mode   Boolean         @default(false)
-  veteran     Boolean         @default(false)
-  diff_option String          @default("normal") @db.VarChar(255)
-  start_time  DateTime        @db.DateTime(0)
-  end_time    DateTime        @db.DateTime(0)
-  raid_uid    String          @id @default(cuid())
-  trial_names eso_trial_names @relation(fields: [trial_name], references: [trial_name], onUpdate: Restrict, map: "fk_raid_to_trial")
-  gmember     discord_user    @relation(fields: [gmember_id], references: [gmember_id], onUpdate: Restrict, map: "fk_raid_to_user")
+  gmember_id String
+  trial_code Int
+  clears     Int
+  wipes      Int
+  start_time DateTime      @db.DateTime(0)
+  end_time   DateTime      @db.DateTime(0)
+  raid_uid   Int           @id @default(autoincrement())
+  member     discord_user? @relation(fields: [gmember_id], references: [gmember_id])
+  trial      eso_trial?    @relation(fields: [trial_code], references: [trial_id])
 }
 
-model eso_trial_names {
-  type           String     @db.VarChar(255)
-  trial_name     String     @id @db.VarChar(255)
+model eso_trial {
+  trial_id       Int        @id @default(autoincrement())
+  type           String     @db.VarChar(255) //core, dlc, trial
+  trial_name     String     @db.VarChar(255)
   difficulty_mod Int        @default(1)
   eso_raid       eso_raid[]
-}
-
-model eso_raid_attend {
-  gmember_id String
-  raid_uid   String
-
-  @@id([gmember_id, raid_uid])
 }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
@@ -485,7 +465,7 @@ model builds {
   id               Int      @id @default(autoincrement())
   content_id       Int?
   title            String   @db.VarChar(255)
-  content          String?  @db.MediumText
+  content          String?  @db.Text
   timestamp        DateTime @default(now()) @db.Timestamp(0)
   cover_image_path String?  @db.VarChar(255)
   game_type        String?  @db.VarChar(255)
@@ -671,14 +651,4 @@ model rewards {
   exampleRenewableReferralReward          BigInt?  @default(0)
 
   @@ignore
-}
-
-model ban_list {
-  id          Int    @id @default(autoincrement())
-  player_name String @unique(map: "player_name_UNIQUE") @db.VarChar(45)
-}
-
-model not_interested {
-  id          Int    @id @default(autoincrement())
-  player_name String @unique(map: "player_name_UNIQUE") @db.VarChar(45)
 }

@@ -63,7 +63,10 @@ export const getRouter = createTRPCRouter({
     });
     return guests;
   }),
-
+  discordUsers: protectedProcedure.query(async () => {
+    const users = await db.discord_user.findMany({});
+    return users;
+  }),
   //Post Pulls
   getPost: protectedProcedure
     .input(z.object({ postId: z.string() }))
@@ -103,7 +106,10 @@ export const getRouter = createTRPCRouter({
       });
       return post;
     }),
-
+  get_eso_trials: protectedProcedure.query(async () => {
+    const trials = await db.eso_trial_names.findMany({});
+    return trials;
+  }),
   getAllPosts: protectedProcedure.query(async () => {
     const posts = await db.post.findMany({
       select: {
